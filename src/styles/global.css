@@ -29,6 +29,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
 @keyframes bg-float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(var(--float-distance, 15px)); }
