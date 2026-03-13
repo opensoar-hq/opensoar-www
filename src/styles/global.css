@@ -28,3 +28,20 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+@keyframes bg-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(var(--float-distance, 15px)); }
+}
+
+@keyframes bg-fade-in {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.bg-shape {
+  opacity: 0;
+  animation:
+    bg-fade-in 2s cubic-bezier(0.23, 0.86, 0.39, 0.96) var(--delay, 0s) forwards,
+    bg-float var(--float-duration, 14s) ease-in-out var(--delay, 0s) infinite;
+}

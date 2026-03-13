@@ -29,6 +29,45 @@ const { title, description = "OpenSOAR is an open-source SOAR (Security Orchestr
     <title>{title}</title>
   </head>
   <body class="bg-bg text-text font-sans min-h-screen antialiased text-sm leading-normal">
-    <slot />
+    <!-- Global floating shapes background -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
+      <div class="absolute inset-0 bg-gradient-to-br from-white/[0.015] via-transparent to-white/[0.015] blur-3xl"></div>
+
+      <div class="bg-shape absolute left-[-8%] top-[5%]" style="--delay: 0.2s; --float-duration: 14s; --float-distance: 20px;">
+        <div class="w-[500px] h-[120px] rounded-full rotate-12 bg-gradient-to-r from-white/[0.06] to-transparent border border-white/[0.06]"></div>
+      </div>
+
+      <div class="bg-shape absolute right-[-3%] top-[4%]" style="--delay: 0.5s; --float-duration: 18s; --float-distance: 12px;">
+        <div class="w-[300px] h-[70px] rounded-full -rotate-[20deg] bg-gradient-to-r from-white/[0.05] to-transparent border border-white/[0.05]"></div>
+      </div>
+
+      <div class="bg-shape absolute right-[-5%] top-[25%]" style="--delay: 0.4s; --float-duration: 20s; --float-distance: 18px;">
+        <div class="w-[450px] h-[110px] rounded-full -rotate-[15deg] bg-gradient-to-r from-white/[0.05] to-transparent border border-white/[0.05]"></div>
+      </div>
+
+      <div class="bg-shape absolute left-[5%] top-[40%]" style="--delay: 0.7s; --float-duration: 16s; --float-distance: 14px;">
+        <div class="w-[200px] h-[50px] rounded-full rotate-[8deg] bg-gradient-to-r from-white/[0.04] to-transparent border border-white/[0.04]"></div>
+      </div>
+
+      <div class="bg-shape absolute left-[25%] top-[55%]" style="--delay: 0.9s; --float-duration: 13s; --float-distance: 10px;">
+        <div class="w-[140px] h-[35px] rounded-full -rotate-[25deg] bg-gradient-to-r from-white/[0.035] to-transparent border border-white/[0.04]"></div>
+      </div>
+
+      <div class="bg-shape absolute right-[10%] top-[50%]" style="--delay: 0.6s; --float-duration: 17s; --float-distance: 16px;">
+        <div class="w-[350px] h-[80px] rounded-full rotate-[18deg] bg-gradient-to-r from-white/[0.04] to-transparent border border-white/[0.04]"></div>
+      </div>
+
+      <div class="bg-shape absolute left-[-4%] top-[70%]" style="--delay: 1.0s; --float-duration: 22s; --float-distance: 15px;">
+        <div class="w-[400px] h-[100px] rounded-full rotate-[5deg] bg-gradient-to-r from-white/[0.04] to-transparent border border-white/[0.04]"></div>
+      </div>
+
+      <div class="bg-shape absolute right-[5%] top-[80%]" style="--delay: 0.8s; --float-duration: 15s; --float-distance: 12px;">
+        <div class="w-[250px] h-[60px] rounded-full -rotate-[12deg] bg-gradient-to-r from-white/[0.035] to-transparent border border-white/[0.04]"></div>
+      </div>
+    </div>
+
+    <div class="relative z-10">
+      <slot />
+    </div>
   </body>
 </html>

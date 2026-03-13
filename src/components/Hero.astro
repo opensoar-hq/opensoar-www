@@ -1,46 +1,8 @@
 ---
+import { AnimatedTerminal } from './AnimatedTerminal';
 ---
 
-<section class="relative pt-28 pb-20 md:pt-36 md:pb-28 overflow-hidden">
-  <!-- Floating shapes background -->
-  <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
-    <!-- Subtle gradient overlay -->
-    <div class="absolute inset-0 bg-gradient-to-br from-white/[0.02] via-transparent to-white/[0.02] blur-3xl"></div>
-
-    <!-- Shape 1 — large, top-left -->
-    <div class="hero-shape absolute left-[-8%] top-[12%] opacity-0" style="--delay: 0.2s; --float-duration: 14s;">
-      <div class="w-[500px] h-[120px] rounded-full rotate-12 bg-gradient-to-r from-white/[0.07] to-transparent backdrop-blur-[2px] border border-white/[0.08] shadow-[0_8px_32px_0_rgba(255,255,255,0.05)]"></div>
-    </div>
-
-    <!-- Shape 2 — medium, top-right -->
-    <div class="hero-shape absolute right-[-3%] top-[8%] opacity-0" style="--delay: 0.5s; --float-duration: 16s;">
-      <div class="w-[300px] h-[70px] rounded-full -rotate-[20deg] bg-gradient-to-r from-white/[0.06] to-transparent backdrop-blur-[2px] border border-white/[0.06] shadow-[0_8px_32px_0_rgba(255,255,255,0.04)]"></div>
-    </div>
-
-    <!-- Shape 3 — large, bottom-right -->
-    <div class="hero-shape absolute right-[-5%] bottom-[10%] opacity-0" style="--delay: 0.4s; --float-duration: 18s;">
-      <div class="w-[450px] h-[110px] rounded-full -rotate-[15deg] bg-gradient-to-r from-white/[0.06] to-transparent backdrop-blur-[2px] border border-white/[0.07] shadow-[0_8px_32px_0_rgba(255,255,255,0.04)]"></div>
-    </div>
-
-    <!-- Shape 4 — small, left-center -->
-    <div class="hero-shape absolute left-[8%] bottom-[18%] opacity-0" style="--delay: 0.7s; --float-duration: 12s;">
-      <div class="w-[200px] h-[50px] rounded-full rotate-[8deg] bg-gradient-to-r from-white/[0.05] to-transparent backdrop-blur-[2px] border border-white/[0.06]"></div>
-    </div>
-
-    <!-- Shape 5 — tiny, top-center -->
-    <div class="hero-shape absolute left-[30%] top-[5%] opacity-0" style="--delay: 0.9s; --float-duration: 10s;">
-      <div class="w-[140px] h-[35px] rounded-full -rotate-[25deg] bg-gradient-to-r from-white/[0.04] to-transparent backdrop-blur-[1px] border border-white/[0.05]"></div>
-    </div>
-
-    <!-- Shape 6 — medium, right-center -->
-    <div class="hero-shape absolute right-[12%] top-[45%] opacity-0" style="--delay: 0.6s; --float-duration: 15s;">
-      <div class="w-[250px] h-[60px] rounded-full rotate-[18deg] bg-gradient-to-r from-white/[0.05] to-transparent backdrop-blur-[1px] border border-white/[0.06]"></div>
-    </div>
-  </div>
-
-  <!-- Fade edges -->
-  <div class="absolute inset-0 bg-gradient-to-t from-bg via-transparent to-bg/60 pointer-events-none"></div>
-
+<section class="relative pt-28 pb-20 md:pt-36 md:pb-28">
   <div class="relative z-10 mx-auto max-w-6xl px-6 text-center">
     <!-- Badge -->
     <div class="inline-flex items-center gap-2 text-heading bg-heading/10 px-2 py-0.5 rounded font-medium text-xs mb-8">
@@ -87,60 +49,9 @@
       </a>
     </div>
 
-    <!-- Terminal preview -->
+    <!-- Animated Terminal -->
     <div class="mt-14 mx-auto max-w-2xl">
-      <div class="rounded-lg border border-border bg-surface/80 backdrop-blur-sm overflow-hidden">
-        <div class="flex items-center gap-2 px-4 py-2.5 border-b border-border">
-          <div class="w-2.5 h-2.5 rounded-full bg-danger/50"></div>
-          <div class="w-2.5 h-2.5 rounded-full bg-warning/50"></div>
-          <div class="w-2.5 h-2.5 rounded-full bg-success/50"></div>
-          <span class="ml-2 text-[11px] text-muted font-mono">terminal — 4 commands to production</span>
-        </div>
-        <div class="p-4 font-mono text-xs text-left text-text leading-loose">
-          <div class="flex items-start gap-2">
-            <span class="text-heading select-none">$</span>
-            <span>git clone https://github.com/opensoar-hq/opensoar-deploy</span>
-          </div>
-          <div class="flex items-start gap-2">
-            <span class="text-heading select-none">$</span>
-            <span>cd opensoar-deploy && cp .env.example .env</span>
-          </div>
-          <div class="flex items-start gap-2">
-            <span class="text-heading select-none">$</span>
-            <span>docker compose up -d</span>
-          </div>
-          <div class="mt-2 pl-4 border-l-2 border-success/30 space-y-0.5">
-            <div><span class="text-success">&#10003;</span> PostgreSQL + Redis ready</div>
-            <div><span class="text-success">&#10003;</span> API running on <span class="text-heading">:8000</span></div>
-            <div><span class="text-success">&#10003;</span> Dashboard ready at <span class="text-heading">:3000</span></div>
-            <div><span class="text-success">&#10003;</span> 3 example playbooks loaded</div>
-          </div>
-        </div>
-      </div>
+      <AnimatedTerminal client:visible />
     </div>
   </div>
 </section>
-
-<style>
-  @keyframes hero-float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(15px); }
-  }
-
-  @keyframes hero-fade-in {
-    from {
-      opacity: 0;
-      transform: translateY(-40px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .hero-shape {
-    animation:
-      hero-fade-in 1.8s cubic-bezier(0.23, 0.86, 0.39, 0.96) var(--delay, 0s) forwards,
-      hero-float var(--float-duration, 14s) ease-in-out var(--delay, 0s) infinite;
-  }
-</style>
