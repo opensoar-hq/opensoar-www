@@ -52,24 +52,24 @@
         <div class="p-4 overflow-x-auto">
           <pre class="text-xs leading-relaxed font-mono"><code><span class="text-accent">from</span> <span class="text-heading">opensoar</span> <span class="text-accent">import</span> <span class="text-heading">playbook, action</span>
 
+<span class="text-accent">@action</span><span class="text-muted">(</span><span class="text-heading">name</span><span class="text-muted">=</span><span class="text-success">"enrich_ip"</span><span class="text-muted">,</span> <span class="text-heading">timeout</span><span class="text-muted">=</span><span class="text-warning">30</span><span class="text-muted">,</span> <span class="text-heading">retries</span><span class="text-muted">=</span><span class="text-warning">2</span><span class="text-muted">)</span>
+<span class="text-accent">async def</span> <span class="text-heading">enrich_ip</span><span class="text-muted">(</span><span class="text-heading">ip</span><span class="text-muted">:</span> <span class="text-heading">str</span><span class="text-muted">)</span> <span class="text-muted">-></span> <span class="text-heading">dict</span><span class="text-muted">:</span>
+    <span class="text-accent">return await</span> <span class="text-heading">virustotal</span><span class="text-muted">.</span><span class="text-heading">lookup_ip</span><span class="text-muted">(</span><span class="text-heading">ip</span><span class="text-muted">)</span>
+
 <span class="text-accent">@playbook</span><span class="text-muted">(</span>
-    <span class="text-heading">trigger</span><span class="text-muted">=</span><span class="text-success">"alert.created"</span><span class="text-muted">,</span>
-    <span class="text-heading">conditions</span><span class="text-muted">=&#123;</span><span class="text-success">"severity"</span><span class="text-muted">:</span> <span class="text-success">"critical"</span><span class="text-muted">&#125;</span>
+    <span class="text-heading">trigger</span><span class="text-muted">=</span><span class="text-success">"webhook"</span><span class="text-muted">,</span>
+    <span class="text-heading">conditions</span><span class="text-muted">=&#123;</span><span class="text-success">"severity"</span><span class="text-muted">: [</span><span class="text-success">"high"</span><span class="text-muted">,</span> <span class="text-success">"critical"</span><span class="text-muted">]&#125;</span>
 <span class="text-muted">)</span>
 <span class="text-accent">async def</span> <span class="text-heading">triage_critical</span><span class="text-muted">(</span><span class="text-heading">alert</span><span class="text-muted">):</span>
-    <span class="text-muted italic"># Enrich IOCs in parallel</span>
+    <span class="text-muted italic"># Enrich all IPs in parallel</span>
+    <span class="text-heading">iocs</span> <span class="text-muted">=</span> <span class="text-heading">alert</span><span class="text-muted">.</span><span class="text-text">get</span><span class="text-muted">(</span><span class="text-success">"iocs"</span><span class="text-muted">,</span> <span class="text-muted">&#123;&#125;)</span>
     <span class="text-heading">results</span> <span class="text-muted">=</span> <span class="text-accent">await</span> <span class="text-heading">asyncio</span><span class="text-muted">.</span><span class="text-heading">gather</span><span class="text-muted">(</span>
-        <span class="text-heading">virustotal</span><span class="text-muted">.</span><span class="text-heading">lookup</span><span class="text-muted">(</span><span class="text-heading">alert</span><span class="text-muted">.</span><span class="text-text">iocs</span><span class="text-muted">),</span>
-        <span class="text-heading">abuseipdb</span><span class="text-muted">.</span><span class="text-heading">check</span><span class="text-muted">(</span><span class="text-heading">alert</span><span class="text-muted">.</span><span class="text-text">source_ip</span><span class="text-muted">),</span>
+        <span class="text-muted">*[</span><span class="text-heading">enrich_ip</span><span class="text-muted">(</span><span class="text-heading">ip</span><span class="text-muted">)</span> <span class="text-accent">for</span> <span class="text-heading">ip</span> <span class="text-accent">in</span> <span class="text-heading">iocs</span><span class="text-muted">.</span><span class="text-text">get</span><span class="text-muted">(</span><span class="text-success">"ips"</span><span class="text-muted">,</span> <span class="text-muted">[])]</span>
     <span class="text-muted">)</span>
 
     <span class="text-muted italic"># Auto-escalate if confirmed malicious</span>
-    <span class="text-accent">if</span> <span class="text-heading">any</span><span class="text-muted">(</span><span class="text-heading">r</span><span class="text-muted">.</span><span class="text-text">malicious</span> <span class="text-accent">for</span> <span class="text-heading">r</span> <span class="text-accent">in</span> <span class="text-heading">results</span><span class="text-muted">):</span>
-        <span class="text-accent">await</span> <span class="text-heading">pagerduty</span><span class="text-muted">.</span><span class="text-heading">create_incident</span><span class="text-muted">(</span><span class="text-heading">alert</span><span class="text-muted">)</span>
-        <span class="text-accent">await</span> <span class="text-heading">slack</span><span class="text-muted">.</span><span class="text-heading">notify</span><span class="text-muted">(</span>
-            <span class="text-success">"#soc"</span><span class="text-muted">,</span>
-            <span class="text-success">f"Confirmed: &#123;</span><span class="text-heading">alert</span><span class="text-muted">.</span><span class="text-text">title</span><span class="text-success">&#125;"</span>
-        <span class="text-muted">)</span></code></pre>
+    <span class="text-accent">if</span> <span class="text-heading">any</span><span class="text-muted">(</span><span class="text-heading">r</span><span class="text-muted">.</span><span class="text-text">get</span><span class="text-muted">(</span><span class="text-success">"malicious"</span><span class="text-muted">)</span> <span class="text-accent">for</span> <span class="text-heading">r</span> <span class="text-accent">in</span> <span class="text-heading">results</span><span class="text-muted">):</span>
+        <span class="text-accent">await</span> <span class="text-heading">notify_soc</span><span class="text-muted">(</span><span class="text-success">f"Confirmed: &#123;</span><span class="text-heading">alert</span><span class="text-muted">[</span><span class="text-success">'title'</span><span class="text-muted">]</span><span class="text-success">&#125;"</span><span class="text-muted">)</span></code></pre>
         </div>
       </div>
     </div>
