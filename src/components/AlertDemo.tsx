@@ -96,11 +96,11 @@ const severityColors: Record<Severity, string> = {
   critical: "bg-[#da3633]/15 text-[#f85149] border-[#da3633]/30",
   high: "bg-[#f85149]/10 text-[#f85149] border-[#f85149]/20",
   medium: "bg-[#d29922]/10 text-[#d29922] border-[#d29922]/20",
-  low: "bg-[#58a6ff]/10 text-[#58a6ff] border-[#58a6ff]/20",
+  low: "bg-[#848d97]/10 text-[#848d97] border-[#848d97]/20",
 };
 
 const statusColors: Record<Status, string> = {
-  new: "bg-[#58a6ff]/10 text-[#58a6ff]",
+  new: "bg-[#848d97]/10 text-[#848d97]",
   in_progress: "bg-[#d29922]/10 text-[#d29922]",
   resolved: "bg-[#3fb950]/10 text-[#3fb950]",
 };
@@ -257,7 +257,7 @@ export function AlertDemo() {
             placeholder="Search alerts..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-44 h-7 pl-8 pr-3 text-[12px] rounded border border-[#30363d] bg-[#0d1117] text-[#e6edf3] placeholder:text-[#6e7681] focus:outline-none focus:border-[#58a6ff] transition-colors"
+            className="w-44 h-7 pl-8 pr-3 text-[12px] rounded border border-[#30363d] bg-[#0d1117] text-[#e6edf3] placeholder:text-[#6e7681] focus:outline-none focus:border-[#e6edf3]/50 transition-colors"
           />
         </div>
 
@@ -265,7 +265,7 @@ export function AlertDemo() {
         <select
           value={severityFilter}
           onChange={(e) => setSeverityFilter(e.target.value as Severity | "")}
-          className="h-7 px-2 text-[12px] rounded border border-[#30363d] bg-[#0d1117] text-[#8b949e] focus:outline-none focus:border-[#58a6ff] cursor-pointer"
+          className="h-7 px-2 text-[12px] rounded border border-[#30363d] bg-[#0d1117] text-[#8b949e] focus:outline-none focus:border-[#e6edf3]/50 cursor-pointer"
         >
           <option value="">All severities</option>
           <option value="critical">Critical</option>

@@ -1,0 +1,59 @@
+---
+import { AlertDisplayCards } from './AlertCards';
+---
+
+<section id="what-is-soar" class="relative py-20 md:py-28">
+  <div class="mx-auto max-w-6xl px-6">
+    <div class="grid lg:grid-cols-2 gap-14 items-center">
+      <!-- Left: SEO-rich explainer -->
+      <div>
+        <span class="text-heading bg-heading/10 px-2 py-0.5 rounded font-medium text-xs">What is SOAR?</span>
+        <h2 class="text-2xl md:text-3xl font-bold text-heading mt-4 mb-5">
+          Security Orchestration,<br/>Automation &amp; Response
+        </h2>
+        <div class="space-y-4 text-sm text-text leading-relaxed">
+          <p>
+            <strong class="text-heading">SOAR</strong> platforms help security teams respond to threats faster by
+            automating repetitive tasks &mdash; alert triage, IOC enrichment, ticket creation, and incident escalation &mdash;
+            so analysts can focus on what requires human judgement.
+          </p>
+          <p>
+            Traditional SOAR tools like Splunk SOAR, Palo Alto XSOAR, and IBM QRadar SOAR are expensive,
+            vendor-locked, and built around drag-and-drop workflows that don't scale. Playbooks are defined in
+            YAML or proprietary visual editors that break under version control and can't be unit tested.
+          </p>
+          <p>
+            <strong class="text-heading" style="font-family: 'Inter Tight', sans-serif; letter-spacing: -0.02em;"><span style="font-weight: 400;">Open</span><span style="font-weight: 700;">SOAR</span></strong> is
+            different. Playbooks are pure Python &mdash; async functions with decorators. You write them in your IDE, test them with pytest,
+            review them in pull requests, and deploy them like any other code. No vendor lock-in, no license fees, no YAML.
+          </p>
+        </div>
+
+        <!-- Key terms for SEO -->
+        <div class="mt-8 grid grid-cols-2 gap-3">
+          <div class="border border-border rounded-md bg-surface px-4 py-3">
+            <div class="text-xs font-semibold text-heading mb-1">Orchestration</div>
+            <div class="text-[11px] text-muted leading-relaxed">Connect your security stack &mdash; SIEM, EDR, threat intel, ticketing &mdash; into unified workflows.</div>
+          </div>
+          <div class="border border-border rounded-md bg-surface px-4 py-3">
+            <div class="text-xs font-semibold text-heading mb-1">Automation</div>
+            <div class="text-[11px] text-muted leading-relaxed">Eliminate repetitive tasks. Enrich IOCs, deduplicate alerts, and triage at machine speed.</div>
+          </div>
+          <div class="border border-border rounded-md bg-surface px-4 py-3">
+            <div class="text-xs font-semibold text-heading mb-1">Response</div>
+            <div class="text-[11px] text-muted leading-relaxed">Auto-escalate, block IPs, isolate hosts, notify on-call &mdash; respond in seconds, not hours.</div>
+          </div>
+          <div class="border border-border rounded-md bg-surface px-4 py-3">
+            <div class="text-xs font-semibold text-heading mb-1">Open Source</div>
+            <div class="text-[11px] text-muted leading-relaxed">Apache 2.0 licensed. Self-host on your infrastructure. Own your data. No surprise invoices.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Stacked alert display cards -->
+      <div class="hidden lg:flex items-center justify-center min-h-[400px]">
+        <AlertDisplayCards client:visible />
+      </div>
+    </div>
+  </div>
+</section>

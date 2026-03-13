@@ -6,7 +6,7 @@ interface Props {
   description?: string;
 }
 
-const { title, description = "Open-source SOAR platform for modern security teams. Python-native playbooks, AI-assisted triage, real-time alert ingestion." } = Astro.props;
+const { title, description = "OpenSOAR is an open-source SOAR (Security Orchestration, Automation and Response) platform. Python-native playbooks, AI-assisted triage, and real-time alert ingestion for modern security teams." } = Astro.props;
 ---
 
 <!doctype html>
@@ -14,6 +14,9 @@ const { title, description = "Open-source SOAR platform for modern security team
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700&display=swap" rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#0d1117" />
