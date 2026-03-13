@@ -1,0 +1,81 @@
+---
+---
+
+<section class="relative pt-32 pb-24 md:pt-44 md:pb-32 overflow-hidden">
+  <!-- Background gradient effects -->
+  <div class="absolute inset-0 pointer-events-none">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-b from-accent-blue/8 via-accent-purple/5 to-transparent rounded-full blur-3xl"></div>
+    <div class="absolute top-20 left-1/4 w-[400px] h-[400px] bg-accent-cyan/5 rounded-full blur-3xl"></div>
+    <div class="absolute top-40 right-1/4 w-[300px] h-[300px] bg-accent-purple/5 rounded-full blur-3xl"></div>
+  </div>
+
+  <!-- Grid pattern overlay -->
+  <div class="absolute inset-0 pointer-events-none opacity-[0.03]" style="background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 60px 60px;"></div>
+
+  <div class="relative mx-auto max-w-6xl px-6 text-center">
+    <!-- Badge -->
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 mb-8 rounded-full border border-white/10 bg-white/5 text-sm text-slate-400">
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+      Apache 2.0 Licensed &mdash; Free &amp; Open Source
+    </div>
+
+    <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.1] tracking-tight mb-6">
+      Open-Source SOAR for<br/>
+      <span class="bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan bg-clip-text text-transparent">Modern Security Teams</span>
+    </h1>
+
+    <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+      Python-native playbooks. AI-assisted triage. Real-time alert ingestion.
+      Build your security automation the way it should be &mdash; in code, not YAML.
+    </p>
+
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a
+        href="https://github.com/opensoar-hq"
+        target="_blank"
+        rel="noopener"
+        class="group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-gradient-to-r from-accent-blue to-accent-purple text-white font-semibold text-base shadow-lg shadow-accent-blue/20 hover:shadow-accent-blue/30 hover:brightness-110 transition-all"
+      >
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+        </svg>
+        Get Started
+        <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+
+      <a
+        href="https://demo.opensoar.app"
+        target="_blank"
+        rel="noopener"
+        class="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl border border-white/10 bg-white/5 text-white font-semibold text-base hover:bg-white/10 hover:border-white/20 transition-all"
+      >
+        <svg class="w-4.5 h-4.5 text-accent-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/>
+        </svg>
+        Live Demo
+      </a>
+    </div>
+
+    <!-- Terminal preview hint -->
+    <div class="mt-16 mx-auto max-w-xl">
+      <div class="rounded-xl border border-white/10 bg-navy-900/80 p-4 font-mono text-sm text-left">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-3 h-3 rounded-full bg-red-500/60"></div>
+          <div class="w-3 h-3 rounded-full bg-yellow-500/60"></div>
+          <div class="w-3 h-3 rounded-full bg-green-500/60"></div>
+          <span class="ml-2 text-xs text-slate-500">terminal</span>
+        </div>
+        <div class="text-slate-400">
+          <span class="text-accent-cyan">$</span> pip install opensoar<br/>
+          <span class="text-accent-cyan">$</span> opensoar init my-soc<br/>
+          <span class="text-accent-cyan">$</span> opensoar run<br/>
+          <span class="text-emerald-400/70">&#10003; Webhook listener started on :8000</span><br/>
+          <span class="text-emerald-400/70">&#10003; 3 playbooks loaded</span><br/>
+          <span class="text-emerald-400/70">&#10003; Dashboard ready at localhost:3000</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

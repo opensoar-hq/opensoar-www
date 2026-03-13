@@ -1,0 +1,79 @@
+---
+const rows = [
+  { feature: "Open Source", opensoar: true, shuffle: true, splunk: false, xsoar: false },
+  { feature: "Python-Native Playbooks", opensoar: true, shuffle: false, splunk: false, xsoar: false },
+  { feature: "Self-Hosted", opensoar: true, shuffle: true, splunk: true, xsoar: false },
+  { feature: "AI-Ready Architecture", opensoar: true, shuffle: false, splunk: "Partial", xsoar: "Partial" },
+  { feature: "No Vendor Lock-In", opensoar: true, shuffle: true, splunk: false, xsoar: false },
+  { feature: "Async / Parallel Execution", opensoar: true, shuffle: false, splunk: true, xsoar: true },
+  { feature: "Free to Use", opensoar: true, shuffle: true, splunk: false, xsoar: false },
+];
+
+function renderCell(value: boolean | string) {
+  if (value === true) return { icon: "check", color: "text-emerald-400" };
+  if (value === false) return { icon: "x", color: "text-slate-600" };
+  return { icon: "partial", color: "text-yellow-400", text: value };
+}
+---
+
+<section id="compare" class="relative py-24 md:py-32">
+  <div class="mx-auto max-w-6xl px-6">
+    <div class="text-center mb-16">
+      <p class="text-sm font-semibold text-accent-cyan uppercase tracking-widest mb-3">Comparison</p>
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+        Why OpenSOAR?
+      </h2>
+      <p class="text-lg text-slate-400 max-w-2xl mx-auto">
+        Built different. No YAML playbooks, no vendor lock-in, no surprise invoices.
+      </p>
+    </div>
+
+    <div class="rounded-2xl border border-white/5 bg-navy-900/50 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-white/5">
+              <th class="text-left px-6 py-4 text-slate-400 font-medium"></th>
+              <th class="px-6 py-4 text-center">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r from-accent-blue/10 to-accent-purple/10 border border-accent-blue/20">
+                  <span class="font-bold text-white">OpenSOAR</span>
+                </div>
+              </th>
+              <th class="px-6 py-4 text-center text-slate-400 font-medium">Shuffle</th>
+              <th class="px-6 py-4 text-center text-slate-400 font-medium">Splunk SOAR</th>
+              <th class="px-6 py-4 text-center text-slate-400 font-medium">XSOAR</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, i) => {
+              const cells = [
+                renderCell(row.opensoar),
+                renderCell(row.shuffle),
+                renderCell(row.splunk),
+                renderCell(row.xsoar),
+              ];
+              return (
+                <tr class={`border-b border-white/5 ${i % 2 === 0 ? 'bg-white/[0.01]' : ''}`}>
+                  <td class="px-6 py-4 text-slate-300 font-medium">{row.feature}</td>
+                  {cells.map((cell) => (
+                    <td class="px-6 py-4 text-center">
+                      {cell.icon === "check" && (
+                        <svg class={`w-5 h-5 mx-auto ${cell.color}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      )}
+                      {cell.icon === "x" && (
+                        <svg class={`w-5 h-5 mx-auto ${cell.color}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                      )}
+                      {cell.icon === "partial" && (
+                        <span class={`text-xs font-medium ${cell.color}`}>{cell.text}</span>
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy-950: #0a0e1a;
+  --color-navy-900: #0f1629;
+  --color-navy-800: #151d37;
+  --color-navy-700: #1c2748;
+  --color-navy-600: #263359;
+  --color-slate-400: #94a3b8;
+  --color-slate-300: #cbd5e1;
+  --color-slate-200: #e2e8f0;
+  --color-accent-blue: #3b82f6;
+  --color-accent-cyan: #06b6d4;
+  --color-accent-purple: #8b5cf6;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Code block syntax highlighting */
+.code-keyword { color: #c792ea; }
+.code-decorator { color: #c792ea; }
+.code-function { color: #82aaff; }
+.code-string { color: #c3e88d; }
+.code-comment { color: #546e7a; font-style: italic; }
+.code-param { color: #f78c6c; }
+.code-method { color: #82aaff; }
+.code-property { color: #f07178; }
+.code-builtin { color: #ffcb6b; }
+.code-punctuation { color: #89ddff; }
+.code-plain { color: #bfc7d5; }
+.code-number { color: #f78c6c; }
