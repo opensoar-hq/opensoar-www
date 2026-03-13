@@ -45,3 +45,4 @@ body {
     bg-fade-in 2s cubic-bezier(0.23, 0.86, 0.39, 0.96) var(--delay, 0s) forwards,
     bg-float var(--float-duration, 14s) ease-in-out var(--delay, 0s) infinite;
 }
+

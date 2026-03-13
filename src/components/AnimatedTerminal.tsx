@@ -30,7 +30,7 @@ const CHAR_MS = 28
 const CMD_PAUSE = 400 // pause between commands
 const OUTPUT_START_DELAY = 300 // pause before output starts
 
-type Phase = 'typing' | 'pausing' | 'output' | 'done' | 'restarting'
+type Phase = 'typing' | 'pausing' | 'output' | 'done'
 
 export function AnimatedTerminal() {
   const [typedCommands, setTypedCommands] = useState<string[]>([])
@@ -39,6 +39,16 @@ export function AnimatedTerminal() {
   const [visibleOutputs, setVisibleOutputs] = useState<number[]>([])
   const [phase, setPhase] = useState<Phase>('typing')
   const [showCursor, setShowCursor] = useState(true)
+
+  // Inject keyframes
+  useEffect(() => {
+    if (typeof document === 'undefined') return
+    if (document.getElementById('terminal-css')) return
+    const s = document.createElement('style')
+    s.id = 'terminal-css'
+    s.textContent = `@keyframes terminal-line-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }`
+    document.head.appendChild(s)
+  }, [])
 
   // Blinking cursor
   useEffect(() => {
@@ -77,37 +87,21 @@ export function AnimatedTerminal() {
 
     if (phase === 'output') {
       const timer = setTimeout(() => {
-        // Reveal outputs one by one
-        let idx = 0
-        const reveal = () => {
-          if (idx < outputs.length) {
-            setVisibleOutputs(prev => [...prev, idx])
-            idx++
-            setTimeout(reveal, outputs[idx - 1]?.delay || 200)
-          } else {
-            setPhase('done')
-          }
-        }
-        reveal()
+        // Reveal outputs one by one using separate timeouts with captured values
+        outputs.forEach((out, i) => {
+          const totalDelay = outputs.slice(0, i).reduce((sum, o) => sum + (o.delay || 200), 0)
+          setTimeout(() => {
+            setVisibleOutputs(prev => [...prev, i])
+            if (i === outputs.length - 1) {
+              setTimeout(() => setPhase('done'), 200)
+            }
+          }, totalDelay)
+        })
       }, OUTPUT_START_DELAY)
       return () => clearTimeout(timer)
     }
 
-    if (phase === 'done') {
-      // Wait then restart
-      const timer = setTimeout(() => {
-        setPhase('restarting')
-      }, 4000)
-      return () => clearTimeout(timer)
-    }
-
-    if (phase === 'restarting') {
-      setTypedCommands([])
-      setCurrentCmd(0)
-      setCurrentChar(0)
-      setVisibleOutputs([])
-      setPhase('typing')
-    }
+    // 'done' — terminal stays as-is, no restart
   }, [phase, currentCmd, currentChar])
 
   // Build the current typing line
@@ -145,7 +139,7 @@ export function AnimatedTerminal() {
         textAlign: 'left',
         color: c.text,
         lineHeight: 1.9,
-        minHeight: '180px',
+        height: '220px',
       }}>
         {/* Already typed commands */}
         {typedCommands.map((cmd, i) => (
@@ -175,38 +169,37 @@ export function AnimatedTerminal() {
         )}
 
         {/* Cursor on empty line when all commands typed but no output yet */}
-        {currentCmd >= commands.length && visibleOutputs.length === 0 && phase !== 'done' && phase !== 'restarting' && (
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
+        {currentCmd >= commands.length && visibleOutputs.length === 0 && phase !== 'done' && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <span style={{ color: c.heading, userSelect: 'none' }}>$</span>
             <span style={{
               display: 'inline-block',
               width: '0.5rem',
-              height: '1.1em',
+              height: '0.85em',
               backgroundColor: showCursor ? c.heading : 'transparent',
-              verticalAlign: 'text-bottom',
+              transition: 'background-color 0.1s',
             }} />
           </div>
         )}
 
-        {/* Output lines */}
+        {/* Output lines — only render visible ones */}
         {visibleOutputs.length > 0 && (
           <div style={{
-            marginTop: '0.5rem',
+            marginTop: '0.25rem',
             paddingLeft: '1rem',
             borderLeft: `2px solid ${c.success}4d`,
             display: 'flex',
             flexDirection: 'column',
             gap: '0.125rem',
+            lineHeight: 1.5,
           }}>
-            {outputs.map((out, i) => {
-              const visible = visibleOutputs.includes(i)
+            {visibleOutputs.map((idx) => {
+              const out = outputs[idx]
               return (
                 <div
-                  key={i}
+                  key={idx}
                   style={{
-                    opacity: visible ? 1 : 0,
-                    transform: visible ? 'translateY(0)' : 'translateY(6px)',
-                    transition: 'opacity 0.3s ease, transform 0.3s ease',
+                    animation: 'terminal-line-in 0.3s ease both',
                   }}
                 >
                   <span style={{ color: c.success }}>&#10003;</span>{' '}
@@ -219,6 +212,24 @@ export function AnimatedTerminal() {
                 </div>
               )
             })}
+          </div>
+        )}
+
+        {/* Final ready prompt after everything is done */}
+        {phase === 'done' && (
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: '0.5rem',
+            marginTop: '0.25rem',
+            animation: 'terminal-line-in 0.3s ease both',
+          }}>
+            <span style={{ color: c.heading, userSelect: 'none' }}>$</span>
+            <span style={{
+              display: 'inline-block',
+              width: '0.5rem',
+              height: '0.85em',
+              backgroundColor: showCursor ? c.heading : 'transparent',
+              transition: 'background-color 0.1s',
+            }} />
           </div>
         )}
       </div>

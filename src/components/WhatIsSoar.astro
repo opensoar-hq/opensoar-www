@@ -1,5 +1,5 @@
 ---
-import { SoarCircuit } from './SoarCircuit';
+import { SoarOrbital } from './SoarOrbital';
 ---
 
 <section id="what-is-soar" class="relative py-20 md:py-28">
@@ -12,17 +12,17 @@ import { SoarCircuit } from './SoarCircuit';
           Security Orchestration,<br/>Automation &amp; Response
         </h2>
         <p class="text-sm text-text leading-relaxed mb-6">
-          <strong class="text-heading">SOAR</strong> automates what slows your SOC down &mdash; alert triage, IOC enrichment, ticket creation, escalation. Analysts focus on real threats while playbooks handle the rest at machine speed.
+          Your SOC drowns in 960+ alerts a day. <strong class="text-heading">SOAR</strong> automates the repetitive work &mdash; alert triage, IOC enrichment, ticket creation, escalation &mdash; so analysts focus on real threats while playbooks handle the rest at machine speed.
         </p>
         <p class="text-sm text-text leading-relaxed">
-          Traditional tools like Splunk SOAR and XSOAR cost six figures and lock you into YAML workflows.
-          <strong class="text-heading" style="font-family: 'Inter Tight', sans-serif; letter-spacing: -0.02em;"><span style="font-weight: 400;"> Open</span><span style="font-weight: 700;">SOAR</span></strong> gives you the same capabilities in pure Python &mdash; free, open source, and built for engineers.
+          Tools like Splunk SOAR and XSOAR cost six figures, lock you into YAML, and charge per automation action.
+          <strong class="text-heading" style="font-family: 'Inter Tight', sans-serif; letter-spacing: -0.02em;"><span style="font-weight: 400;"> Open</span><span style="font-weight: 700;">SOAR</span></strong> gives you the same capabilities in pure Python &mdash; no sandbox, no per-action billing, Apache 2.0 licensed.
         </p>
       </div>
 
-      <!-- Right: Circuit visualization — alerts flowing into SOAR engine -->
+      <!-- Right: Orbital visualization — alert sources flowing into SOAR engine -->
       <div class="hidden lg:flex items-center justify-center">
-        <SoarCircuit client:visible />
+        <SoarOrbital client:visible />
       </div>
     </div>
   </div>

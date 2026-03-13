@@ -1,12 +1,13 @@
 ---
 const rows = [
-  { feature: "Open Source", opensoar: true, shuffle: true, splunk: false, xsoar: false },
-  { feature: "Python-Native Playbooks", opensoar: true, shuffle: false, splunk: false, xsoar: false },
-  { feature: "Self-Hosted", opensoar: true, shuffle: true, splunk: true, xsoar: false },
-  { feature: "AI-Ready Architecture", opensoar: true, shuffle: false, splunk: "Partial", xsoar: "Partial" },
-  { feature: "No Vendor Lock-In", opensoar: true, shuffle: true, splunk: false, xsoar: false },
-  { feature: "Async / Parallel Execution", opensoar: true, shuffle: false, splunk: true, xsoar: true },
-  { feature: "Free to Use", opensoar: true, shuffle: true, splunk: false, xsoar: false },
+  { feature: "Open Source", opensoar: true, shuffle: true, turbine: false, splunk: false, xsoar: false },
+  { feature: "Python-Native Playbooks", opensoar: true, shuffle: false, turbine: "Sandboxed", splunk: false, xsoar: false },
+  { feature: "No Per-Action Billing", opensoar: true, shuffle: true, turbine: false, splunk: false, xsoar: false },
+  { feature: "Self-Hosted", opensoar: true, shuffle: true, turbine: true, splunk: true, xsoar: false },
+  { feature: "AI-Ready Architecture", opensoar: true, shuffle: false, turbine: "Partial", splunk: "Partial", xsoar: "Partial" },
+  { feature: "No Vendor Lock-In", opensoar: true, shuffle: true, turbine: false, splunk: false, xsoar: false },
+  { feature: "Async / Parallel Execution", opensoar: true, shuffle: false, turbine: true, splunk: true, xsoar: true },
+  { feature: "Apache 2.0 License", opensoar: true, shuffle: false, turbine: false, splunk: false, xsoar: false },
 ];
 
 function renderCell(value: boolean | string) {
@@ -24,7 +25,7 @@ function renderCell(value: boolean | string) {
         Why OpenSOAR?
       </h2>
       <p class="text-sm text-text max-w-2xl mx-auto">
-        Built different. No YAML playbooks, no vendor lock-in, no surprise invoices.
+        No YAML playbooks, no sandboxed Python, no per-action billing, no vendor lock-in.
       </p>
     </div>
 
@@ -38,6 +39,7 @@ function renderCell(value: boolean | string) {
                 <span class="text-heading bg-heading/10 px-2 py-0.5 rounded text-xs" style="font-family: 'Inter Tight', sans-serif; letter-spacing: -0.02em;"><span style="font-weight: 400;">Open</span><span style="font-weight: 700;">SOAR</span></span>
               </th>
               <th class="px-5 py-3 text-center text-muted font-medium text-xs">Shuffle</th>
+              <th class="px-5 py-3 text-center text-muted font-medium text-xs">Turbine</th>
               <th class="px-5 py-3 text-center text-muted font-medium text-xs">Splunk SOAR</th>
               <th class="px-5 py-3 text-center text-muted font-medium text-xs">XSOAR</th>
             </tr>
@@ -47,6 +49,7 @@ function renderCell(value: boolean | string) {
               const cells = [
                 renderCell(row.opensoar),
                 renderCell(row.shuffle),
+                renderCell(row.turbine),
                 renderCell(row.splunk),
                 renderCell(row.xsoar),
               ];

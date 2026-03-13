@@ -30,7 +30,7 @@ Deployed automatically via Cloudflare Pages on push to `main`.
 
 ## Part of OpenSOAR
 
-- [opensoar](https://github.com/opensoar-hq/opensoar) -- Core platform
+- [opensoar-core](https://github.com/opensoar-hq/opensoar-core) -- Core platform
 - [opensoar-ui](https://github.com/opensoar-hq/opensoar-ui) -- React dashboard
 - [opensoar-sdk](https://github.com/opensoar-hq/opensoar-sdk) -- Python SDK
 - [opensoar-integrations](https://github.com/opensoar-hq/opensoar-integrations) -- Community integrations

@@ -1,8 +1,21 @@
 ---
-import { AnimatedTerminal } from './AnimatedTerminal';
+import { FlickeringGrid } from './ui/flickering-grid';
 ---
 
-<section class="relative pt-28 pb-20 md:pt-36 md:pb-28">
+<section class="relative pt-28 pb-20 md:pt-36 md:pb-28 overflow-hidden">
+  <!-- Flickering grid background -->
+  <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+    <FlickeringGrid
+      client:visible
+      className="z-0 absolute inset-0 size-full"
+      squareSize={4}
+      gridGap={6}
+      color="#6B7280"
+      maxOpacity={0.15}
+      flickerChance={0.1}
+    />
+    <div class="absolute inset-0 bg-gradient-to-t from-bg via-transparent to-bg/80"></div>
+  </div>
   <div class="relative z-10 mx-auto max-w-6xl px-6 text-center">
     <!-- Badge -->
     <div class="inline-flex items-center gap-2 text-heading bg-heading/10 px-2 py-0.5 rounded font-medium text-xs mb-8">
@@ -22,7 +35,7 @@ import { AnimatedTerminal } from './AnimatedTerminal';
 
     <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
       <a
-        href="https://github.com/opensoar-hq"
+        href="https://github.com/opensoar-hq/opensoar-core"
         target="_blank"
         rel="noopener"
         class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-heading text-bg font-medium text-sm hover:bg-heading/90 transition-colors"
@@ -49,9 +62,33 @@ import { AnimatedTerminal } from './AnimatedTerminal';
       </a>
     </div>
 
-    <!-- Animated Terminal -->
-    <div class="mt-14 mx-auto max-w-2xl">
-      <AnimatedTerminal client:visible />
+    <!-- Quick start command -->
+    <div class="mt-14 mx-auto max-w-md">
+      <div class="flex items-center gap-3 bg-surface border border-border rounded-lg px-4 py-3">
+        <span class="text-muted select-none">$</span>
+        <code class="text-sm text-heading font-mono flex-1 select-all">git clone https://github.com/opensoar-hq/opensoar-core && cd opensoar-core && docker compose up -d</code>
+        <button
+          id="copy-cmd"
+          class="text-muted hover:text-heading transition-colors shrink-0"
+          aria-label="Copy command"
+        >
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+        </button>
+      </div>
     </div>
+
+    <script>
+      document.getElementById('copy-cmd')?.addEventListener('click', (e) => {
+        const cmd = 'git clone https://github.com/opensoar-hq/opensoar-core && cd opensoar-core && docker compose up -d';
+        navigator.clipboard.writeText(cmd);
+        const btn = e.currentTarget as HTMLButtonElement;
+        btn.innerHTML = '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+        setTimeout(() => {
+          btn.innerHTML = '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+        }, 2000);
+      });
+    </script>
   </div>
 </section>

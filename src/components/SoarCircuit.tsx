@@ -62,11 +62,60 @@ export function SoarCircuit() {
   return (
     <div style={{ position: 'relative', width: '100%', maxWidth: '500px', margin: '0 auto' }}>
       <svg
-        viewBox="0 0 200 100"
+        viewBox="15 0 200 100"
         width="100%"
         height="100%"
         style={{ color: c.muted }}
       >
+        {/* Defs first */}
+        <defs>
+          {/* Masks for each trace path */}
+          <mask id="soar-m1"><path d="M 10 20 h 79.5 q 5 0 5 5 v 24" strokeWidth="0.5" stroke="white" fill="none" /></mask>
+          <mask id="soar-m2"><path d="M 180 10 h -69.7 q -5 0 -5 5 v 24" strokeWidth="0.5" stroke="white" fill="none" /></mask>
+          <mask id="soar-m3"><path d="M 130 20 v 21.8 q 0 5 -5 5 h -10" strokeWidth="0.5" stroke="white" fill="none" /></mask>
+          <mask id="soar-m4"><path d="M 170 80 v -21.8 q 0 -5 -5 -5 h -50" strokeWidth="0.5" stroke="white" fill="none" /></mask>
+          <mask id="soar-m5"><path d="M 135 65 h 15 q 5 0 5 5 v 10 q 0 5 -5 5 h -39.8 q -5 0 -5 -5 v -20" strokeWidth="0.5" stroke="white" fill="none" /></mask>
+          <mask id="soar-m6"><path d="M 94.8 95 v -36" strokeWidth="0.5" stroke="white" fill="none" /></mask>
+          <mask id="soar-m7"><path d="M 88 88 v -15 q 0 -5 -5 -5 h -10 q -5 0 -5 -5 v -5 q 0 -5 5 -5 h 14" strokeWidth="0.5" stroke="white" fill="none" /></mask>
+          <mask id="soar-m8"><path d="M 30 30 h 25 q 5 0 5 5 v 6.5 q 0 5 5 5 h 20" strokeWidth="0.5" stroke="white" fill="none" /></mask>
+
+          {/* Trace glow gradients */}
+          <radialGradient id="soar-g-white" fx="1">
+            <stop offset="0%" stopColor={c.heading} />
+            <stop offset="100%" stopColor="transparent" />
+          </radialGradient>
+          <radialGradient id="soar-g-green" fx="1">
+            <stop offset="0%" stopColor={c.success} />
+            <stop offset="100%" stopColor="transparent" />
+          </radialGradient>
+          <radialGradient id="soar-g-danger" fx="1">
+            <stop offset="0%" stopColor={c.danger} />
+            <stop offset="100%" stopColor="transparent" />
+          </radialGradient>
+          <radialGradient id="soar-g-warn" fx="1">
+            <stop offset="0%" stopColor={c.warning} />
+            <stop offset="100%" stopColor="transparent" />
+          </radialGradient>
+
+          {/* Pin gradient */}
+          <linearGradient id="soar-pin-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={c.border} />
+            <stop offset="100%" stopColor={c.bg} />
+          </linearGradient>
+
+          {/* Shadow */}
+          <filter id="soar-shadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="1" dy="1" stdDeviation="1.5" floodColor={c.heading} floodOpacity="0.08" />
+          </filter>
+
+          {/* Start marker dots */}
+          <marker id="soar-marker" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="14" markerHeight="14">
+            <circle cx="5" cy="5" r="2" fill={c.bg} stroke={c.border} strokeWidth="0.5">
+              <animate attributeName="r" values="0; 3; 2" dur="0.5s" />
+            </circle>
+          </marker>
+        </defs>
+
         {/* Circuit paths */}
         <g
           stroke="currentColor"
@@ -122,11 +171,11 @@ export function SoarCircuit() {
             <rect x="87" y="-13.6" width="2.5" height="5" rx="0.7" transform="rotate(270 115.25 19.5)" />
           </g>
 
-          {/* Main chip */}
+          {/* Main chip body */}
           <rect x="85" y="40" width="30" height="20" rx="2" fill={c.surface} filter="url(#soar-shadow)" stroke={c.border} strokeWidth="0.3" />
 
-          {/* SOAR text with shimmer */}
-          <text x="88.5" y="52.5" fontSize="6.5" fill="url(#soar-text-grad)" fontWeight="700" letterSpacing="0.08em"
+          {/* SOAR text — rendered last to ensure it's on top */}
+          <text x="88.5" y="52.5" fontSize="6.5" fill={c.heading} fontWeight="700" letterSpacing="0.08em"
             style={{ fontFamily: "'Inter Tight', sans-serif" }}>
             SOAR
           </text>
@@ -139,68 +188,6 @@ export function SoarCircuit() {
             {s.label}
           </text>
         ))}
-
-        {/* Defs */}
-        <defs>
-          {/* Masks for each trace path */}
-          <mask id="soar-m1"><path d="M 10 20 h 79.5 q 5 0 5 5 v 24" strokeWidth="0.5" stroke="white" fill="none" /></mask>
-          <mask id="soar-m2"><path d="M 180 10 h -69.7 q -5 0 -5 5 v 24" strokeWidth="0.5" stroke="white" fill="none" /></mask>
-          <mask id="soar-m3"><path d="M 130 20 v 21.8 q 0 5 -5 5 h -10" strokeWidth="0.5" stroke="white" fill="none" /></mask>
-          <mask id="soar-m4"><path d="M 170 80 v -21.8 q 0 -5 -5 -5 h -50" strokeWidth="0.5" stroke="white" fill="none" /></mask>
-          <mask id="soar-m5"><path d="M 135 65 h 15 q 5 0 5 5 v 10 q 0 5 -5 5 h -39.8 q -5 0 -5 -5 v -20" strokeWidth="0.5" stroke="white" fill="none" /></mask>
-          <mask id="soar-m6"><path d="M 94.8 95 v -36" strokeWidth="0.5" stroke="white" fill="none" /></mask>
-          <mask id="soar-m7"><path d="M 88 88 v -15 q 0 -5 -5 -5 h -10 q -5 0 -5 -5 v -5 q 0 -5 5 -5 h 14" strokeWidth="0.5" stroke="white" fill="none" /></mask>
-          <mask id="soar-m8"><path d="M 30 30 h 25 q 5 0 5 5 v 6.5 q 0 5 5 5 h 20" strokeWidth="0.5" stroke="white" fill="none" /></mask>
-
-          {/* Trace glow gradients — monochrome with semantic colors */}
-          <radialGradient id="soar-g-white" fx="1">
-            <stop offset="0%" stopColor={c.heading} />
-            <stop offset="100%" stopColor="transparent" />
-          </radialGradient>
-          <radialGradient id="soar-g-green" fx="1">
-            <stop offset="0%" stopColor={c.success} />
-            <stop offset="100%" stopColor="transparent" />
-          </radialGradient>
-          <radialGradient id="soar-g-danger" fx="1">
-            <stop offset="0%" stopColor={c.danger} />
-            <stop offset="100%" stopColor="transparent" />
-          </radialGradient>
-          <radialGradient id="soar-g-warn" fx="1">
-            <stop offset="0%" stopColor={c.warning} />
-            <stop offset="100%" stopColor="transparent" />
-          </radialGradient>
-
-          {/* Pin gradient */}
-          <linearGradient id="soar-pin-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={c.border} />
-            <stop offset="100%" stopColor={c.bg} />
-          </linearGradient>
-
-          {/* Shadow */}
-          <filter id="soar-shadow" x="-50%" y="-50%" width="200%" height="200%">
-            <feDropShadow dx="1" dy="1" stdDeviation="1.5" floodColor={c.heading} floodOpacity="0.08" />
-          </filter>
-
-          {/* Start marker dots */}
-          <marker id="soar-marker" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="14" markerHeight="14">
-            <circle cx="5" cy="5" r="2" fill={c.bg} stroke={c.border} strokeWidth="0.5">
-              <animate attributeName="r" values="0; 3; 2" dur="0.5s" />
-            </circle>
-          </marker>
-
-          {/* SOAR text shimmer */}
-          <linearGradient id="soar-text-grad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor={c.muted}>
-              <animate attributeName="offset" values="-2; -1; 0" dur="5s" repeatCount="indefinite" calcMode="spline" keyTimes="0; 0.5; 1" keySplines="0.4 0 0.2 1; 0.4 0 0.2 1" />
-            </stop>
-            <stop offset="25%" stopColor={c.heading}>
-              <animate attributeName="offset" values="-1; 0; 1" dur="5s" repeatCount="indefinite" calcMode="spline" keyTimes="0; 0.5; 1" keySplines="0.4 0 0.2 1; 0.4 0 0.2 1" />
-            </stop>
-            <stop offset="50%" stopColor={c.muted}>
-              <animate attributeName="offset" values="0; 1; 2" dur="5s" repeatCount="indefinite" calcMode="spline" keyTimes="0; 0.5; 1" keySplines="0.4 0 0.2 1; 0.4 0 0.2 1" />
-            </stop>
-          </linearGradient>
-        </defs>
       </svg>
     </div>
   )
