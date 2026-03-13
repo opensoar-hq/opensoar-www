@@ -1,35 +1,5 @@
 ---
 import { AlertDemo } from './AlertDemo';
-
-const features = [
-  { icon: "code", label: "Python-Native Playbooks", desc: "Write automation in real Python — not YAML, not a sandbox. Full IDE support, any pip package.", tag: "Core" },
-  { icon: "zap", label: "Real-Time Ingestion", desc: "Webhooks, polling, Elasticsearch, syslog — alerts flow in from anywhere and trigger playbooks automatically.", tag: "Core" },
-  { icon: "layout", label: "SOC Dashboard", desc: "Priority queue, MTTR tracking, unassigned alerts, per-partner stats. Built for IR analysts.", tag: "UI" },
-  { icon: "git-branch", label: "Async Playbook Engine", desc: "asyncio.gather() for parallel, await for sequential. Timeout, retry, and backoff per action.", tag: "Core" },
-  { icon: "plug", label: "Integration Ecosystem", desc: "Elastic, CrowdStrike, VirusTotal, AbuseIPDB, Slack, Jira, and more. Community-driven.", tag: "Integrations" },
-  { icon: "shield", label: "JWT + API Key Auth", desc: "Analyst management with JWT. API keys for integrations. Full REST API with OpenAPI docs.", tag: "Auth" },
-  { icon: "layers", label: "Alert Lifecycle", desc: "New → In Progress → Resolved. Determination tracking, IOC extraction, deduplication, severity inference.", tag: "Core" },
-  { icon: "cpu", label: "Celery Workers", desc: "Async playbook execution with horizontal scaling. Add more workers, handle more alerts.", tag: "Infra" },
-];
-
-const icons: Record<string, string> = {
-  code: '<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>',
-  zap: '<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>',
-  layout: '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>',
-  "git-branch": '<line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/>',
-  plug: '<path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a6 6 0 0 1-6 6 6 6 0 0 1-6-6V8z"/>',
-  shield: '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>',
-  layers: '<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>',
-  cpu: '<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/>',
-};
-
-const tagColors: Record<string, string> = {
-  Core: "bg-[#e6edf3]/10 text-[#e6edf3]",
-  UI: "bg-[#d29922]/10 text-[#d29922]",
-  Integrations: "bg-[#3fb950]/10 text-[#3fb950]",
-  Auth: "bg-[#f85149]/10 text-[#f85149]",
-  Infra: "bg-[#848d97]/10 text-[#848d97]",
-};
 ---
 
 <section id="features" class="relative py-20 md:py-28">
@@ -44,34 +14,228 @@ const tagColors: Record<string, string> = {
       </p>
     </div>
 
-    <!-- Feature list -->
-    <div class="rounded-lg border border-border bg-surface overflow-hidden">
-      <div class="flex items-center px-4 py-2.5 border-b border-border">
-        <div class="flex items-center gap-1.5 mr-2">
-          <div class="w-2.5 h-2.5 rounded-full bg-danger/50"></div>
-          <div class="w-2.5 h-2.5 rounded-full bg-warning/50"></div>
-          <div class="w-2.5 h-2.5 rounded-full bg-success/50"></div>
+    <!-- Bento grid -->
+    <div class="grid grid-cols-1 md:grid-cols-6 gap-3">
+
+      <!-- Python-Native Playbooks — wide card with code preview -->
+      <div class="md:col-span-3 group rounded-lg border border-border bg-surface p-5 hover:border-border/80 transition-colors">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="flex items-center justify-center w-7 h-7 rounded-md bg-heading/8 text-heading">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+            </svg>
+          </div>
+          <span class="text-xs font-medium text-heading">Python-Native Playbooks</span>
+          <span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-[#e6edf3]/10 text-[#e6edf3]">Core</span>
         </div>
-        <span class="text-[11px] text-muted font-mono">opensoar — capabilities</span>
-        <span class="ml-auto text-[11px] text-muted">{features.length} features</span>
+        <p class="text-xs text-text leading-relaxed mb-4">Write automation in real Python — not YAML, not a sandbox. Full IDE support, any pip package.</p>
+        <div class="rounded-md bg-bg border border-border overflow-hidden">
+          <div class="flex items-center gap-1.5 px-3 py-1.5 border-b border-border">
+            <div class="w-2 h-2 rounded-full bg-danger/40"></div>
+            <div class="w-2 h-2 rounded-full bg-warning/40"></div>
+            <div class="w-2 h-2 rounded-full bg-success/40"></div>
+            <span class="text-[10px] text-muted font-mono ml-1">triage.py</span>
+          </div>
+          <pre class="px-3 py-2.5 text-[11px] leading-relaxed font-mono overflow-x-auto no-scrollbar"><code><span class="text-[#ff7b72]">@playbook</span>(<span class="text-[#a5d6ff]">"triage_critical"</span>)
+<span class="text-[#ff7b72]">async def</span> <span class="text-[#d2a8ff]">run</span>(alert):
+    iocs = <span class="text-[#ff7b72]">await</span> extract_iocs(alert)
+    results = <span class="text-[#ff7b72]">await</span> gather(
+        lookup_virustotal(iocs),
+        check_abuseipdb(iocs),
+    )
+    <span class="text-[#ff7b72]">if</span> results.malicious:
+        <span class="text-[#ff7b72]">await</span> escalate_to_slack(alert)</code></pre>
+        </div>
       </div>
 
-      <div class="divide-y divide-border">
-        {features.map((f) => (
-          <div class="flex items-start gap-3 px-4 py-3 hover:bg-surface-hover transition-colors">
-            <div class="flex items-center justify-center w-8 h-8 rounded-md bg-heading/8 text-heading shrink-0 mt-0.5">
-              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={icons[f.icon]} />
+      <!-- Async Playbook Engine — wide card -->
+      <div class="md:col-span-3 group rounded-lg border border-border bg-surface p-5 hover:border-border/80 transition-colors">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="flex items-center justify-center w-7 h-7 rounded-md bg-heading/8 text-heading">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/>
+            </svg>
+          </div>
+          <span class="text-xs font-medium text-heading">Async Playbook Engine</span>
+          <span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-[#e6edf3]/10 text-[#e6edf3]">Core</span>
+        </div>
+        <p class="text-xs text-text leading-relaxed mb-4">asyncio.gather() for parallel, await for sequential. Timeout, retry, and backoff per action.</p>
+        <div class="rounded-md bg-bg border border-border overflow-hidden">
+          <div class="flex items-center gap-1.5 px-3 py-1.5 border-b border-border">
+            <div class="w-2 h-2 rounded-full bg-danger/40"></div>
+            <div class="w-2 h-2 rounded-full bg-warning/40"></div>
+            <div class="w-2 h-2 rounded-full bg-success/40"></div>
+            <span class="text-[10px] text-muted font-mono ml-1">execution flow</span>
+          </div>
+          <div class="px-3 py-3 space-y-2">
+            <div class="flex items-center gap-2">
+              <div class="w-1.5 h-1.5 rounded-full bg-success animate-pulse"></div>
+              <span class="text-[11px] font-mono text-muted">alert received</span>
+              <span class="text-[10px] text-muted/60 ml-auto">0ms</span>
             </div>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center gap-2">
-                <span class="text-sm font-medium text-heading">{f.label}</span>
-                <span class={`px-1.5 py-0.5 rounded text-[10px] font-medium ${tagColors[f.tag]}`}>{f.tag}</span>
-              </div>
-              <p class="text-xs text-text mt-0.5 leading-relaxed">{f.desc}</p>
+            <div class="flex items-center gap-2 ml-3">
+              <div class="w-px h-3 bg-border -my-1"></div>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-1.5 h-1.5 rounded-full bg-warning"></div>
+              <span class="text-[11px] font-mono text-heading">gather(</span>
+            </div>
+            <div class="flex items-center gap-2 ml-4">
+              <div class="w-1.5 h-1.5 rounded-full bg-info/60"></div>
+              <span class="text-[11px] font-mono text-muted">├─ virustotal.lookup()</span>
+              <span class="text-[10px] text-muted/60 ml-auto">120ms</span>
+            </div>
+            <div class="flex items-center gap-2 ml-4">
+              <div class="w-1.5 h-1.5 rounded-full bg-info/60"></div>
+              <span class="text-[11px] font-mono text-muted">├─ abuseipdb.check()</span>
+              <span class="text-[10px] text-muted/60 ml-auto">95ms</span>
+            </div>
+            <div class="flex items-center gap-2 ml-4">
+              <div class="w-1.5 h-1.5 rounded-full bg-info/60"></div>
+              <span class="text-[11px] font-mono text-muted">└─ geoip.resolve()</span>
+              <span class="text-[10px] text-muted/60 ml-auto">45ms</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-1.5 h-1.5 rounded-full bg-warning"></div>
+              <span class="text-[11px] font-mono text-heading">)</span>
+              <span class="text-[10px] text-success ml-auto">parallel — 120ms total</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-1.5 h-1.5 rounded-full bg-success"></div>
+              <span class="text-[11px] font-mono text-muted">await escalate()</span>
+              <span class="text-[10px] text-muted/60 ml-auto">200ms</span>
             </div>
           </div>
-        ))}
+        </div>
       </div>
+
+      <!-- Real-Time Ingestion -->
+      <div class="md:col-span-2 group rounded-lg border border-border bg-surface p-5 hover:border-border/80 transition-colors">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="flex items-center justify-center w-7 h-7 rounded-md bg-heading/8 text-heading">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
+          </div>
+          <span class="text-xs font-medium text-heading">Real-Time Ingestion</span>
+        </div>
+        <p class="text-xs text-text leading-relaxed mb-4">Webhooks, polling, Elasticsearch, syslog — alerts flow in from anywhere.</p>
+        <div class="space-y-1.5">
+          <div class="flex items-center gap-2 text-[11px] font-mono">
+            <span class="text-success">POST</span>
+            <span class="text-muted">/webhooks/alerts</span>
+          </div>
+          <div class="flex items-center gap-2 text-[11px] font-mono">
+            <span class="text-warning">POLL</span>
+            <span class="text-muted">elasticsearch:9200</span>
+          </div>
+          <div class="flex items-center gap-2 text-[11px] font-mono">
+            <span class="text-info">TCP</span>
+            <span class="text-muted">syslog:514</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOC Dashboard -->
+      <div class="md:col-span-2 group rounded-lg border border-border bg-surface p-5 hover:border-border/80 transition-colors">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="flex items-center justify-center w-7 h-7 rounded-md bg-[#d29922]/10 text-[#d29922]">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>
+            </svg>
+          </div>
+          <span class="text-xs font-medium text-heading">SOC Dashboard</span>
+        </div>
+        <p class="text-xs text-text leading-relaxed mb-4">Priority queue, MTTR tracking, unassigned alerts, per-partner stats.</p>
+        <div class="grid grid-cols-2 gap-2">
+          <div class="rounded-md bg-bg border border-border px-2.5 py-2 text-center">
+            <div class="text-base font-bold text-heading">24</div>
+            <div class="text-[10px] text-muted">Open</div>
+          </div>
+          <div class="rounded-md bg-bg border border-border px-2.5 py-2 text-center">
+            <div class="text-base font-bold text-success">4.2m</div>
+            <div class="text-[10px] text-muted">MTTR</div>
+          </div>
+          <div class="rounded-md bg-bg border border-border px-2.5 py-2 text-center">
+            <div class="text-base font-bold text-warning">7</div>
+            <div class="text-[10px] text-muted">Critical</div>
+          </div>
+          <div class="rounded-md bg-bg border border-border px-2.5 py-2 text-center">
+            <div class="text-base font-bold text-heading">156</div>
+            <div class="text-[10px] text-muted">Today</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Integration Ecosystem -->
+      <div class="md:col-span-2 group rounded-lg border border-border bg-surface p-5 hover:border-border/80 transition-colors">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="flex items-center justify-center w-7 h-7 rounded-md bg-[#3fb950]/10 text-[#3fb950]">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a6 6 0 0 1-6 6 6 6 0 0 1-6-6V8z"/>
+            </svg>
+          </div>
+          <span class="text-xs font-medium text-heading">Integrations</span>
+        </div>
+        <p class="text-xs text-text leading-relaxed mb-4">Elastic, CrowdStrike, VirusTotal, AbuseIPDB, Slack, Jira, and more.</p>
+        <div class="flex flex-wrap gap-1.5">
+          {["Elastic", "CrowdStrike", "VirusTotal", "AbuseIPDB", "Slack", "Jira", "PagerDuty"].map(name => (
+            <span class="px-2 py-1 rounded-md bg-bg border border-border text-[10px] font-mono text-muted">{name}</span>
+          ))}
+        </div>
+      </div>
+
+      <!-- Alert Lifecycle — wider -->
+      <div class="md:col-span-3 group rounded-lg border border-border bg-surface p-5 hover:border-border/80 transition-colors">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="flex items-center justify-center w-7 h-7 rounded-md bg-heading/8 text-heading">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>
+            </svg>
+          </div>
+          <span class="text-xs font-medium text-heading">Alert Lifecycle</span>
+          <span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-[#e6edf3]/10 text-[#e6edf3]">Core</span>
+        </div>
+        <p class="text-xs text-text leading-relaxed mb-4">Full lifecycle management with determination tracking, IOC extraction, and deduplication.</p>
+        <div class="flex items-center gap-0 text-[11px] font-mono">
+          <span class="px-2.5 py-1 rounded-l-md bg-warning/15 text-warning border border-warning/20">New</span>
+          <svg class="w-4 h-4 text-muted/40 -mx-0.5 relative z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="px-2.5 py-1 bg-info/15 text-info border border-info/20">In Progress</span>
+          <svg class="w-4 h-4 text-muted/40 -mx-0.5 relative z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="px-2.5 py-1 rounded-r-md bg-success/15 text-success border border-success/20">Resolved</span>
+        </div>
+      </div>
+
+      <!-- Auth + Workers combined -->
+      <div class="md:col-span-3 group rounded-lg border border-border bg-surface p-5 hover:border-border/80 transition-colors">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="flex items-center justify-center w-7 h-7 rounded-md bg-[#f85149]/10 text-[#f85149]">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+            </svg>
+          </div>
+          <span class="text-xs font-medium text-heading">Auth & Scaling</span>
+        </div>
+        <p class="text-xs text-text leading-relaxed mb-4">JWT analyst auth, API keys for integrations, Celery workers for horizontal scaling.</p>
+        <div class="space-y-1.5">
+          <div class="flex items-center gap-2 text-[11px] font-mono">
+            <span class="w-1.5 h-1.5 rounded-full bg-success"></span>
+            <span class="text-muted">worker-01</span>
+            <span class="text-muted/60 ml-auto">12 runs/min</span>
+          </div>
+          <div class="flex items-center gap-2 text-[11px] font-mono">
+            <span class="w-1.5 h-1.5 rounded-full bg-success"></span>
+            <span class="text-muted">worker-02</span>
+            <span class="text-muted/60 ml-auto">9 runs/min</span>
+          </div>
+          <div class="flex items-center gap-2 text-[11px] font-mono">
+            <span class="w-1.5 h-1.5 rounded-full bg-warning animate-pulse"></span>
+            <span class="text-muted">worker-03</span>
+            <span class="text-muted/60 ml-auto">scaling up…</span>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <!-- Alert feed preview -->
