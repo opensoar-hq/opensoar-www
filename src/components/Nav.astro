@@ -26,19 +26,6 @@
       </a>
     </div>
 
-    <div id="nav-divider-2" class="hidden md:block w-px h-4 transition-colors duration-300" style="background-color: transparent;"></div>
-
-    <a
-      href="https://demo.opensoar.app"
-      target="_blank"
-      rel="noopener"
-      class="hidden md:inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-md bg-surface border border-border text-heading hover:bg-surface-hover transition-colors"
-    >
-      Live Demo
-      <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M7 17L17 7M17 7H7M17 7v10"/>
-      </svg>
-    </a>
   </div>
 </nav>
 
@@ -46,7 +33,6 @@
   const nav = document.getElementById('main-nav');
   const inner = document.getElementById('nav-inner');
   const divider = document.getElementById('nav-divider');
-  const divider2 = document.getElementById('nav-divider-2');
   const links = document.querySelectorAll('.nav-link[href^="#"]');
 
   if (nav && inner) {
@@ -61,7 +47,6 @@
       inner.style.backgroundColor = scrolled ? '#161b22' : 'transparent';
       inner.style.borderColor = scrolled ? '#30363d' : 'transparent';
       if (divider) divider.style.backgroundColor = scrolled ? '#30363d' : 'transparent';
-      if (divider2) divider2.style.backgroundColor = scrolled ? '#30363d' : 'transparent';
     };
 
     const sections = Array.from(links).map(link => {
