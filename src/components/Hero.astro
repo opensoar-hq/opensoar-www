@@ -49,22 +49,33 @@
     </div>
 
     <!-- Terminal preview -->
-    <div class="mt-14 mx-auto max-w-xl">
-      <div class="rounded-lg border border-border bg-surface p-4 font-mono text-xs text-left">
-        <div class="flex items-center gap-2 mb-3 border-b border-border pb-3">
+    <div class="mt-14 mx-auto max-w-2xl">
+      <div class="rounded-lg border border-border bg-surface overflow-hidden">
+        <div class="flex items-center gap-2 px-4 py-2.5 border-b border-border">
           <div class="w-2.5 h-2.5 rounded-full bg-danger/50"></div>
           <div class="w-2.5 h-2.5 rounded-full bg-warning/50"></div>
           <div class="w-2.5 h-2.5 rounded-full bg-success/50"></div>
-          <span class="ml-2 text-[11px] text-muted">terminal</span>
+          <span class="ml-2 text-[11px] text-muted font-mono">terminal — 4 commands to production</span>
         </div>
-        <div class="text-text leading-relaxed">
-          <span class="text-accent">$</span> git clone https://github.com/opensoar-hq/opensoar-deploy<br/>
-          <span class="text-accent">$</span> cd opensoar-deploy<br/>
-          <span class="text-accent">$</span> cp .env.example .env<br/>
-          <span class="text-accent">$</span> docker compose up -d<br/>
-          <span class="text-success">&#10003; API running on :8000</span><br/>
-          <span class="text-success">&#10003; Dashboard ready at :3000</span><br/>
-          <span class="text-success">&#10003; 3 example playbooks loaded</span>
+        <div class="p-4 font-mono text-xs text-left text-text leading-loose">
+          <div class="flex items-start gap-2">
+            <span class="text-accent select-none">$</span>
+            <span>git clone https://github.com/opensoar-hq/opensoar-deploy</span>
+          </div>
+          <div class="flex items-start gap-2">
+            <span class="text-accent select-none">$</span>
+            <span>cd opensoar-deploy && cp .env.example .env</span>
+          </div>
+          <div class="flex items-start gap-2">
+            <span class="text-accent select-none">$</span>
+            <span>docker compose up -d</span>
+          </div>
+          <div class="mt-2 pl-4 border-l-2 border-success/30 space-y-0.5">
+            <div><span class="text-success">&#10003;</span> PostgreSQL + Redis ready</div>
+            <div><span class="text-success">&#10003;</span> API running on <span class="text-heading">:8000</span></div>
+            <div><span class="text-success">&#10003;</span> Dashboard ready at <span class="text-heading">:3000</span></div>
+            <div><span class="text-success">&#10003;</span> 3 example playbooks loaded</div>
+          </div>
         </div>
       </div>
     </div>
