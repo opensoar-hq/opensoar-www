@@ -10,25 +10,22 @@ const { title, description = "Open-source SOAR platform for modern security team
 ---
 
 <!doctype html>
-<html lang="en" class="bg-navy-950">
+<html lang="en" class="bg-bg">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#0a0e1a" />
+    <meta name="theme-color" content="#0d1117" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://opensoar.app" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="generator" content={Astro.generator} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <title>{title}</title>
   </head>
-  <body class="bg-navy-950 text-slate-300 font-sans min-h-screen antialiased">
+  <body class="bg-bg text-text font-sans min-h-screen antialiased text-sm leading-normal">
     <slot />
   </body>
 </html>

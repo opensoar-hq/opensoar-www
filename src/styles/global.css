@@ -1,19 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  --color-navy-950: #0a0e1a;
-  --color-navy-900: #0f1629;
-  --color-navy-800: #151d37;
-  --color-navy-700: #1c2748;
-  --color-navy-600: #263359;
-  --color-slate-400: #94a3b8;
-  --color-slate-300: #cbd5e1;
-  --color-slate-200: #e2e8f0;
-  --color-accent-blue: #3b82f6;
-  --color-accent-cyan: #06b6d4;
-  --color-accent-purple: #8b5cf6;
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --color-bg: #0d1117;
+  --color-surface: #161b22;
+  --color-surface-hover: #1c2129;
+  --color-overlay: #21262d;
+  --color-border: #30363d;
+  --color-text: #8b949e;
+  --color-heading: #e6edf3;
+  --color-muted: #6e7681;
+  --color-accent: #58a6ff;
+  --color-success: #3fb950;
+  --color-warning: #d29922;
+  --color-danger: #f85149;
+  --color-critical: #da3633;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 }
 
 html {
@@ -24,17 +27,3 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-/* Code block syntax highlighting */
-.code-keyword { color: #c792ea; }
-.code-decorator { color: #c792ea; }
-.code-function { color: #82aaff; }
-.code-string { color: #c3e88d; }
-.code-comment { color: #546e7a; font-style: italic; }
-.code-param { color: #f78c6c; }
-.code-method { color: #82aaff; }
-.code-property { color: #f07178; }
-.code-builtin { color: #ffcb6b; }
-.code-punctuation { color: #89ddff; }
-.code-plain { color: #bfc7d5; }
-.code-number { color: #f78c6c; }

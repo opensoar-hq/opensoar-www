@@ -1,80 +1,75 @@
 ---
 ---
 
-<section id="playbooks" class="relative py-24 md:py-32">
-  <!-- Background accent -->
-  <div class="absolute inset-0 pointer-events-none">
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-accent-purple/5 rounded-full blur-3xl"></div>
-  </div>
-
-  <div class="relative mx-auto max-w-6xl px-6">
-    <div class="grid lg:grid-cols-2 gap-12 items-center">
+<section id="playbooks" class="relative py-20 md:py-28">
+  <div class="mx-auto max-w-6xl px-6">
+    <div class="grid lg:grid-cols-2 gap-10 items-center">
       <!-- Left: Description -->
       <div>
-        <p class="text-sm font-semibold text-accent-purple uppercase tracking-widest mb-3">Developer Experience</p>
-        <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+        <span class="text-accent bg-accent/10 px-2 py-0.5 rounded font-medium text-xs">Developer Experience</span>
+        <h2 class="text-2xl md:text-3xl font-bold text-heading mt-4 mb-5">
           Playbooks that feel like<br/>writing real code
         </h2>
-        <p class="text-lg text-slate-400 leading-relaxed mb-6">
+        <p class="text-sm text-text leading-relaxed mb-5">
           Because they <em>are</em> real code. Define triggers with decorators,
           enrich data with async/await, escalate with function calls.
           No proprietary DSL to learn, no visual flowcharts to untangle.
         </p>
-        <ul class="space-y-3 text-slate-400">
-          <li class="flex items-start gap-3">
-            <svg class="w-5 h-5 text-emerald-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <ul class="space-y-2.5 text-sm text-text">
+          <li class="flex items-start gap-2.5">
+            <svg class="w-4 h-4 text-success mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             <span>Type hints, autocomplete, linting &mdash; your IDE just works</span>
           </li>
-          <li class="flex items-start gap-3">
-            <svg class="w-5 h-5 text-emerald-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <li class="flex items-start gap-2.5">
+            <svg class="w-4 h-4 text-success mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             <span>Unit test playbooks with pytest like any other code</span>
           </li>
-          <li class="flex items-start gap-3">
-            <svg class="w-5 h-5 text-emerald-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <li class="flex items-start gap-2.5">
+            <svg class="w-4 h-4 text-success mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             <span>Version control, code review, CI/CD &mdash; standard workflows</span>
           </li>
-          <li class="flex items-start gap-3">
-            <svg class="w-5 h-5 text-emerald-400 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <li class="flex items-start gap-2.5">
+            <svg class="w-4 h-4 text-success mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             <span>Async-first &mdash; enrich from 10 APIs in parallel, not sequentially</span>
           </li>
         </ul>
       </div>
 
       <!-- Right: Code block -->
-      <div class="rounded-2xl border border-white/10 bg-navy-900/80 overflow-hidden shadow-2xl shadow-black/20">
+      <div class="rounded-lg border border-border bg-surface overflow-hidden">
         <!-- Title bar -->
-        <div class="flex items-center justify-between px-5 py-3 border-b border-white/5 bg-navy-900">
-          <div class="flex items-center gap-2">
-            <div class="w-3 h-3 rounded-full bg-red-500/60"></div>
-            <div class="w-3 h-3 rounded-full bg-yellow-500/60"></div>
-            <div class="w-3 h-3 rounded-full bg-green-500/60"></div>
+        <div class="flex items-center justify-between px-4 py-2.5 border-b border-border">
+          <div class="flex items-center gap-1.5">
+            <div class="w-2.5 h-2.5 rounded-full bg-danger/50"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-warning/50"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-success/50"></div>
           </div>
-          <span class="text-xs text-slate-500 font-mono">triage_critical.py</span>
-          <div class="w-16"></div>
+          <span class="text-[11px] text-muted font-mono">triage_critical.py</span>
+          <div class="w-14"></div>
         </div>
 
         <!-- Code -->
-        <div class="p-5 overflow-x-auto">
-          <pre class="text-sm leading-relaxed font-mono"><code><span class="code-keyword">from</span> <span class="code-plain">opensoar</span> <span class="code-keyword">import</span> <span class="code-plain">playbook, action</span>
+        <div class="p-4 overflow-x-auto">
+          <pre class="text-xs leading-relaxed font-mono"><code><span class="text-accent">from</span> <span class="text-heading">opensoar</span> <span class="text-accent">import</span> <span class="text-heading">playbook, action</span>
 
-<span class="code-decorator">@playbook</span><span class="code-punctuation">(</span>
-    <span class="code-param">trigger</span><span class="code-punctuation">=</span><span class="code-string">"alert.created"</span><span class="code-punctuation">,</span>
-    <span class="code-param">conditions</span><span class="code-punctuation">=&#123;</span><span class="code-string">"severity"</span><span class="code-punctuation">:</span> <span class="code-string">"critical"</span><span class="code-punctuation">&#125;</span>
-<span class="code-punctuation">)</span>
-<span class="code-keyword">async def</span> <span class="code-function">triage_critical</span><span class="code-punctuation">(</span><span class="code-param">alert</span><span class="code-punctuation">):</span>
-    <span class="code-comment"># Enrich IOCs in parallel</span>
-    <span class="code-plain">results</span> <span class="code-punctuation">=</span> <span class="code-keyword">await</span> <span class="code-plain">asyncio</span><span class="code-punctuation">.</span><span class="code-method">gather</span><span class="code-punctuation">(</span>
-        <span class="code-plain">virustotal</span><span class="code-punctuation">.</span><span class="code-method">lookup</span><span class="code-punctuation">(</span><span class="code-plain">alert</span><span class="code-punctuation">.</span><span class="code-property">iocs</span><span class="code-punctuation">),</span>
-        <span class="code-plain">abuseipdb</span><span class="code-punctuation">.</span><span class="code-method">check</span><span class="code-punctuation">(</span><span class="code-plain">alert</span><span class="code-punctuation">.</span><span class="code-property">source_ip</span><span class="code-punctuation">),</span>
-    <span class="code-punctuation">)</span>
+<span class="text-accent">@playbook</span><span class="text-muted">(</span>
+    <span class="text-heading">trigger</span><span class="text-muted">=</span><span class="text-success">"alert.created"</span><span class="text-muted">,</span>
+    <span class="text-heading">conditions</span><span class="text-muted">=&#123;</span><span class="text-success">"severity"</span><span class="text-muted">:</span> <span class="text-success">"critical"</span><span class="text-muted">&#125;</span>
+<span class="text-muted">)</span>
+<span class="text-accent">async def</span> <span class="text-heading">triage_critical</span><span class="text-muted">(</span><span class="text-heading">alert</span><span class="text-muted">):</span>
+    <span class="text-muted italic"># Enrich IOCs in parallel</span>
+    <span class="text-heading">results</span> <span class="text-muted">=</span> <span class="text-accent">await</span> <span class="text-heading">asyncio</span><span class="text-muted">.</span><span class="text-heading">gather</span><span class="text-muted">(</span>
+        <span class="text-heading">virustotal</span><span class="text-muted">.</span><span class="text-heading">lookup</span><span class="text-muted">(</span><span class="text-heading">alert</span><span class="text-muted">.</span><span class="text-text">iocs</span><span class="text-muted">),</span>
+        <span class="text-heading">abuseipdb</span><span class="text-muted">.</span><span class="text-heading">check</span><span class="text-muted">(</span><span class="text-heading">alert</span><span class="text-muted">.</span><span class="text-text">source_ip</span><span class="text-muted">),</span>
+    <span class="text-muted">)</span>
 
-    <span class="code-comment"># Auto-escalate if confirmed malicious</span>
-    <span class="code-keyword">if</span> <span class="code-builtin">any</span><span class="code-punctuation">(</span><span class="code-plain">r</span><span class="code-punctuation">.</span><span class="code-property">malicious</span> <span class="code-keyword">for</span> <span class="code-plain">r</span> <span class="code-keyword">in</span> <span class="code-plain">results</span><span class="code-punctuation">):</span>
-        <span class="code-keyword">await</span> <span class="code-plain">pagerduty</span><span class="code-punctuation">.</span><span class="code-method">create_incident</span><span class="code-punctuation">(</span><span class="code-plain">alert</span><span class="code-punctuation">)</span>
-        <span class="code-keyword">await</span> <span class="code-plain">slack</span><span class="code-punctuation">.</span><span class="code-method">notify</span><span class="code-punctuation">(</span>
-            <span class="code-string">"#soc"</span><span class="code-punctuation">,</span>
-            <span class="code-string">f"Confirmed: &#123;</span><span class="code-plain">alert</span><span class="code-punctuation">.</span><span class="code-property">title</span><span class="code-string">&#125;"</span>
-        <span class="code-punctuation">)</span></code></pre>
+    <span class="text-muted italic"># Auto-escalate if confirmed malicious</span>
+    <span class="text-accent">if</span> <span class="text-heading">any</span><span class="text-muted">(</span><span class="text-heading">r</span><span class="text-muted">.</span><span class="text-text">malicious</span> <span class="text-accent">for</span> <span class="text-heading">r</span> <span class="text-accent">in</span> <span class="text-heading">results</span><span class="text-muted">):</span>
+        <span class="text-accent">await</span> <span class="text-heading">pagerduty</span><span class="text-muted">.</span><span class="text-heading">create_incident</span><span class="text-muted">(</span><span class="text-heading">alert</span><span class="text-muted">)</span>
+        <span class="text-accent">await</span> <span class="text-heading">slack</span><span class="text-muted">.</span><span class="text-heading">notify</span><span class="text-muted">(</span>
+            <span class="text-success">"#soc"</span><span class="text-muted">,</span>
+            <span class="text-success">f"Confirmed: &#123;</span><span class="text-heading">alert</span><span class="text-muted">.</span><span class="text-text">title</span><span class="text-success">&#125;"</span>
+        <span class="text-muted">)</span></code></pre>
         </div>
       </div>
     </div>
