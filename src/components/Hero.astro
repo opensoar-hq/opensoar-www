@@ -58,12 +58,13 @@
           <span class="ml-2 text-[11px] text-muted">terminal</span>
         </div>
         <div class="text-text leading-relaxed">
-          <span class="text-accent">$</span> pip install opensoar<br/>
-          <span class="text-accent">$</span> opensoar init my-soc<br/>
-          <span class="text-accent">$</span> opensoar run<br/>
-          <span class="text-success">&#10003; Webhook listener started on :8000</span><br/>
-          <span class="text-success">&#10003; 3 playbooks loaded</span><br/>
-          <span class="text-success">&#10003; Dashboard ready at localhost:3000</span>
+          <span class="text-accent">$</span> git clone https://github.com/opensoar-hq/opensoar-deploy<br/>
+          <span class="text-accent">$</span> cd opensoar-deploy<br/>
+          <span class="text-accent">$</span> cp .env.example .env<br/>
+          <span class="text-accent">$</span> docker compose up -d<br/>
+          <span class="text-success">&#10003; API running on :8000</span><br/>
+          <span class="text-success">&#10003; Dashboard ready at :3000</span><br/>
+          <span class="text-success">&#10003; 3 example playbooks loaded</span>
         </div>
       </div>
     </div>
