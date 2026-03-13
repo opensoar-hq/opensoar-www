@@ -35,11 +35,11 @@ import { FlickeringGrid } from './ui/flickering-grid';
 
     <!-- Install + GitHub row -->
     <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mt-2">
-      <div class="flex items-center gap-3 bg-surface border border-border rounded-lg pl-4 pr-2 py-2.5 max-w-full overflow-hidden">
+      <div class="flex items-center gap-3 bg-surface border border-border rounded-lg pl-4 pr-2 py-2.5">
         <span class="text-xs text-muted whitespace-nowrap shrink-0">Get started</span>
         <div class="w-px h-4 bg-border shrink-0"></div>
         <span class="text-muted select-none shrink-0 text-sm font-mono">$</span>
-        <code class="text-sm text-heading font-mono whitespace-nowrap overflow-hidden text-ellipsis">git clone https://github.com/opensoar-hq/opensoar-core.git && cd opensoar-core && docker compose up -d</code>
+        <code class="text-sm text-heading font-mono whitespace-nowrap">curl -fsSL https://opensoar.app/install.sh | sh</code>
         <button
           id="copy-cmd"
           class="text-muted hover:text-heading transition-colors shrink-0 p-1 rounded hover:bg-heading/10"
@@ -66,7 +66,7 @@ import { FlickeringGrid } from './ui/flickering-grid';
 
     <script>
       document.getElementById('copy-cmd')?.addEventListener('click', (e) => {
-        const cmd = 'git clone https://github.com/opensoar-hq/opensoar-core.git && cd opensoar-core && docker compose up -d';
+        const cmd = 'curl -fsSL https://opensoar.app/install.sh | sh';
         navigator.clipboard.writeText(cmd);
         const btn = e.currentTarget as HTMLButtonElement;
         btn.innerHTML = '<svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
