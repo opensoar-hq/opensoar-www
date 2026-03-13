@@ -177,10 +177,13 @@ import { AlertDemo } from './AlertDemo';
           </div>
           <span class="text-xs font-medium text-heading">Integrations</span>
         </div>
-        <p class="text-xs text-text leading-relaxed mb-4">Elastic, CrowdStrike, VirusTotal, AbuseIPDB, Slack, Jira, and more.</p>
+        <p class="text-xs text-text leading-relaxed mb-4">Elastic, VirusTotal, AbuseIPDB, Slack, Email — with more on the way.</p>
         <div class="flex flex-wrap gap-1.5">
-          {["Elastic", "CrowdStrike", "VirusTotal", "AbuseIPDB", "Slack", "Jira", "PagerDuty"].map(name => (
+          {["Elastic", "VirusTotal", "AbuseIPDB", "Slack", "Email"].map(name => (
             <span class="px-2 py-1 rounded-md bg-bg border border-border text-[10px] font-mono text-muted">{name}</span>
+          ))}
+          {["CrowdStrike", "Jira", "PagerDuty"].map(name => (
+            <span class="px-2 py-1 rounded-md bg-bg border border-border/50 text-[10px] font-mono text-muted/50 italic">{name}</span>
           ))}
         </div>
       </div>
