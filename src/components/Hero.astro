@@ -63,10 +63,13 @@ import { FlickeringGrid } from './ui/flickering-grid';
     </div>
 
     <!-- Quick start command -->
-    <div class="mt-14 mx-auto max-w-md">
-      <div class="flex items-center gap-3 bg-surface border border-border rounded-lg px-4 py-3">
-        <span class="text-muted select-none">$</span>
-        <code class="text-sm text-heading font-mono flex-1 select-all">git clone https://github.com/opensoar-hq/opensoar-core && cd opensoar-core && docker compose up -d</code>
+    <div class="mt-14 mx-auto max-w-lg">
+      <div class="relative flex items-center gap-3 bg-surface border border-border rounded-lg px-4 py-3">
+        <span class="text-muted select-none shrink-0">$</span>
+        <div class="relative overflow-hidden flex-1">
+          <code class="text-sm text-heading font-mono whitespace-nowrap">git clone opensoar-hq/opensoar-core && docker compose up -d</code>
+          <div class="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-surface to-transparent pointer-events-none"></div>
+        </div>
         <button
           id="copy-cmd"
           class="text-muted hover:text-heading transition-colors shrink-0"
