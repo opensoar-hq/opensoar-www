@@ -1,5 +1,5 @@
 ---
-import { AlertDisplayCards } from './AlertCards';
+import { SoarCircuit } from './SoarCircuit';
 ---
 
 <section id="what-is-soar" class="relative py-20 md:py-28">
@@ -20,9 +20,9 @@ import { AlertDisplayCards } from './AlertCards';
         </p>
       </div>
 
-      <!-- Right: Animated alert cards -->
-      <div class="hidden lg:flex items-center justify-center min-h-[400px]">
-        <AlertDisplayCards client:visible />
+      <!-- Right: Circuit visualization — alerts flowing into SOAR engine -->
+      <div class="hidden lg:flex items-center justify-center">
+        <SoarCircuit client:visible />
       </div>
     </div>
   </div>
