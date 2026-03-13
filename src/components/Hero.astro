@@ -63,35 +63,22 @@ import { FlickeringGrid } from './ui/flickering-grid';
     </div>
 
     <!-- Quick start -->
-    <div class="mt-14 mx-auto max-w-xl">
+    <div class="mt-14 mx-auto max-w-lg">
       <p class="text-xs text-muted mb-3">Get started in seconds</p>
-      <div class="flex flex-col gap-2">
-        <div class="relative flex items-center gap-3 bg-surface border border-border rounded-lg px-4 py-3 group">
-          <span class="text-muted select-none shrink-0 text-sm font-mono">$</span>
-          <code class="text-sm text-heading font-mono whitespace-nowrap flex-1 overflow-x-auto no-scrollbar">git clone https://github.com/opensoar-hq/opensoar-core.git</code>
-          <button
-            data-cmd="git clone https://github.com/opensoar-hq/opensoar-core.git"
-            class="copy-btn text-muted hover:text-heading transition-colors shrink-0"
-            aria-label="Copy command"
-          >
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-            </svg>
-          </button>
+      <div class="relative bg-surface border border-border rounded-lg px-4 py-3">
+        <div class="overflow-x-auto no-scrollbar">
+          <pre class="text-sm font-mono leading-relaxed"><span class="text-muted select-none">$ </span><span class="text-heading">git clone https://github.com/opensoar-hq/opensoar-core.git</span>
+<span class="text-muted select-none">$ </span><span class="text-heading">cd opensoar-core && docker compose up -d</span></pre>
         </div>
-        <div class="relative flex items-center gap-3 bg-surface border border-border rounded-lg px-4 py-3 group">
-          <span class="text-muted select-none shrink-0 text-sm font-mono">$</span>
-          <code class="text-sm text-heading font-mono whitespace-nowrap flex-1">cd opensoar-core && docker compose up -d</code>
-          <button
-            data-cmd="cd opensoar-core && docker compose up -d"
-            class="copy-btn text-muted hover:text-heading transition-colors shrink-0"
-            aria-label="Copy command"
-          >
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-            </svg>
-          </button>
-        </div>
+        <button
+          id="copy-cmd"
+          class="absolute top-3 right-3 text-muted hover:text-heading transition-colors"
+          aria-label="Copy commands"
+        >
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+        </button>
       </div>
       <p class="text-xs text-muted mt-3">
         Or read the <a href="https://github.com/opensoar-hq/opensoar-core#quick-start" target="_blank" rel="noopener" class="text-heading hover:underline">documentation</a>
@@ -99,15 +86,14 @@ import { FlickeringGrid } from './ui/flickering-grid';
     </div>
 
     <script>
-      document.querySelectorAll('.copy-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const el = e.currentTarget as HTMLButtonElement;
-          navigator.clipboard.writeText(el.dataset.cmd || '');
-          el.innerHTML = '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
-          setTimeout(() => {
-            el.innerHTML = '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
-          }, 2000);
-        });
+      document.getElementById('copy-cmd')?.addEventListener('click', (e) => {
+        const cmd = 'git clone https://github.com/opensoar-hq/opensoar-core.git && cd opensoar-core && docker compose up -d';
+        navigator.clipboard.writeText(cmd);
+        const btn = e.currentTarget as HTMLButtonElement;
+        btn.innerHTML = '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+        setTimeout(() => {
+          btn.innerHTML = '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+        }, 2000);
       });
     </script>
   </div>
