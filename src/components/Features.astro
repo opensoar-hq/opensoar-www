@@ -1,5 +1,4 @@
 ---
-import { AlertDemo } from './AlertDemo';
 ---
 
 <section id="features" class="relative py-20 md:py-28">
@@ -183,7 +182,7 @@ import { AlertDemo } from './AlertDemo';
             <span class="px-2 py-1 rounded-md bg-bg border border-border text-[10px] font-mono text-muted">{name}</span>
           ))}
           {["CrowdStrike", "Jira", "PagerDuty"].map(name => (
-            <span class="px-2 py-1 rounded-md bg-bg border border-border/50 text-[10px] font-mono text-muted/50 italic">{name}</span>
+            <span class="px-2 py-1 rounded-md bg-bg border border-border/50 text-[10px] font-mono text-muted/40">{name} <span class="text-[9px] italic">soon</span></span>
           ))}
         </div>
       </div>
@@ -241,9 +240,5 @@ import { AlertDemo } from './AlertDemo';
 
     </div>
 
-    <!-- Alert feed preview -->
-    <div class="mt-3">
-      <AlertDemo client:visible />
-    </div>
   </div>
 </section>
