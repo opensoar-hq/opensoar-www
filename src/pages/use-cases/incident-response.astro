@@ -1,6 +1,7 @@
 ---
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import CodeBlock from '../../components/CodeBlock.astro';
+import { AnimatedTerminal } from '../../components/AnimatedTerminal';
 
 const containThreatExample = `@playbook(trigger="alert.severity_changed", condition={"severity": "critical"})
 async def contain_threat(alert):
@@ -62,6 +63,29 @@ const approvalGateExample = `if alert.asset_criticality == "production":
   <h2>Incident response with OpenSOAR</h2>
 
   <h3>Automated containment</h3>
+
+  <div class="my-6 rounded-lg border border-border overflow-hidden">
+    <AnimatedTerminal
+      client:visible
+      title="opensoar — incident containment"
+      height="300px"
+      commands={[
+        "opensoar incident create --alert=alert-7293 --severity=critical",
+        "opensoar contain host workstation-0891 --isolate --collect-forensics",
+        "opensoar contain ip 185.220.101.34 --block --duration=24h",
+        "opensoar contain user jdoe --disable --revoke-sessions",
+      ]}
+      outputs={[
+        { text: "Incident INC-0042 created, severity: critical", delay: 0 },
+        { text: "Host workstation-0891 isolated via CrowdStrike", delay: 200 },
+        { text: "Forensic snapshot queued (memory + disk)", delay: 200 },
+        { text: "IP 185.220.101.34 blocked on Palo Alto FW + AWS SG", delay: 200 },
+        { text: "User jdoe disabled in Okta, 3 active sessions revoked", delay: 200 },
+        { text: "Slack #incident-response notified, PagerDuty alert sent", delay: 300 },
+      ]}
+    />
+  </div>
+
   <CodeBlock code={containThreatExample} filename="contain_threat.py" />
 
   <h3>Human-in-the-loop for high-impact actions</h3>

@@ -1,6 +1,7 @@
 ---
 import ContentLayout from '../layouts/ContentLayout.astro';
 import CodeBlock from '../components/CodeBlock.astro';
+import { SoarOrbital } from '../components/SoarOrbital';
 
 const enrichAndTriageExample = `from opensoar import playbook, action
 
@@ -55,6 +56,10 @@ async def enrich_and_triage(alert):
   </p>
 
   <h2>What can you automate?</h2>
+
+  <div class="my-6 rounded-lg border border-border overflow-hidden">
+    <SoarOrbital client:visible />
+  </div>
 
   <h3>Alert enrichment</h3>
   <p>

@@ -1,6 +1,7 @@
 ---
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import CodeBlock from '../../components/CodeBlock.astro';
+import { AnimatedTerminal } from '../../components/AnimatedTerminal';
 
 const autoEnrichCode = `@playbook(trigger="alert.created")
 async def auto_enrich(alert):
@@ -36,6 +37,26 @@ async def auto_enrich(alert):
   <p>
     OpenSOAR automates the repetitive parts of alert triage while keeping analysts in control of the decisions that matter.
   </p>
+
+  <div class="my-6 rounded-lg border border-border overflow-hidden">
+    <AnimatedTerminal
+      client:visible
+      title="opensoar — alert triage flow"
+      height="280px"
+      commands={[
+        "opensoar alerts list --status=new --limit=1",
+        "opensoar enrich alert-4821 --sources=virustotal,abuseipdb,asset-db",
+        "opensoar triage alert-4821 --auto-score",
+      ]}
+      outputs={[
+        { text: "Alert #4821: Suspicious outbound connection to 185.220.101.34", delay: 0 },
+        { text: "VirusTotal: IP flagged by 6/89 vendors", delay: 200 },
+        { text: "AbuseIPDB: confidence score 92% (Tor exit node)", delay: 200 },
+        { text: "Asset DB: workstation-0142, low criticality, user: jsmith", delay: 200 },
+        { text: "Risk score: 14/100 — auto-resolved as false_positive (known Tor researcher)", delay: 300 },
+      ]}
+    />
+  </div>
 
   <h3>Step 1: Auto-enrichment</h3>
   <p>

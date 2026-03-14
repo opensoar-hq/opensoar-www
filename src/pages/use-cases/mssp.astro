@@ -1,6 +1,7 @@
 ---
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import CodeBlock from '../../components/CodeBlock.astro';
+import { AnimatedTerminal } from '../../components/AnimatedTerminal';
 
 const triageCode = `@playbook(trigger="alert.created")
 async def standard_triage(alert):
@@ -40,6 +41,29 @@ async def standard_triage(alert):
   <p>
     Deploy a dedicated OpenSOAR instance for each client using Docker or Kubernetes. Each tenant gets their own database, their own playbooks, and their own API keys. Complete data isolation with shared infrastructure.
   </p>
+
+  <div class="my-6 rounded-lg border border-border overflow-hidden">
+    <AnimatedTerminal
+      client:visible
+      title="opensoar — multi-tenant deployment"
+      height="300px"
+      commands={[
+        "docker compose -p client-acme --env-file clients/acme/.env up -d",
+        "docker compose -p client-globex --env-file clients/globex/.env up -d",
+        "docker compose -p client-initech --env-file clients/initech/.env up -d",
+      ]}
+      outputs={[
+        { text: "client-acme: PostgreSQL + Redis + API + Worker running", delay: 0 },
+        { text: "client-acme: Dashboard ready at acme.soc.yourdomain.com", delay: 200 },
+        { text: "client-globex: PostgreSQL + Redis + API + Worker running", delay: 200 },
+        { text: "client-globex: Dashboard ready at globex.soc.yourdomain.com", delay: 200 },
+        { text: "client-initech: PostgreSQL + Redis + API + Worker running", delay: 200 },
+        { text: "client-initech: Dashboard ready at initech.soc.yourdomain.com", delay: 200 },
+        { text: "3 tenants deployed, 0 licensing fees", delay: 300 },
+      ]}
+    />
+  </div>
+
   <CodeBlock code={`# Deploy per-tenant with Docker Compose
 # Each client gets their own stack
 docker compose -f docker-compose.yml \\
