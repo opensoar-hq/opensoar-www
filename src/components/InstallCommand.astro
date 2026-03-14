@@ -1,0 +1,75 @@
+---
+interface Props {
+  /** 'hero' = separate Copy button, 'inline' = icon-only copy inside the bar */
+  variant?: 'hero' | 'inline';
+  id?: string;
+}
+
+const { variant = 'inline', id = 'install' } = Astro.props;
+const cmd = 'curl -fsSL https://opensoar.app/install.sh | sh';
+const btnId = `copy-${id}`;
+const textId = `copy-text-${id}`;
+const iconId = `copy-icon-${id}`;
+---
+
+{variant === 'hero' ? (
+  <div class="flex flex-col sm:flex-row items-center justify-center gap-2.5">
+    <div class="flex items-center gap-3 bg-surface border border-border rounded-lg px-4 py-2.5 max-w-full overflow-hidden">
+      <span class="text-muted select-none shrink-0 text-sm font-mono">$</span>
+      <code class="text-sm text-heading font-mono truncate">{cmd}</code>
+    </div>
+    <button
+      id={btnId}
+      type="button"
+      class="inline-flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium rounded-lg bg-heading text-bg hover:bg-heading/90 transition-colors cursor-pointer border-none"
+    >
+      <svg id={iconId} class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+      </svg>
+      <span id={textId}>Copy</span>
+    </button>
+  </div>
+) : (
+  <div class="flex items-center gap-3 bg-bg border border-border rounded-lg pl-4 pr-2 py-2.5 max-w-full overflow-hidden">
+    <span class="text-muted select-none shrink-0 text-sm font-mono">$</span>
+    <code class="text-sm text-heading font-mono truncate">{cmd}</code>
+    <button
+      id={btnId}
+      class="text-muted hover:text-heading transition-colors shrink-0 p-1 rounded hover:bg-heading/10"
+      aria-label="Copy install command"
+    >
+      <svg id={iconId} class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+      </svg>
+    </button>
+  </div>
+)}
+
+<script is:inline define:vars={{ cmd, btnId, textId, iconId }}>
+  document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById(btnId);
+    if (!btn) return;
+    btn.addEventListener('click', function() {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(cmd);
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = cmd;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      var icon = document.getElementById(iconId);
+      var text = document.getElementById(textId);
+      if (icon) icon.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
+      if (text) text.textContent = 'Copied!';
+      setTimeout(function() {
+        if (icon) icon.innerHTML = '<rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>';
+        if (text) text.textContent = 'Copy';
+      }, 2000);
+    });
+  });
+</script>

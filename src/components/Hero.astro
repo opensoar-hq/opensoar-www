@@ -1,5 +1,6 @@
 ---
 import { DotMatrixBg } from './ui/dot-matrix-bg';
+import InstallCommand from './InstallCommand.astro';
 ---
 
 <section class="relative pt-28 pb-20 md:pt-36 md:pb-28 overflow-hidden">
@@ -36,58 +37,10 @@ import { DotMatrixBg } from './ui/dot-matrix-bg';
     <!-- Install -->
     <div class="mt-2">
       <p class="text-[11px] text-muted mb-2">Get started in seconds</p>
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-2.5">
-        <div class="flex items-center gap-3 bg-surface border border-border rounded-lg px-4 py-2.5">
-          <span class="text-muted select-none shrink-0 text-sm font-mono">$</span>
-          <code class="text-sm text-heading font-mono whitespace-nowrap">curl -fsSL https://opensoar.app/install.sh | sh</code>
-        </div>
-        <button
-          id="copy-cmd-btn"
-          type="button"
-          class="inline-flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium rounded-lg bg-heading text-bg hover:bg-heading/90 transition-colors cursor-pointer border-none"
-        >
-          <svg id="copy-icon" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-          </svg>
-          <span id="copy-cmd-text">Copy</span>
-        </button>
-      </div>
+      <InstallCommand variant="hero" id="hero" />
       <p class="text-[11px] text-muted mt-2.5">
         Or read the <a href="https://github.com/opensoar-hq/opensoar-core#quick-start" target="_blank" rel="noopener" class="text-heading hover:underline">documentation</a>
       </p>
     </div>
-
-    <script is:inline>
-      function copyText(str) {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(str);
-        } else {
-          var ta = document.createElement('textarea');
-          ta.value = str;
-          ta.style.position = 'fixed';
-          ta.style.opacity = '0';
-          document.body.appendChild(ta);
-          ta.select();
-          document.execCommand('copy');
-          document.body.removeChild(ta);
-        }
-      }
-      document.addEventListener('DOMContentLoaded', function() {
-        var btn = document.getElementById('copy-cmd-btn');
-        if (btn) {
-          btn.addEventListener('click', function() {
-            copyText('curl -fsSL https://opensoar.app/install.sh | sh');
-            var text = document.getElementById('copy-cmd-text');
-            var icon = document.getElementById('copy-icon');
-            if (text) text.textContent = 'Copied!';
-            if (icon) icon.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
-            setTimeout(function() {
-              if (text) text.textContent = 'Copy';
-              if (icon) icon.innerHTML = '<rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>';
-            }, 2000);
-          });
-        }
-      });
-    </script>
   </div>
 </section>
