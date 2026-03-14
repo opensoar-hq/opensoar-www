@@ -1,4 +1,6 @@
 ---
+const pathname = Astro.url.pathname;
+const isHome = pathname === '/';
 ---
 
 <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 flex justify-center pt-4 transition-[padding] duration-300">
@@ -15,10 +17,19 @@
     <div id="nav-divider" class="w-px h-4 transition-colors duration-300" style="background-color: transparent;"></div>
 
     <div class="hidden md:flex items-center gap-0.5 text-[13px]">
-      <a href="#features" class="nav-link px-2.5 py-1 rounded-md text-text hover:text-heading transition-colors duration-150">Features</a>
-      <a href="#playbooks" class="nav-link px-2.5 py-1 rounded-md text-text hover:text-heading transition-colors duration-150">Playbooks</a>
-      <a href="#ai" class="nav-link px-2.5 py-1 rounded-md text-text hover:text-heading transition-colors duration-150">AI</a>
-      <a href="#compare" class="nav-link px-2.5 py-1 rounded-md text-text hover:text-heading transition-colors duration-150">Compare</a>
+      {isHome ? (
+        <!-- Homepage: anchor links with scroll-spy -->
+        <a href="#features" class="nav-link nav-anchor px-2.5 py-1 rounded-md text-text hover:text-heading transition-colors duration-150">Features</a>
+        <a href="#playbooks" class="nav-link nav-anchor px-2.5 py-1 rounded-md text-text hover:text-heading transition-colors duration-150">Playbooks</a>
+        <a href="#ai" class="nav-link nav-anchor px-2.5 py-1 rounded-md text-text hover:text-heading transition-colors duration-150">AI</a>
+        <a href="#compare" class="nav-link nav-anchor px-2.5 py-1 rounded-md text-text hover:text-heading transition-colors duration-150">Compare</a>
+      ) : (
+        <!-- Subpages: real page links -->
+        <a href="/what-is-soar" class={`nav-link px-2.5 py-1 rounded-md transition-colors duration-150 ${pathname.startsWith('/what-is-soar') ? 'text-heading bg-heading/6' : 'text-text hover:text-heading'}`}>What is SOAR?</a>
+        <a href="/python-security-playbooks" class={`nav-link px-2.5 py-1 rounded-md transition-colors duration-150 ${pathname.startsWith('/python-security-playbooks') ? 'text-heading bg-heading/6' : 'text-text hover:text-heading'}`}>Playbooks</a>
+        <a href="/compare" class={`nav-link px-2.5 py-1 rounded-md transition-colors duration-150 ${pathname.startsWith('/compare') || pathname.startsWith('/alternatives') ? 'text-heading bg-heading/6' : 'text-text hover:text-heading'}`}>Compare</a>
+        <a href="/use-cases/alert-triage" class={`nav-link px-2.5 py-1 rounded-md transition-colors duration-150 ${pathname.startsWith('/use-cases') ? 'text-heading bg-heading/6' : 'text-text hover:text-heading'}`}>Use Cases</a>
+      )}
     </div>
 
     <div id="nav-divider-2" class="hidden md:block w-px h-4 transition-colors duration-300" style="background-color: transparent;"></div>
@@ -42,7 +53,7 @@
   const inner = document.getElementById('nav-inner');
   const divider = document.getElementById('nav-divider');
   const divider2 = document.getElementById('nav-divider-2');
-  const links = document.querySelectorAll('.nav-link[href^="#"]');
+  const anchorLinks = document.querySelectorAll('.nav-anchor');
 
   if (nav && inner) {
     let lastScrolled = false;
@@ -59,27 +70,33 @@
       if (divider2) divider2.style.backgroundColor = scrolled ? '#30363d' : 'transparent';
     };
 
-    const sections = Array.from(links).map(link => {
-      const id = link.getAttribute('href')!.slice(1);
-      return { link, el: document.getElementById(id) };
-    }).filter(s => s.el);
+    // Scroll-spy only for homepage anchor links
+    if (anchorLinks.length > 0) {
+      const sections = Array.from(anchorLinks).map(link => {
+        const id = link.getAttribute('href')!.slice(1);
+        return { link, el: document.getElementById(id) };
+      }).filter(s => s.el);
 
-    const updateActive = () => {
-      const scrollY = window.scrollY + 120;
-      let activeLink = null;
-      for (const { link, el } of sections) {
-        if (el && el.offsetTop <= scrollY) activeLink = link;
-      }
-      links.forEach(link => {
-        const isActive = link === activeLink;
-        link.classList.toggle('text-heading', isActive);
-        link.classList.toggle('text-text', !isActive);
-        (link as HTMLElement).style.backgroundColor = isActive ? 'rgba(230, 237, 243, 0.06)' : '';
-      });
-    };
+      const updateActive = () => {
+        const scrollY = window.scrollY + 120;
+        let activeLink: Element | null = null;
+        for (const { link, el } of sections) {
+          if (el && el.offsetTop <= scrollY) activeLink = link;
+        }
+        anchorLinks.forEach(link => {
+          const isActive = link === activeLink;
+          link.classList.toggle('text-heading', isActive);
+          link.classList.toggle('text-text', !isActive);
+          (link as HTMLElement).style.backgroundColor = isActive ? 'rgba(230, 237, 243, 0.06)' : '';
+        });
+      };
 
-    const onScroll = () => { updateNav(); updateActive(); };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
+      const onScroll = () => { updateNav(); updateActive(); };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    } else {
+      window.addEventListener('scroll', updateNav, { passive: true });
+      updateNav();
+    }
   }
 </script>
