@@ -1,0 +1,154 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+
+const triageCode = `from opensoar import playbook
+from opensoar.ai import triage
+
+@playbook(trigger="alert.created")
+async def ai_assisted_triage(alert):
+    # AI analyzes the alert and returns structured assessment
+    assessment = await triage(
+        alert,
+        provider="claude",  # or "gemini", "openai", "ollama"
+    )
+
+    # assessment.summary     → natural language explanation
+    # assessment.severity    → suggested severity level
+    # assessment.determination → benign / suspicious / malicious
+    # assessment.confidence  → 0-100 confidence score
+    # assessment.reasoning   → step-by-step analysis
+
+    if assessment.confidence > 85 and assessment.determination == "benign":
+        await resolve(alert, determination="false_positive",
+                      note=assessment.summary)
+    elif assessment.determination == "malicious":
+        await escalate(alert, reason=assessment.reasoning)
+    else:
+        # Enrich alert with AI context for analyst review
+        alert.ai_summary = assessment.summary
+        alert.suggested_severity = assessment.severity
+        await save_alert(alert)`;
+
+const multiModelCode = `from opensoar.ai import triage, configure_provider
+
+# Use any LLM provider — or run locally with Ollama
+configure_provider("claude", api_key="sk-...")
+configure_provider("gemini", api_key="AIza...")
+configure_provider("ollama", base_url="http://localhost:11434",
+                   model="llama3")
+
+# Switch providers per-playbook or globally
+assessment = await triage(alert, provider="claude")
+assessment = await triage(alert, provider="ollama")  # fully local, no data leaves your network`;
+---
+
+<ContentLayout
+  title="AI-Powered Security Alert Triage | OpenSOAR"
+  description="Automate alert triage with AI. OpenSOAR uses LLMs to classify, summarize, and prioritize security alerts — with any provider (Claude, Gemini, OpenAI, Ollama)."
+  badge="AI"
+  heading="AI-Powered Alert Triage"
+  subheading="Let AI handle the noise. Classify, summarize, and prioritize hundreds of alerts per day — automatically, with human-in-the-loop controls."
+>
+  <h2>Why AI for security alerts?</h2>
+  <p>
+    Security analysts spend most of their day on repetitive triage work: reading alerts, looking up context, deciding if something is real or noise. Most alerts are false positives. The real threats hide in the volume.
+  </p>
+  <p>
+    AI doesn't replace your analysts — it gives them superpowers. By handling the initial assessment of every alert, AI lets your team focus on the 10% that actually matter.
+  </p>
+
+  <h2>What OpenSOAR's AI triage does</h2>
+  <ul>
+    <li><strong>Alert summarization</strong> — turns raw JSON payloads into natural language: "Brute-force login attempt from IP 45.33.x.x targeting admin account, 47 failed attempts in 3 minutes"</li>
+    <li><strong>Severity assessment</strong> — suggests severity based on alert content, asset criticality, and enrichment data</li>
+    <li><strong>Determination</strong> — classifies as benign, suspicious, or malicious with a confidence score</li>
+    <li><strong>Reasoning</strong> — explains the assessment step by step, so analysts can verify the logic</li>
+    <li><strong>Deduplication</strong> — identifies semantically similar alerts that should be grouped, not just exact hash matches</li>
+    <li><strong>Correlation</strong> — connects related alerts across different sources into a single incident</li>
+  </ul>
+
+  <h2>How it works</h2>
+  <p>
+    AI triage is a playbook action — just another step in your automation. Call it from any playbook, configure thresholds, and decide what happens at each confidence level.
+  </p>
+  <pre><code set:text={triageCode} /></pre>
+  <p>
+    The AI sees the full alert context: raw payload, enrichment data from VirusTotal/AbuseIPDB, asset information, historical patterns. It returns a structured assessment your playbook can act on.
+  </p>
+
+  <h2>Bring your own model</h2>
+  <p>
+    OpenSOAR is model-agnostic. Use whichever LLM fits your requirements — cloud providers for convenience or local models for data sovereignty.
+  </p>
+  <pre><code set:text={multiModelCode} /></pre>
+  <table>
+    <thead>
+      <tr>
+        <th>Provider</th>
+        <th>Best for</th>
+        <th>Data leaves network?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Claude (Anthropic)</td>
+        <td>Complex reasoning, nuanced analysis</td>
+        <td>Yes (Anthropic API)</td>
+      </tr>
+      <tr>
+        <td>Gemini (Google)</td>
+        <td>Speed, Google Cloud integration</td>
+        <td>Yes (Google API)</td>
+      </tr>
+      <tr>
+        <td>OpenAI</td>
+        <td>GPT-4 ecosystem, function calling</td>
+        <td>Yes (OpenAI API)</td>
+      </tr>
+      <tr>
+        <td>Ollama (local)</td>
+        <td>Air-gapped, compliance, no data egress</td>
+        <td>No — fully local</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Human-in-the-loop</h2>
+  <p>
+    AI triage doesn't mean autonomous triage. You control the thresholds:
+  </p>
+  <ul>
+    <li><strong>High confidence (85%+)</strong> — auto-resolve false positives, auto-escalate confirmed threats</li>
+    <li><strong>Medium confidence (50-85%)</strong> — queue for analyst review with AI summary and recommendation</li>
+    <li><strong>Low confidence (&lt;50%)</strong> — flag for manual triage, AI provides context but no action</li>
+  </ul>
+  <p>
+    Every AI decision is logged with the full reasoning chain, so you can audit, adjust thresholds, and build trust over time.
+  </p>
+
+  <h2>What AI triage looks like for your SOC</h2>
+  <ul>
+    <li><strong>Before:</strong> Analyst opens alert → manually copies IOCs → checks VirusTotal → checks AbuseIPDB → reads SIEM context → decides severity → documents decision → 15-20 minutes per alert</li>
+    <li><strong>After:</strong> Alert arrives → AI enriches + analyzes → analyst sees summary + recommendation → confirms or overrides → 30 seconds per alert</li>
+  </ul>
+  <p>
+    That's not 10% faster. That's 30x faster. Your team handles the same volume with a fraction of the effort.
+  </p>
+
+  <h2>Privacy and security</h2>
+  <p>
+    We take data handling seriously:
+  </p>
+  <ul>
+    <li>OpenSOAR never sends your data to our servers — AI calls go directly from your deployment to your chosen provider</li>
+    <li>Use Ollama for fully local inference — no data leaves your network</li>
+    <li>All AI interactions are logged in your database for audit</li>
+    <li>You control exactly which alert fields are sent to the AI</li>
+  </ul>
+
+  <hr />
+
+  <p>
+    AI-powered alert triage is built into OpenSOAR. <a href="https://github.com/opensoar-hq/opensoar-core">Get started on GitHub →</a>
+  </p>
+</ContentLayout>

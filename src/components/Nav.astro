@@ -1,6 +1,5 @@
 ---
 const pathname = Astro.url.pathname;
-const isHome = pathname === '/';
 ---
 
 <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 flex justify-center pt-4 transition-[padding] duration-300">
@@ -17,19 +16,105 @@ const isHome = pathname === '/';
     <div id="nav-divider" class="w-px h-4 transition-colors duration-300" style="background-color: transparent;"></div>
 
     <div class="hidden md:flex items-center gap-0.5 text-[13px]">
-      {isHome ? (
-        <!-- Homepage: anchor links with scroll-spy -->
-        <a href="#features" class="nav-link nav-anchor px-2.5 py-1 rounded-md text-text hover:text-heading transition-colors duration-150">Features</a>
-        <a href="#playbooks" class="nav-link nav-anchor px-2.5 py-1 rounded-md text-text hover:text-heading transition-colors duration-150">Playbooks</a>
-        <a href="#ai" class="nav-link nav-anchor px-2.5 py-1 rounded-md text-text hover:text-heading transition-colors duration-150">AI</a>
-        <a href="#compare" class="nav-link nav-anchor px-2.5 py-1 rounded-md text-text hover:text-heading transition-colors duration-150">Compare</a>
-      ) : (
-        <!-- Subpages: real page links -->
-        <a href="/what-is-soar" class={`nav-link px-2.5 py-1 rounded-md transition-colors duration-150 ${pathname.startsWith('/what-is-soar') ? 'text-heading bg-heading/6' : 'text-text hover:text-heading'}`}>What is SOAR?</a>
-        <a href="/python-security-playbooks" class={`nav-link px-2.5 py-1 rounded-md transition-colors duration-150 ${pathname.startsWith('/python-security-playbooks') ? 'text-heading bg-heading/6' : 'text-text hover:text-heading'}`}>Playbooks</a>
-        <a href="/compare" class={`nav-link px-2.5 py-1 rounded-md transition-colors duration-150 ${pathname.startsWith('/compare') || pathname.startsWith('/alternatives') ? 'text-heading bg-heading/6' : 'text-text hover:text-heading'}`}>Compare</a>
-        <a href="/use-cases/alert-triage" class={`nav-link px-2.5 py-1 rounded-md transition-colors duration-150 ${pathname.startsWith('/use-cases') ? 'text-heading bg-heading/6' : 'text-text hover:text-heading'}`}>Use Cases</a>
-      )}
+      <!-- Product dropdown -->
+      <div class="nav-dropdown relative">
+        <button class={`nav-link px-2.5 py-1 rounded-md transition-colors duration-150 flex items-center gap-1 ${pathname.startsWith('/python-security-playbooks') || pathname.startsWith('/ai-triage') ? 'text-heading' : 'text-text hover:text-heading'}`}>
+          Product
+          <svg class="w-3 h-3 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="nav-dropdown-menu absolute top-full left-0 pt-2 opacity-0 invisible transition-all duration-150">
+          <div class="bg-surface border border-border rounded-lg p-1.5 shadow-xl shadow-black/30 min-w-[220px]">
+            <a href="/python-security-playbooks" class={`flex items-start gap-2.5 px-3 py-2 rounded-md text-xs transition-colors ${pathname.startsWith('/python-security-playbooks') ? 'bg-heading/6 text-heading' : 'text-text hover:text-heading hover:bg-heading/5'}`}>
+              <svg class="w-3.5 h-3.5 mt-0.5 shrink-0 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              <div>
+                <div class="font-medium text-heading">Python Playbooks</div>
+                <div class="text-muted text-[11px] mt-0.5">Write automation in real code</div>
+              </div>
+            </a>
+            <a href="/ai-triage" class={`flex items-start gap-2.5 px-3 py-2 rounded-md text-xs transition-colors ${pathname.startsWith('/ai-triage') ? 'bg-heading/6 text-heading' : 'text-text hover:text-heading hover:bg-heading/5'}`}>
+              <svg class="w-3.5 h-3.5 mt-0.5 shrink-0 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1.27A7 7 0 0 1 14 22h-4a7 7 0 0 1-6.73-5H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/><circle cx="10" cy="16" r="1"/><circle cx="14" cy="16" r="1"/></svg>
+              <div>
+                <div class="font-medium text-heading">AI Triage</div>
+                <div class="text-muted text-[11px] mt-0.5">LLM-powered alert analysis</div>
+              </div>
+            </a>
+            <a href="/security-automation" class={`flex items-start gap-2.5 px-3 py-2 rounded-md text-xs transition-colors ${pathname.startsWith('/security-automation') ? 'bg-heading/6 text-heading' : 'text-text hover:text-heading hover:bg-heading/5'}`}>
+              <svg class="w-3.5 h-3.5 mt-0.5 shrink-0 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              <div>
+                <div class="font-medium text-heading">Security Automation</div>
+                <div class="text-muted text-[11px] mt-0.5">Automate SOC workflows</div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Use Cases dropdown -->
+      <div class="nav-dropdown relative">
+        <button class={`nav-link px-2.5 py-1 rounded-md transition-colors duration-150 flex items-center gap-1 ${pathname.startsWith('/use-cases') ? 'text-heading' : 'text-text hover:text-heading'}`}>
+          Use Cases
+          <svg class="w-3 h-3 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="nav-dropdown-menu absolute top-full left-0 pt-2 opacity-0 invisible transition-all duration-150">
+          <div class="bg-surface border border-border rounded-lg p-1.5 shadow-xl shadow-black/30 min-w-[220px]">
+            <a href="/use-cases/alert-triage" class={`flex items-start gap-2.5 px-3 py-2 rounded-md text-xs transition-colors ${pathname === '/use-cases/alert-triage/' ? 'bg-heading/6 text-heading' : 'text-text hover:text-heading hover:bg-heading/5'}`}>
+              <svg class="w-3.5 h-3.5 mt-0.5 shrink-0 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V2"/><path d="m5 12 7-4 7 4"/><path d="m5 18 7-4 7 4"/></svg>
+              <div>
+                <div class="font-medium text-heading">Alert Triage</div>
+                <div class="text-muted text-[11px] mt-0.5">Automate SOC alert prioritization</div>
+              </div>
+            </a>
+            <a href="/use-cases/incident-response" class={`flex items-start gap-2.5 px-3 py-2 rounded-md text-xs transition-colors ${pathname === '/use-cases/incident-response/' ? 'bg-heading/6 text-heading' : 'text-text hover:text-heading hover:bg-heading/5'}`}>
+              <svg class="w-3.5 h-3.5 mt-0.5 shrink-0 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+              <div>
+                <div class="font-medium text-heading">Incident Response</div>
+                <div class="text-muted text-[11px] mt-0.5">Contain threats in seconds</div>
+              </div>
+            </a>
+            <a href="/use-cases/mssp" class={`flex items-start gap-2.5 px-3 py-2 rounded-md text-xs transition-colors ${pathname === '/use-cases/mssp/' ? 'bg-heading/6 text-heading' : 'text-text hover:text-heading hover:bg-heading/5'}`}>
+              <svg class="w-3.5 h-3.5 mt-0.5 shrink-0 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <div>
+                <div class="font-medium text-heading">MSSPs</div>
+                <div class="text-muted text-[11px] mt-0.5">Multi-tenant security automation</div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Compare dropdown -->
+      <div class="nav-dropdown relative">
+        <button class={`nav-link px-2.5 py-1 rounded-md transition-colors duration-150 flex items-center gap-1 ${pathname.startsWith('/compare') || pathname.startsWith('/alternatives') ? 'text-heading' : 'text-text hover:text-heading'}`}>
+          Compare
+          <svg class="w-3 h-3 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="nav-dropdown-menu absolute top-full left-0 pt-2 opacity-0 invisible transition-all duration-150">
+          <div class="bg-surface border border-border rounded-lg p-1.5 shadow-xl shadow-black/30 min-w-[220px]">
+            <a href="/compare" class={`flex items-start gap-2.5 px-3 py-2 rounded-md text-xs transition-colors ${pathname === '/compare/' ? 'bg-heading/6 text-heading' : 'text-text hover:text-heading hover:bg-heading/5'}`}>
+              <svg class="w-3.5 h-3.5 mt-0.5 shrink-0 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              <div>
+                <div class="font-medium text-heading">Overview</div>
+                <div class="text-muted text-[11px] mt-0.5">Feature comparison table</div>
+              </div>
+            </a>
+            <div class="h-px bg-border my-1 mx-2"></div>
+            <a href="/alternatives/splunk-soar" class={`flex items-center gap-2.5 px-3 py-1.5 rounded-md text-xs transition-colors ${pathname.startsWith('/alternatives/splunk') ? 'bg-heading/6 text-heading' : 'text-text hover:text-heading hover:bg-heading/5'}`}>
+              <span class="text-muted">vs</span> Splunk SOAR
+            </a>
+            <a href="/alternatives/xsoar" class={`flex items-center gap-2.5 px-3 py-1.5 rounded-md text-xs transition-colors ${pathname.startsWith('/alternatives/xsoar') ? 'bg-heading/6 text-heading' : 'text-text hover:text-heading hover:bg-heading/5'}`}>
+              <span class="text-muted">vs</span> Palo Alto XSOAR
+            </a>
+            <a href="/alternatives/swimlane" class={`flex items-center gap-2.5 px-3 py-1.5 rounded-md text-xs transition-colors ${pathname.startsWith('/alternatives/swimlane') ? 'bg-heading/6 text-heading' : 'text-text hover:text-heading hover:bg-heading/5'}`}>
+              <span class="text-muted">vs</span> Swimlane
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- What is SOAR — direct link -->
+      <a href="/what-is-soar" class={`nav-link px-2.5 py-1 rounded-md transition-colors duration-150 ${pathname.startsWith('/what-is-soar') ? 'text-heading bg-heading/6' : 'text-text hover:text-heading'}`}>
+        What is SOAR?
+      </a>
     </div>
 
     <div id="nav-divider-2" class="hidden md:block w-px h-4 transition-colors duration-300" style="background-color: transparent;"></div>
@@ -45,58 +130,76 @@ const isHome = pathname === '/';
       </svg>
       GitHub
     </a>
+
+    <!-- Mobile menu button -->
+    <button id="mobile-menu-btn" class="md:hidden px-2 py-1 text-text hover:text-heading transition-colors" aria-label="Menu">
+      <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+    </button>
   </div>
 </nav>
+
+<!-- Mobile menu overlay -->
+<div id="mobile-menu" class="fixed inset-0 z-40 bg-bg/95 backdrop-blur-sm hidden">
+  <div class="pt-20 px-6 space-y-1">
+    <div class="text-[10px] font-medium text-muted uppercase tracking-wider px-3 py-2">Product</div>
+    <a href="/python-security-playbooks" class="block px-3 py-2 text-sm text-text hover:text-heading rounded-md hover:bg-heading/5">Python Playbooks</a>
+    <a href="/ai-triage" class="block px-3 py-2 text-sm text-text hover:text-heading rounded-md hover:bg-heading/5">AI Triage</a>
+    <a href="/security-automation" class="block px-3 py-2 text-sm text-text hover:text-heading rounded-md hover:bg-heading/5">Security Automation</a>
+    <div class="h-px bg-border my-3"></div>
+    <div class="text-[10px] font-medium text-muted uppercase tracking-wider px-3 py-2">Use Cases</div>
+    <a href="/use-cases/alert-triage" class="block px-3 py-2 text-sm text-text hover:text-heading rounded-md hover:bg-heading/5">Alert Triage</a>
+    <a href="/use-cases/incident-response" class="block px-3 py-2 text-sm text-text hover:text-heading rounded-md hover:bg-heading/5">Incident Response</a>
+    <a href="/use-cases/mssp" class="block px-3 py-2 text-sm text-text hover:text-heading rounded-md hover:bg-heading/5">MSSPs</a>
+    <div class="h-px bg-border my-3"></div>
+    <a href="/compare" class="block px-3 py-2 text-sm text-text hover:text-heading rounded-md hover:bg-heading/5">Compare Platforms</a>
+    <a href="/what-is-soar" class="block px-3 py-2 text-sm text-text hover:text-heading rounded-md hover:bg-heading/5">What is SOAR?</a>
+    <div class="h-px bg-border my-3"></div>
+    <a href="https://github.com/opensoar-hq/opensoar-core" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-3 py-2 text-sm text-heading">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      GitHub
+    </a>
+  </div>
+</div>
+
+<style>
+  .nav-dropdown:hover .nav-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+  }
+</style>
 
 <script>
   const nav = document.getElementById('main-nav');
   const inner = document.getElementById('nav-inner');
   const divider = document.getElementById('nav-divider');
   const divider2 = document.getElementById('nav-divider-2');
-  const anchorLinks = document.querySelectorAll('.nav-anchor');
 
   if (nav && inner) {
     let lastScrolled = false;
-
     const updateNav = () => {
       const scrolled = window.scrollY > 40;
       if (scrolled === lastScrolled) return;
       lastScrolled = scrolled;
-
       nav.style.paddingTop = scrolled ? '0.5rem' : '1rem';
       inner.style.backgroundColor = scrolled ? '#161b22' : 'transparent';
       inner.style.borderColor = scrolled ? '#30363d' : 'transparent';
       if (divider) divider.style.backgroundColor = scrolled ? '#30363d' : 'transparent';
       if (divider2) divider2.style.backgroundColor = scrolled ? '#30363d' : 'transparent';
     };
+    window.addEventListener('scroll', updateNav, { passive: true });
+    updateNav();
+  }
 
-    // Scroll-spy only for homepage anchor links
-    if (anchorLinks.length > 0) {
-      const sections = Array.from(anchorLinks).map(link => {
-        const id = link.getAttribute('href')!.slice(1);
-        return { link, el: document.getElementById(id) };
-      }).filter(s => s.el);
-
-      const updateActive = () => {
-        const scrollY = window.scrollY + 120;
-        let activeLink: Element | null = null;
-        for (const { link, el } of sections) {
-          if (el && el.offsetTop <= scrollY) activeLink = link;
-        }
-        anchorLinks.forEach(link => {
-          const isActive = link === activeLink;
-          link.classList.toggle('text-heading', isActive);
-          link.classList.toggle('text-text', !isActive);
-          (link as HTMLElement).style.backgroundColor = isActive ? 'rgba(230, 237, 243, 0.06)' : '';
-        });
-      };
-
-      const onScroll = () => { updateNav(); updateActive(); };
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
-    } else {
-      window.addEventListener('scroll', updateNav, { passive: true });
-      updateNav();
-    }
+  // Mobile menu
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (menuBtn && mobileMenu) {
+    menuBtn.addEventListener('click', () => {
+      const isOpen = !mobileMenu.classList.contains('hidden');
+      mobileMenu.classList.toggle('hidden');
+      menuBtn.innerHTML = isOpen
+        ? '<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>'
+        : '<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+    });
   }
 </script>

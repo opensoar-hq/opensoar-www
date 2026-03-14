@@ -8,7 +8,7 @@ interface Props {
   ogImage?: string;
 }
 
-const defaultDescription = "OpenSOAR is an open-source SOAR (Security Orchestration, Automation and Response) platform. Python-native playbooks, AI-assisted triage, and real-time alert ingestion for modern security teams.";
+const defaultDescription = "OpenSOAR is an open-source security automation platform. Automate alert triage, enrich threats with AI, and build incident response playbooks in Python. Free, self-hosted, Apache 2.0.";
 
 const { title, description = defaultDescription, canonical, ogImage = "/og.png" } = Astro.props;
 const canonicalURL = canonical || new URL(Astro.url.pathname, Astro.site).toString();
