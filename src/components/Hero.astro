@@ -1,20 +1,21 @@
 ---
-import { FlickeringGrid } from './ui/flickering-grid';
+import { DotMatrixBg } from './ui/dot-matrix-bg';
 ---
 
 <section class="relative pt-28 pb-20 md:pt-36 md:pb-28 overflow-hidden">
-  <!-- Flickering grid background -->
+  <!-- Dot matrix background -->
   <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
-    <FlickeringGrid
+    <DotMatrixBg
       client:visible
-      className="z-0 absolute inset-0 size-full"
-      squareSize={4}
-      gridGap={6}
-      color="#6B7280"
-      maxOpacity={0.15}
-      flickerChance={0.1}
+      className="absolute inset-0 h-full w-full"
+      colors={[[110, 118, 129], [63, 185, 80]]}
+      opacities={[0.3, 0.3, 0.4, 0.5, 0.5, 0.6, 0.7, 0.8, 0.9, 1]}
+      dotSize={4}
+      totalSize={16}
+      animationSpeed={5}
     />
-    <div class="absolute inset-0 bg-gradient-to-t from-bg via-transparent to-bg/80"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-bg via-bg/40 to-bg/70"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,var(--color-bg)_75%)]"></div>
   </div>
   <div class="relative z-10 mx-auto max-w-6xl px-6 text-center">
     <!-- Badge -->
