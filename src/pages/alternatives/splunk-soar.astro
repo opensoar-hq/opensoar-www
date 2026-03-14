@@ -1,0 +1,117 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+---
+
+<ContentLayout
+  title="OpenSOAR vs Splunk SOAR (Phantom): Open-Source Alternative | OpenSOAR"
+  description="Compare OpenSOAR with Splunk SOAR (formerly Phantom). See how a free, open-source Python SOAR platform compares on features, pricing, and flexibility."
+  badge="Alternative"
+  heading="OpenSOAR vs Splunk SOAR"
+  subheading="A free, open-source alternative to Splunk SOAR (formerly Phantom) with Python-native playbooks and no licensing costs."
+>
+  <h2>About Splunk SOAR</h2>
+  <p>
+    Splunk SOAR (formerly Phantom) is one of the oldest and most established SOAR platforms on the market. Acquired by Splunk in 2018 (and now part of Cisco after the 2024 acquisition), it offers a visual playbook editor, a large integration marketplace, and tight integration with Splunk Enterprise Security.
+  </p>
+  <p>
+    It's a solid platform — but it comes with a significant price tag and increasingly ties you to the Splunk/Cisco ecosystem.
+  </p>
+
+  <h2>Key differences</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Aspect</th>
+        <th>OpenSOAR</th>
+        <th>Splunk SOAR</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Price</td>
+        <td>Free (Apache 2.0)</td>
+        <td>~$50,000+/year</td>
+      </tr>
+      <tr>
+        <td>Playbook format</td>
+        <td>Python</td>
+        <td>Visual editor + Python blocks</td>
+      </tr>
+      <tr>
+        <td>Deployment</td>
+        <td>Docker / Kubernetes</td>
+        <td>On-prem VM or Splunk Cloud</td>
+      </tr>
+      <tr>
+        <td>Source code</td>
+        <td>Fully open</td>
+        <td>Proprietary</td>
+      </tr>
+      <tr>
+        <td>SIEM dependency</td>
+        <td>None — works with any SIEM</td>
+        <td>Best with Splunk ES</td>
+      </tr>
+      <tr>
+        <td>Integrations</td>
+        <td>Growing (open-source)</td>
+        <td>300+ (Splunkbase)</td>
+      </tr>
+      <tr>
+        <td>AI triage</td>
+        <td>Built-in</td>
+        <td>Add-on</td>
+      </tr>
+      <tr>
+        <td>Community</td>
+        <td>Open-source community</td>
+        <td>Splunk community</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Why teams switch from Splunk SOAR</h2>
+
+  <h3>Cost</h3>
+  <p>
+    Splunk SOAR licensing starts around $50,000/year and scales with usage. When combined with Splunk Enterprise Security licensing (which many teams need to get full value from SOAR), total costs can exceed $200,000/year. For many organizations, this puts SOAR automation out of reach entirely.
+  </p>
+
+  <h3>Vendor lock-in</h3>
+  <p>
+    Splunk SOAR works best within the Splunk ecosystem. Your playbooks are built in their visual editor, your integrations come from Splunkbase, and your data lives in their platform. Moving away means rebuilding everything from scratch.
+  </p>
+  <p>
+    With OpenSOAR, your playbooks are Python files in a git repo. Your data is in PostgreSQL. Nothing is proprietary.
+  </p>
+
+  <h3>Playbook limitations</h3>
+  <p>
+    Splunk SOAR's visual playbook editor is good for simple workflows but becomes difficult to manage as complexity grows. Debugging visual playbooks is particularly painful — there's no step-through debugger, no pytest, and reviewing changes requires comparing screenshots rather than code diffs.
+  </p>
+
+  <h3>Cisco acquisition uncertainty</h3>
+  <p>
+    With Cisco's acquisition of Splunk, many teams are uncertain about the future direction of Splunk SOAR. Product roadmaps shift after acquisitions, and pricing tends to increase.
+  </p>
+
+  <h2>When Splunk SOAR might be the better choice</h2>
+  <ul>
+    <li>You're already deep in the Splunk ecosystem and want tight SIEM-SOAR integration</li>
+    <li>You need 300+ out-of-the-box integrations right now</li>
+    <li>Your team prefers visual playbook building over writing code</li>
+    <li>You need enterprise support with SLAs</li>
+  </ul>
+
+  <h2>Migration path</h2>
+  <p>
+    If you're considering moving from Splunk SOAR to OpenSOAR, the main work is rewriting your playbooks in Python. Since Splunk SOAR supports Python blocks within its visual editor, much of your existing logic can be directly ported. OpenSOAR can ingest alerts from the same sources and connect to the same tools.
+  </p>
+
+  <hr />
+
+  <p>
+    Ready to try an open-source alternative? <a href="https://github.com/opensoar-hq/opensoar-core">Get started with OpenSOAR →</a>
+  </p>
+</ContentLayout>

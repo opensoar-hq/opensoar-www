@@ -1,0 +1,113 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+
+const containThreatExample = `@playbook(trigger="alert.severity_changed", condition={"severity": "critical"})
+async def contain_threat(alert):
+    # Immediate containment — parallel execution
+    await asyncio.gather(
+        isolate_host(alert.hostname),
+        block_ip(alert.source_ip, duration="24h"),
+        disable_user(alert.username, reason="Security incident"),
+    )
+
+    # Preserve evidence before remediation
+    await collect_forensics(alert.hostname)
+
+    # Notify IR team
+    await create_incident(
+        alert=alert,
+        severity="critical",
+        channel="#incident-response",
+    )`;
+
+const approvalGateExample = `if alert.asset_criticality == "production":
+    approved = await request_approval(
+        action="isolate_host",
+        target=alert.hostname,
+        approvers=["@security-lead"],
+        timeout_minutes=15,
+    )
+    if not approved:
+        await escalate(alert, reason="Containment requires approval")
+        return`;
+---
+
+<ContentLayout
+  title="Automated Incident Response Playbooks | OpenSOAR"
+  description="Automate incident response with Python playbooks. Contain threats in seconds, coordinate response across tools, and ensure consistent IR processes."
+  badge="Use Case"
+  heading="Automated Incident Response"
+  subheading="Contain threats in seconds, not hours. Coordinate response actions across your security stack with Python playbooks."
+>
+  <h2>Why automate incident response?</h2>
+  <p>
+    When a security incident is confirmed, speed matters. Every minute between detection and containment is a minute the attacker has to move laterally, exfiltrate data, or escalate privileges.
+  </p>
+  <p>
+    Manual incident response is slow because it involves multiple tools and multiple teams:
+  </p>
+  <ul>
+    <li>Isolate the compromised host (EDR console)</li>
+    <li>Block the attacker's IP (firewall console)</li>
+    <li>Disable the compromised account (Active Directory / IdP)</li>
+    <li>Preserve forensic evidence (endpoint collection tool)</li>
+    <li>Notify stakeholders (email, Slack, ticketing system)</li>
+    <li>Document everything (case management, compliance records)</li>
+  </ul>
+  <p>
+    An analyst doing this manually across 4-6 different consoles takes 30-60 minutes minimum. An automated playbook does it in under a minute.
+  </p>
+
+  <h2>Incident response with OpenSOAR</h2>
+
+  <h3>Automated containment</h3>
+  <pre><code set:text={containThreatExample} /></pre>
+
+  <h3>Human-in-the-loop for high-impact actions</h3>
+  <p>
+    Not every response action should be fully automated. Disabling a VIP account or isolating a production server needs human approval. OpenSOAR supports approval gates:
+  </p>
+  <pre><code set:text={approvalGateExample} /></pre>
+
+  <h3>Coordinated response across tools</h3>
+  <p>
+    Real incident response spans multiple tools. OpenSOAR orchestrates them all from a single playbook:
+  </p>
+  <ul>
+    <li><strong>EDR:</strong> Isolate hosts, collect artifacts, run remote scans</li>
+    <li><strong>Firewall:</strong> Block IPs, domains, update threat feeds</li>
+    <li><strong>Identity:</strong> Disable accounts, force password resets, revoke sessions</li>
+    <li><strong>Email:</strong> Search for and quarantine related phishing emails</li>
+    <li><strong>Ticketing:</strong> Create incidents, update status, assign teams</li>
+    <li><strong>Communication:</strong> Notify stakeholders via Slack, Teams, or email</li>
+  </ul>
+
+  <h2>IR playbook templates</h2>
+  <p>
+    OpenSOAR includes example playbooks for common incident types:
+  </p>
+  <ul>
+    <li><strong>Malware containment</strong> — Isolate host, quarantine file, block C2, collect forensics</li>
+    <li><strong>Phishing response</strong> — Extract IOCs, search mailboxes, quarantine emails, block sender</li>
+    <li><strong>Compromised account</strong> — Disable account, revoke sessions, check for lateral movement</li>
+    <li><strong>Data exfiltration</strong> — Block destination, preserve evidence, assess data scope</li>
+    <li><strong>Ransomware</strong> — Network isolation, identify spread, preserve backups, notify leadership</li>
+  </ul>
+
+  <h2>Compliance and documentation</h2>
+  <p>
+    Every action OpenSOAR takes is logged with timestamps, inputs, outputs, and the analyst who approved it. This creates an automatic audit trail that satisfies compliance requirements for:
+  </p>
+  <ul>
+    <li>SOC 2 incident response documentation</li>
+    <li>GDPR breach notification timelines</li>
+    <li>HIPAA security incident procedures</li>
+    <li>PCI DSS incident response requirements</li>
+  </ul>
+
+  <hr />
+
+  <p>
+    Build incident response playbooks in Python. <a href="https://github.com/opensoar-hq/opensoar-core">Get started with OpenSOAR →</a>
+  </p>
+</ContentLayout>

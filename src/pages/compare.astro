@@ -1,0 +1,175 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+---
+
+<ContentLayout
+  title="OpenSOAR vs Commercial SOAR Platforms: Feature Comparison | OpenSOAR"
+  description="Compare OpenSOAR with Splunk SOAR, Palo Alto XSOAR, and Swimlane. See how an open-source Python-native SOAR platform stacks up against commercial alternatives."
+  badge="Comparison"
+  heading="OpenSOAR vs Commercial SOAR"
+  subheading="How an open-source, Python-native SOAR platform compares to Splunk SOAR, XSOAR, and Swimlane."
+>
+  <h2>The SOAR market today</h2>
+  <p>
+    The SOAR market is dominated by three commercial platforms: Splunk SOAR (formerly Phantom), Palo Alto XSOAR (formerly Demisto), and Swimlane. They're all capable platforms — but they come with significant trade-offs around cost, flexibility, and vendor lock-in.
+  </p>
+  <p>
+    OpenSOAR takes a different approach: open-source, Python-native, and built for teams that want to own their automation.
+  </p>
+
+  <h2>Feature comparison</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>OpenSOAR</th>
+        <th>Splunk SOAR</th>
+        <th>XSOAR</th>
+        <th>Swimlane</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>License</td>
+        <td>Apache 2.0</td>
+        <td>Commercial</td>
+        <td>Commercial</td>
+        <td>Commercial</td>
+      </tr>
+      <tr>
+        <td>Starting price</td>
+        <td>Free</td>
+        <td>~$50k/yr</td>
+        <td>~$75k/yr</td>
+        <td>~$60k/yr</td>
+      </tr>
+      <tr>
+        <td>Playbook format</td>
+        <td>Python</td>
+        <td>Visual + Python</td>
+        <td>YAML + JavaScript</td>
+        <td>Visual + Python</td>
+      </tr>
+      <tr>
+        <td>Self-hosted</td>
+        <td>Yes</td>
+        <td>Yes</td>
+        <td>Yes (or cloud)</td>
+        <td>Yes (or cloud)</td>
+      </tr>
+      <tr>
+        <td>Alert ingestion</td>
+        <td>Webhooks, pollers</td>
+        <td>Webhooks, pollers</td>
+        <td>Webhooks, pollers</td>
+        <td>Webhooks, pollers</td>
+      </tr>
+      <tr>
+        <td>Case management</td>
+        <td>Built-in</td>
+        <td>Built-in</td>
+        <td>Built-in</td>
+        <td>Built-in</td>
+      </tr>
+      <tr>
+        <td>Integrations</td>
+        <td>Growing (open-source)</td>
+        <td>300+ (marketplace)</td>
+        <td>700+ (marketplace)</td>
+        <td>200+ (marketplace)</td>
+      </tr>
+      <tr>
+        <td>AI-assisted triage</td>
+        <td>Built-in</td>
+        <td>Add-on</td>
+        <td>Limited</td>
+        <td>Limited</td>
+      </tr>
+      <tr>
+        <td>Multi-tenancy</td>
+        <td>Planned</td>
+        <td>Enterprise tier</td>
+        <td>Enterprise tier</td>
+        <td>Enterprise tier</td>
+      </tr>
+      <tr>
+        <td>Async execution</td>
+        <td>Native (asyncio)</td>
+        <td>Celery-based</td>
+        <td>Proprietary</td>
+        <td>Proprietary</td>
+      </tr>
+      <tr>
+        <td>Playbook testing</td>
+        <td>pytest</td>
+        <td>Limited</td>
+        <td>Limited</td>
+        <td>Limited</td>
+      </tr>
+      <tr>
+        <td>Source code access</td>
+        <td>Full</td>
+        <td>No</td>
+        <td>No</td>
+        <td>No</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Where OpenSOAR wins</h2>
+
+  <h3>Cost</h3>
+  <p>
+    OpenSOAR is free and open-source under the Apache 2.0 license. Commercial SOAR platforms typically start at $50,000-$100,000 per year, with costs increasing based on the number of users, actions, or integrations. For many security teams — especially startups, SMBs, and MSSPs — this pricing is prohibitive.
+  </p>
+
+  <h3>Playbook flexibility</h3>
+  <p>
+    OpenSOAR playbooks are standard Python. You can use any pip package, write complex conditional logic naturally, test with pytest, and review changes in pull requests. Commercial platforms use visual builders or proprietary formats that become unwieldy as complexity grows.
+  </p>
+
+  <h3>No vendor lock-in</h3>
+  <p>
+    Your playbooks are Python files. Your data is in your PostgreSQL database. Your deployment is Docker containers. If you ever want to move away from OpenSOAR, you keep everything you built. With commercial platforms, your playbooks, integrations, and data are trapped in proprietary formats.
+  </p>
+
+  <h3>Transparency</h3>
+  <p>
+    With open source, you can inspect every line of code. You know exactly how your alerts are processed, how your data is stored, and what happens when an action executes. This matters for security teams — you shouldn't have to trust a black box.
+  </p>
+
+  <h2>Where commercial platforms win (for now)</h2>
+
+  <h3>Integration breadth</h3>
+  <p>
+    XSOAR has 700+ integrations. Splunk SOAR has 300+. OpenSOAR is growing its integration library, with community contributions welcome. If you need out-of-the-box integrations for niche tools, commercial platforms have a head start.
+  </p>
+
+  <h3>Enterprise support</h3>
+  <p>
+    Commercial platforms come with SLAs, dedicated support engineers, and professional services. OpenSOAR is community-supported (enterprise support coming soon).
+  </p>
+
+  <h3>Mature multi-tenancy</h3>
+  <p>
+    If you're an MSSP managing dozens of tenants, commercial platforms have more mature multi-tenancy features today. OpenSOAR has multi-tenancy on its roadmap.
+  </p>
+
+  <h2>Who should use OpenSOAR?</h2>
+  <ul>
+    <li><strong>Security teams</strong> that want real automation without a six-figure budget</li>
+    <li><strong>Engineers</strong> who prefer writing Python over clicking through visual builders</li>
+    <li><strong>MSSPs</strong> looking for a white-label SOAR platform they can deploy per-tenant</li>
+    <li><strong>Organizations</strong> that need full control over their security automation data and logic</li>
+  </ul>
+
+  <p>
+    Detailed comparisons: <a href="/alternatives/splunk-soar">vs Splunk SOAR</a> · <a href="/alternatives/xsoar">vs XSOAR</a> · <a href="/alternatives/swimlane">vs Swimlane</a>
+  </p>
+
+  <hr />
+
+  <p>
+    <a href="https://github.com/opensoar-hq/opensoar-core">Try OpenSOAR free on GitHub →</a>
+  </p>
+</ContentLayout>

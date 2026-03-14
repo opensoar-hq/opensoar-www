@@ -1,0 +1,127 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+
+const triageCode = `@playbook(trigger="alert.created")
+async def standard_triage(alert):
+    # Core logic — same for every client
+    enrichment = await enrich_alert(alert)
+    score = calculate_risk(enrichment)
+
+    # Client-specific thresholds from config
+    config = get_tenant_config()
+    if score > config.escalation_threshold:
+        await escalate(alert, channel=config.slack_channel)
+    elif score < config.auto_resolve_threshold:
+        await resolve(alert, determination="false_positive")`;
+---
+
+<ContentLayout
+  title="SOAR for MSSPs: Multi-Tenant Security Automation | OpenSOAR"
+  description="Deploy OpenSOAR as your MSSP's SOAR platform. Per-tenant isolation, white-label ready, Python playbooks, and no per-client licensing fees."
+  badge="Use Case"
+  heading="SOAR for MSSPs"
+  subheading="A SOAR platform built for managed security service providers — per-tenant isolation, shared playbooks, and no per-client licensing."
+>
+  <h2>The MSSP SOAR challenge</h2>
+  <p>
+    MSSPs face a unique challenge with SOAR platforms. You manage security operations for dozens or hundreds of clients, each with different tools, different alert sources, and different response procedures.
+  </p>
+  <p>
+    Commercial SOAR platforms charge per-user, per-action, or per-tenant. When you're managing 50 clients, those costs multiply quickly. A $75,000/year SOAR license becomes a $500,000+ line item that eats into margins and gets passed to clients.
+  </p>
+  <p>
+    OpenSOAR is free. Deploy one instance per tenant, or run a shared platform with tenant isolation. No per-client fees, no per-action caps, no licensing math.
+  </p>
+
+  <h2>How MSSPs use OpenSOAR</h2>
+
+  <h3>Per-tenant deployment</h3>
+  <p>
+    Deploy a dedicated OpenSOAR instance for each client using Docker or Kubernetes. Each tenant gets their own database, their own playbooks, and their own API keys. Complete data isolation with shared infrastructure.
+  </p>
+  <pre><code># Deploy per-tenant with Docker Compose
+# Each client gets their own stack
+docker compose -f docker-compose.yml \
+  -p client-acme \
+  --env-file clients/acme/.env \
+  up -d</code></pre>
+
+  <h3>Shared playbook library</h3>
+  <p>
+    Build playbooks once, deploy across clients. Your core triage, enrichment, and response playbooks work for every client. Client-specific customizations are just Python configuration:
+  </p>
+  <pre><code set:text={triageCode} /></pre>
+
+  <h3>White-label ready</h3>
+  <p>
+    OpenSOAR is Apache 2.0 licensed. You can rebrand, customize, and deploy it as part of your managed service offering without attribution requirements. Your clients see your brand, not ours.
+  </p>
+
+  <h3>Client-specific integrations</h3>
+  <p>
+    Every client has different tools. Client A uses CrowdStrike + Splunk. Client B uses SentinelOne + Elastic. OpenSOAR's integration layer handles this cleanly — configure integrations per-tenant, use the same playbook logic.
+  </p>
+
+  <h2>MSSP metrics and reporting</h2>
+  <p>
+    OpenSOAR tracks everything your clients want to see:
+  </p>
+  <ul>
+    <li><strong>Mean time to detect (MTTD)</strong> — from alert creation to analyst acknowledgment</li>
+    <li><strong>Mean time to respond (MTTR)</strong> — from detection to containment</li>
+    <li><strong>Alert volume and trends</strong> — by source, severity, and type</li>
+    <li><strong>Automation rate</strong> — percentage of alerts handled without human intervention</li>
+    <li><strong>Playbook execution logs</strong> — every action taken, with timing and results</li>
+  </ul>
+  <p>
+    Export these metrics to your client-facing dashboards or generate automated monthly reports.
+  </p>
+
+  <h2>Cost comparison for MSSPs</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Scenario (50 clients)</th>
+        <th>OpenSOAR</th>
+        <th>Commercial SOAR</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Software licensing</td>
+        <td>$0</td>
+        <td>$200,000-$500,000/yr</td>
+      </tr>
+      <tr>
+        <td>Infrastructure</td>
+        <td>$500-2,000/mo</td>
+        <td>$500-2,000/mo</td>
+      </tr>
+      <tr>
+        <td>Per-action fees</td>
+        <td>$0</td>
+        <td>Variable</td>
+      </tr>
+      <tr>
+        <td>Additional tenants</td>
+        <td>$0</td>
+        <td>$1,000-5,000/tenant/yr</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Getting started as an MSSP</h2>
+  <ol>
+    <li><strong>Deploy a pilot instance</strong> for your highest-volume client</li>
+    <li><strong>Build your core playbooks</strong> — start with alert triage and enrichment</li>
+    <li><strong>Prove the ROI</strong> — measure MTTR reduction and automation rates</li>
+    <li><strong>Roll out to more clients</strong> — reuse playbooks, customize configs</li>
+    <li><strong>Scale with Kubernetes</strong> — auto-scale workers based on alert volume</li>
+  </ol>
+
+  <hr />
+
+  <p>
+    Build your MSSP's SOAR platform on open source. <a href="https://github.com/opensoar-hq/opensoar-core">Deploy OpenSOAR free →</a>
+  </p>
+</ContentLayout>

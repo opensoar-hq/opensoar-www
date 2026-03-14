@@ -1,0 +1,93 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+
+const autoEnrichCode = `@playbook(trigger="alert.created")
+async def auto_enrich(alert):
+    results = await asyncio.gather(
+        check_virustotal(alert.file_hash),
+        check_abuseipdb(alert.source_ip),
+        lookup_asset(alert.hostname),
+        lookup_user(alert.username),
+    )
+    alert.enrichment = combine_results(results)
+    await save_alert(alert)`;
+---
+
+<ContentLayout
+  title="Automated Alert Triage for SOC Teams | OpenSOAR"
+  description="Automate SOC alert triage with OpenSOAR. Reduce alert fatigue, cut MTTR, and let analysts focus on real threats instead of chasing false positives."
+  badge="Use Case"
+  heading="Automated Alert Triage"
+  subheading="Stop drowning in alerts. Automate enrichment, scoring, and routing so your SOC analysts focus on the threats that matter."
+>
+  <h2>The alert triage problem</h2>
+  <p>
+    A SOC analyst's day looks like this: open alert queue, read alert, copy IOCs into threat intel tools, check context in the SIEM, check if the asset is critical, check if the user is a VIP, decide if it's real or noise, document the decision, move to the next alert. Repeat hundreds of times.
+  </p>
+  <p>
+    Most of that work is mechanical. The enrichment steps are the same every time. The triage logic follows the same decision tree. Yet analysts do it manually, alert after alert, shift after shift.
+  </p>
+  <p>
+    The result: alert fatigue, slow response times, inconsistent decisions, and burned-out analysts.
+  </p>
+
+  <h2>Automating triage with OpenSOAR</h2>
+  <p>
+    OpenSOAR automates the repetitive parts of alert triage while keeping analysts in control of the decisions that matter.
+  </p>
+
+  <h3>Step 1: Auto-enrichment</h3>
+  <p>
+    When an alert arrives, OpenSOAR automatically enriches it with context from your threat intelligence sources, asset inventory, and identity provider — all in parallel.
+  </p>
+  <pre><code set:text={autoEnrichCode} /></pre>
+  <p>
+    By the time an analyst opens the alert, all the context is already there. No manual lookups needed.
+  </p>
+
+  <h3>Step 2: Auto-scoring</h3>
+  <p>
+    Based on enrichment results, OpenSOAR calculates a risk score combining threat intel confidence, asset criticality, user risk, and alert source reliability.
+  </p>
+
+  <h3>Step 3: Auto-routing</h3>
+  <ul>
+    <li><strong>Score &gt; 80:</strong> Escalate immediately to senior analyst with full context</li>
+    <li><strong>Score 40-80:</strong> Queue for analyst review with enrichment summary</li>
+    <li><strong>Score &lt; 20:</strong> Auto-resolve as false positive with documented reasoning</li>
+  </ul>
+  <p>
+    Analysts only see the alerts that need human judgment. The obvious false positives and the confirmed threats are handled automatically.
+  </p>
+
+  <h3>Step 4: AI-assisted analysis</h3>
+  <p>
+    For alerts in the middle range (score 40-80), OpenSOAR's AI triage assistant provides an analysis summary and recommended action, giving analysts a head start on investigation.
+  </p>
+
+  <h2>Results</h2>
+  <ul>
+    <li><strong>80%+ reduction</strong> in manual triage time</li>
+    <li><strong>Consistent decisions</strong> — every alert is triaged by the same logic</li>
+    <li><strong>Faster MTTR</strong> — critical alerts are escalated in seconds, not hours</li>
+    <li><strong>Better analyst retention</strong> — analysts work on interesting investigations, not repetitive lookups</li>
+  </ul>
+
+  <h2>Common alert sources</h2>
+  <p>
+    OpenSOAR ingests alerts from any source via webhooks or polling:
+  </p>
+  <ul>
+    <li><strong>SIEMs:</strong> Elastic Security, Splunk, Microsoft Sentinel</li>
+    <li><strong>EDR:</strong> CrowdStrike, SentinelOne, Microsoft Defender</li>
+    <li><strong>Cloud:</strong> AWS GuardDuty, Azure Security Center, GCP Security Command Center</li>
+    <li><strong>Email:</strong> Proofpoint, Mimecast, Microsoft Defender for Office 365</li>
+    <li><strong>Network:</strong> Suricata, Zeek, Palo Alto firewalls</li>
+  </ul>
+
+  <hr />
+
+  <p>
+    Ready to automate your alert triage? <a href="https://github.com/opensoar-hq/opensoar-core">Deploy OpenSOAR free →</a>
+  </p>
+</ContentLayout>

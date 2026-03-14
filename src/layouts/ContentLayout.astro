@@ -1,0 +1,44 @@
+---
+import Layout from './Layout.astro';
+import Nav from '../components/Nav.astro';
+import OpenSource from '../components/OpenSource.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  badge?: string;
+  heading: string;
+  subheading?: string;
+}
+
+const { title, description, badge, heading, subheading } = Astro.props;
+---
+
+<Layout title={title} description={description}>
+  <Nav />
+  <main>
+    <section class="pt-28 pb-16 md:pt-36 md:pb-20">
+      <div class="mx-auto max-w-4xl px-6">
+        {badge && (
+          <div class="text-center mb-4">
+            <span class="text-heading bg-heading/10 px-2 py-0.5 rounded font-medium text-xs">{badge}</span>
+          </div>
+        )}
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-heading leading-tight tracking-tight text-center mb-5">
+          {heading}
+        </h1>
+        {subheading && (
+          <p class="text-base md:text-lg text-text max-w-2xl mx-auto text-center leading-relaxed mb-12">
+            {subheading}
+          </p>
+        )}
+        <div class="prose-content">
+          <slot />
+        </div>
+      </div>
+    </section>
+    <OpenSource />
+  </main>
+  <Footer />
+</Layout>

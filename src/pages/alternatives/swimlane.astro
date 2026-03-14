@@ -1,0 +1,112 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+---
+
+<ContentLayout
+  title="OpenSOAR vs Swimlane: Open-Source SOAR Alternative | OpenSOAR"
+  description="Compare OpenSOAR with Swimlane SOAR. See how an open-source Python-native SOAR platform compares to Swimlane's low-code approach."
+  badge="Alternative"
+  heading="OpenSOAR vs Swimlane"
+  subheading="A free, open-source alternative to Swimlane — Python playbooks instead of low-code, no per-user licensing."
+>
+  <h2>About Swimlane</h2>
+  <p>
+    Swimlane is a SOAR platform known for its low-code automation approach and focus on case management. It positions itself as more accessible than script-heavy platforms, with a visual canvas for building automation workflows and a strong emphasis on metrics and reporting.
+  </p>
+  <p>
+    Swimlane Turbine, their latest platform, extends into the broader "security automation" space beyond traditional SOAR — but the core trade-offs around cost and flexibility remain.
+  </p>
+
+  <h2>Key differences</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Aspect</th>
+        <th>OpenSOAR</th>
+        <th>Swimlane</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Price</td>
+        <td>Free (Apache 2.0)</td>
+        <td>~$60,000+/year</td>
+      </tr>
+      <tr>
+        <td>Approach</td>
+        <td>Code-first (Python)</td>
+        <td>Low-code visual canvas</td>
+      </tr>
+      <tr>
+        <td>Deployment</td>
+        <td>Docker / Kubernetes</td>
+        <td>Cloud or on-prem</td>
+      </tr>
+      <tr>
+        <td>Source code</td>
+        <td>Fully open</td>
+        <td>Proprietary</td>
+      </tr>
+      <tr>
+        <td>Integrations</td>
+        <td>Growing (open-source)</td>
+        <td>200+ (marketplace)</td>
+      </tr>
+      <tr>
+        <td>Case management</td>
+        <td>Built-in</td>
+        <td>Built-in (strong)</td>
+      </tr>
+      <tr>
+        <td>Reporting</td>
+        <td>Dashboard</td>
+        <td>Advanced analytics</td>
+      </tr>
+      <tr>
+        <td>AI triage</td>
+        <td>Built-in</td>
+        <td>Swimlane Hero AI</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Why teams look for Swimlane alternatives</h2>
+
+  <h3>Low-code limitations</h3>
+  <p>
+    Swimlane's low-code approach works well for simple workflows but hits a ceiling with complex automation logic. When you need custom data transformations, complex conditional branching, or integration with internal APIs, you end up writing Python anyway — but within the constraints of Swimlane's platform.
+  </p>
+  <p>
+    OpenSOAR is Python from the start. No ceiling, no constraints.
+  </p>
+
+  <h3>Cost</h3>
+  <p>
+    Swimlane's pricing is typically per-user and starts around $60,000/year for a small team. Adding users, integrations, or advanced features increases the cost. For growing teams or MSSPs managing multiple clients, costs scale quickly.
+  </p>
+
+  <h3>Customization depth</h3>
+  <p>
+    Low-code platforms trade depth for accessibility. When you need to implement a custom enrichment pipeline, build a machine learning model for alert scoring, or integrate with a proprietary internal system, you need real code. OpenSOAR doesn't limit what you can build.
+  </p>
+
+  <h2>When Swimlane might be the better choice</h2>
+  <ul>
+    <li>Your team prefers a visual, low-code approach to automation</li>
+    <li>You need Swimlane's advanced reporting and metrics capabilities</li>
+    <li>Your organization prioritizes vendor support over self-managed infrastructure</li>
+    <li>You want a polished case management experience out of the box</li>
+  </ul>
+
+  <h2>Migration path</h2>
+  <p>
+    Migrating from Swimlane means translating visual workflows into Python playbooks. The logic is usually straightforward — the visual canvas maps to sequential and parallel async operations. Swimlane's Python-based custom actions can often be reused directly.
+  </p>
+
+  <hr />
+
+  <p>
+    Want a SOAR platform with no low-code ceiling? <a href="https://github.com/opensoar-hq/opensoar-core">Get started with OpenSOAR →</a>
+  </p>
+</ContentLayout>
