@@ -1,0 +1,50 @@
+---
+import { Code } from 'astro:components';
+
+interface Props {
+  code: string;
+  filename?: string;
+  lang?: string;
+}
+
+const { code, filename, lang = 'python' } = Astro.props;
+---
+
+<div class="code-block rounded-lg border border-border bg-surface overflow-hidden">
+  <!-- Title bar -->
+  <div class="flex items-center justify-between px-4 py-2.5 border-b border-border">
+    <div class="flex items-center gap-1.5">
+      <div class="w-2.5 h-2.5 rounded-full bg-danger/50"></div>
+      <div class="w-2.5 h-2.5 rounded-full bg-warning/50"></div>
+      <div class="w-2.5 h-2.5 rounded-full bg-success/50"></div>
+    </div>
+    {filename && <span class="text-[11px] text-muted font-mono">{filename}</span>}
+    <div class="w-14"></div>
+  </div>
+
+  <!-- Code -->
+  <div class="p-4 overflow-x-auto">
+    <Code code={code} lang={lang} theme="github-dark" />
+  </div>
+</div>
+
+<style>
+  .code-block :global(pre) {
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+  .code-block :global(pre code) {
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    font-size: 0.6875rem !important;
+    line-height: 1.65 !important;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
+  }
+  .code-block :global(.astro-code) {
+    background: none !important;
+  }
+</style>

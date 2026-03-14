@@ -1,5 +1,6 @@
 ---
 import ContentLayout from '../../layouts/ContentLayout.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
 
 const triageCode = `@playbook(trigger="alert.created")
 async def standard_triage(alert):
@@ -39,18 +40,18 @@ async def standard_triage(alert):
   <p>
     Deploy a dedicated OpenSOAR instance for each client using Docker or Kubernetes. Each tenant gets their own database, their own playbooks, and their own API keys. Complete data isolation with shared infrastructure.
   </p>
-  <pre><code># Deploy per-tenant with Docker Compose
+  <CodeBlock code={`# Deploy per-tenant with Docker Compose
 # Each client gets their own stack
-docker compose -f docker-compose.yml \
-  -p client-acme \
-  --env-file clients/acme/.env \
-  up -d</code></pre>
+docker compose -f docker-compose.yml \\
+  -p client-acme \\
+  --env-file clients/acme/.env \\
+  up -d`} filename="terminal" lang="bash" />
 
   <h3>Shared playbook library</h3>
   <p>
     Build playbooks once, deploy across clients. Your core triage, enrichment, and response playbooks work for every client. Client-specific customizations are just Python configuration:
   </p>
-  <pre><code set:text={triageCode} /></pre>
+  <CodeBlock code={triageCode} filename="standard_triage.py" />
 
   <h3>White-label ready</h3>
   <p>

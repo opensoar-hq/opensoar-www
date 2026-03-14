@@ -1,5 +1,6 @@
 ---
 import ContentLayout from '../layouts/ContentLayout.astro';
+import CodeBlock from '../components/CodeBlock.astro';
 
 const codeBasic = `from opensoar import playbook, action
 
@@ -108,25 +109,25 @@ async def test_confirmed_malicious_triggers_isolation():
   </p>
 
   <h3>Basic playbook</h3>
-  <pre><code set:text={codeBasic} /></pre>
+  <CodeBlock code={codeBasic} filename="triage_high_severity.py" />
 
   <h3>Parallel enrichment</h3>
   <p>
     Need to query multiple threat intel sources? Don't chain them sequentially — run them in parallel with <code>asyncio.gather()</code>:
   </p>
-  <pre><code set:text={codeParallel} /></pre>
+  <CodeBlock code={codeParallel} filename="parallel_enrich.py" />
 
   <h3>Human-in-the-loop</h3>
   <p>
     Not everything should be fully automated. Use approval gates for high-impact actions:
   </p>
-  <pre><code set:text={codeApproval} /></pre>
+  <CodeBlock code={codeApproval} filename="malware_response.py" />
 
   <h2>Testing playbooks</h2>
   <p>
     Because playbooks are Python, you test them like any other Python code:
   </p>
-  <pre><code set:text={codeTest} /></pre>
+  <CodeBlock code={codeTest} filename="test_triage.py" />
   <p>
     Run your playbook tests in CI. Catch bugs before they hit production. This is how software engineering works — security automation should be no different.
   </p>

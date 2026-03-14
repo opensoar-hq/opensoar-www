@@ -1,5 +1,6 @@
 ---
 import ContentLayout from '../layouts/ContentLayout.astro';
+import CodeBlock from '../components/CodeBlock.astro';
 
 const playbookExample = `from opensoar import playbook, action
 
@@ -142,7 +143,7 @@ async def triage_critical_alert(alert):
   <p>
     A playbook is a defined workflow that runs when certain conditions are met. In traditional SOAR platforms, playbooks are built with drag-and-drop visual editors. In OpenSOAR, playbooks are written in Python — giving you the full power of a programming language instead of a limited visual builder.
   </p>
-  <pre><code set:text={playbookExample} /></pre>
+  <CodeBlock code={playbookExample} filename="triage_critical.py" />
   <p>
     This is a real OpenSOAR playbook. No YAML. No drag-and-drop. Just Python.
   </p>
@@ -162,7 +163,7 @@ async def triage_critical_alert(alert):
   <p>
     OpenSOAR is free, open-source, and takes less than a minute to deploy:
   </p>
-  <pre><code>curl -fsSL https://get.opensoar.app | sh</code></pre>
+  <CodeBlock code="curl -fsSL https://get.opensoar.app | sh" filename="terminal" lang="bash" />
   <p>
     <a href="https://github.com/opensoar-hq/opensoar-core">View on GitHub →</a>
   </p>

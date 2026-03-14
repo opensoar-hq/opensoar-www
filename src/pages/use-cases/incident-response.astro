@@ -1,5 +1,6 @@
 ---
 import ContentLayout from '../../layouts/ContentLayout.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
 
 const containThreatExample = `@playbook(trigger="alert.severity_changed", condition={"severity": "critical"})
 async def contain_threat(alert):
@@ -61,13 +62,13 @@ const approvalGateExample = `if alert.asset_criticality == "production":
   <h2>Incident response with OpenSOAR</h2>
 
   <h3>Automated containment</h3>
-  <pre><code set:text={containThreatExample} /></pre>
+  <CodeBlock code={containThreatExample} filename="contain_threat.py" />
 
   <h3>Human-in-the-loop for high-impact actions</h3>
   <p>
     Not every response action should be fully automated. Disabling a VIP account or isolating a production server needs human approval. OpenSOAR supports approval gates:
   </p>
-  <pre><code set:text={approvalGateExample} /></pre>
+  <CodeBlock code={approvalGateExample} filename="approval_gate.py" />
 
   <h3>Coordinated response across tools</h3>
   <p>

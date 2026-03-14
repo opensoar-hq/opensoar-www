@@ -1,5 +1,6 @@
 ---
 import ContentLayout from '../layouts/ContentLayout.astro';
+import CodeBlock from '../components/CodeBlock.astro';
 
 const triageCode = `from opensoar import playbook
 from opensoar.ai import triage
@@ -71,7 +72,7 @@ assessment = await triage(alert, provider="ollama")  # fully local, no data leav
   <p>
     AI triage is a playbook action — just another step in your automation. Call it from any playbook, configure thresholds, and decide what happens at each confidence level.
   </p>
-  <pre><code set:text={triageCode} /></pre>
+  <CodeBlock code={triageCode} filename="ai_triage.py" />
   <p>
     The AI sees the full alert context: raw payload, enrichment data from VirusTotal/AbuseIPDB, asset information, historical patterns. It returns a structured assessment your playbook can act on.
   </p>
@@ -80,7 +81,7 @@ assessment = await triage(alert, provider="ollama")  # fully local, no data leav
   <p>
     OpenSOAR is model-agnostic. Use whichever LLM fits your requirements — cloud providers for convenience or local models for data sovereignty.
   </p>
-  <pre><code set:text={multiModelCode} /></pre>
+  <CodeBlock code={multiModelCode} filename="configure_providers.py" />
   <table>
     <thead>
       <tr>

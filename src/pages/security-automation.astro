@@ -1,5 +1,6 @@
 ---
 import ContentLayout from '../layouts/ContentLayout.astro';
+import CodeBlock from '../components/CodeBlock.astro';
 
 const enrichAndTriageExample = `from opensoar import playbook, action
 
@@ -87,7 +88,7 @@ async def enrich_and_triage(alert):
   <p>
     Python-native playbooks (like those in <a href="/">OpenSOAR</a>) give you the full power of a real programming language:
   </p>
-  <pre><code set:text={enrichAndTriageExample} /></pre>
+  <CodeBlock code={enrichAndTriageExample} filename="enrich_and_triage.py" />
   <p>
     Standard Python means you can use any library, write proper unit tests, version control your playbooks in git, and do code review before deploying changes.
   </p>

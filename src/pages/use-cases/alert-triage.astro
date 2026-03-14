@@ -1,5 +1,6 @@
 ---
 import ContentLayout from '../../layouts/ContentLayout.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
 
 const autoEnrichCode = `@playbook(trigger="alert.created")
 async def auto_enrich(alert):
@@ -40,7 +41,7 @@ async def auto_enrich(alert):
   <p>
     When an alert arrives, OpenSOAR automatically enriches it with context from your threat intelligence sources, asset inventory, and identity provider — all in parallel.
   </p>
-  <pre><code set:text={autoEnrichCode} /></pre>
+  <CodeBlock code={autoEnrichCode} filename="auto_enrich.py" />
   <p>
     By the time an analyst opens the alert, all the context is already there. No manual lookups needed.
   </p>
