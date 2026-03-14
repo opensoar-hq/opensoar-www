@@ -30,8 +30,8 @@ import ContentLayout from '../../layouts/ContentLayout.astro';
     <tbody>
       <tr>
         <td>Price</td>
-        <td>Free (Apache 2.0)</td>
-        <td>~$75,000+/year</td>
+        <td><span class="indicator indicator--positive"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" fill="#3fb950"/></svg> Free (Apache 2.0)</span></td>
+        <td><span class="indicator indicator--negative"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.75.75 0 1 1 1.06 1.06L9.06 8l3.22 3.22a.75.75 0 1 1-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 0 1-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z" fill="#f85149"/></svg> ~$75,000+/year</span></td>
       </tr>
       <tr>
         <td>Playbook format</td>
@@ -40,13 +40,13 @@ import ContentLayout from '../../layouts/ContentLayout.astro';
       </tr>
       <tr>
         <td>Pricing model</td>
-        <td>Unlimited</td>
-        <td>Per-action or per-endpoint</td>
+        <td><span class="indicator indicator--positive"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" fill="#3fb950"/></svg> Unlimited</span></td>
+        <td><span class="indicator indicator--negative"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.75.75 0 1 1 1.06 1.06L9.06 8l3.22 3.22a.75.75 0 1 1-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 0 1-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z" fill="#f85149"/></svg> Per-action or per-endpoint</span></td>
       </tr>
       <tr>
         <td>Source code</td>
-        <td>Fully open</td>
-        <td>Proprietary</td>
+        <td><span class="indicator indicator--positive"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" fill="#3fb950"/></svg> Fully open</span></td>
+        <td><span class="indicator indicator--negative"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.75.75 0 1 1 1.06 1.06L9.06 8l3.22 3.22a.75.75 0 1 1-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 0 1-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z" fill="#f85149"/></svg> Proprietary</span></td>
       </tr>
       <tr>
         <td>Deployment</td>
@@ -60,13 +60,13 @@ import ContentLayout from '../../layouts/ContentLayout.astro';
       </tr>
       <tr>
         <td>SIEM dependency</td>
-        <td>None</td>
-        <td>Best with Cortex XSIAM</td>
+        <td><span class="indicator indicator--positive"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" fill="#3fb950"/></svg> None</span></td>
+        <td><span class="indicator indicator--limited"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="4" fill="#d29922"/></svg> Best with Cortex XSIAM</span></td>
       </tr>
       <tr>
         <td>AI triage</td>
-        <td>Built-in</td>
-        <td>Limited</td>
+        <td><span class="indicator indicator--positive"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" fill="#3fb950"/></svg> Built-in</span></td>
+        <td><span class="indicator indicator--limited"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="4" fill="#d29922"/></svg> Limited</span></td>
       </tr>
     </tbody>
   </table>
@@ -111,6 +111,11 @@ import ContentLayout from '../../layouts/ContentLayout.astro';
   <p>
     XSOAR playbooks are YAML-based, so migration requires rewriting playbook logic in Python. The good news: Python is more concise and expressive, so most XSOAR playbooks become shorter and clearer when rewritten. XSOAR integrations that use Python scripts can often be adapted directly.
   </p>
+
+  <div class="callout-card callout-card--verdict">
+    <strong>Why choose OpenSOAR over XSOAR?</strong>
+    <p>No per-action pricing that penalizes automation, Python playbooks instead of YAML, no pressure to buy into the Cortex ecosystem, and full open-source transparency. OpenSOAR lets you automate without limits or vendor strings attached.</p>
+  </div>
 
   <hr />
 

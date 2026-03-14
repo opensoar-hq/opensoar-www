@@ -1,6 +1,7 @@
 ---
 import ContentLayout from '../layouts/ContentLayout.astro';
 import CodeBlock from '../components/CodeBlock.astro';
+import { AlertDisplayCards } from '../components/AlertCards';
 
 const triageCode = `from opensoar import playbook
 from opensoar.ai import triage
@@ -128,6 +129,9 @@ assessment = await triage(alert, provider="ollama")  # fully local, no data leav
   </p>
 
   <h2>What AI triage looks like for your SOC</h2>
+  <div style="border: 1px solid #30363d; background-color: #161b22; border-radius: 0.5rem; padding: 1.5rem; margin: 1.5rem 0;">
+    <AlertDisplayCards client:visible />
+  </div>
   <ul>
     <li><strong>Before:</strong> Analyst opens alert → manually copies IOCs → checks VirusTotal → checks AbuseIPDB → reads SIEM context → decides severity → documents decision → 15-20 minutes per alert</li>
     <li><strong>After:</strong> Alert arrives → AI enriches + analyzes → analyst sees summary + recommendation → confirms or overrides → 30 seconds per alert</li>

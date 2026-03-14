@@ -1,6 +1,7 @@
 ---
 import ContentLayout from '../layouts/ContentLayout.astro';
 import CodeBlock from '../components/CodeBlock.astro';
+import { AnimatedTerminal } from '../components/AnimatedTerminal';
 
 const playbookExample = `from opensoar import playbook, action
 
@@ -163,7 +164,17 @@ async def triage_critical_alert(alert):
   <p>
     OpenSOAR is free, open-source, and takes less than a minute to deploy:
   </p>
-  <CodeBlock code="curl -fsSL https://get.opensoar.app | sh" filename="terminal" lang="bash" />
+  <AnimatedTerminal
+    client:visible
+    commands={['curl -fsSL https://get.opensoar.app | sh']}
+    outputs={[
+      { text: 'Downloading OpenSOAR v0.9.2', delay: 0 },
+      { text: 'Installing to /usr/local/bin/soar', delay: 150 },
+      { text: 'OpenSOAR ready — run soar init to get started', delay: 300 },
+    ]}
+    title="terminal — install OpenSOAR"
+    height="160px"
+  />
   <p>
     <a href="https://github.com/opensoar-hq/opensoar-core">View on GitHub →</a>
   </p>

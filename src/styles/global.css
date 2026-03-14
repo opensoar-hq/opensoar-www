@@ -234,3 +234,50 @@ body {
   margin: 2.5rem 0;
 }
 
+/* Indicator icons in comparison tables */
+.indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.indicator svg {
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+/* Callout cards */
+.callout-card {
+  border-radius: 0.5rem;
+  padding: 1.25rem 1.5rem;
+  margin: 2rem 0;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+.callout-card p {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+.callout-card--success {
+  background: rgba(63, 185, 80, 0.08);
+  border: 1px solid rgba(63, 185, 80, 0.3);
+  color: var(--color-text);
+}
+
+.callout-card--success strong {
+  color: var(--color-success);
+}
+
+.callout-card--verdict {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-success);
+  color: var(--color-text);
+}
+
+.callout-card--verdict strong {
+  color: var(--color-heading);
+}
+

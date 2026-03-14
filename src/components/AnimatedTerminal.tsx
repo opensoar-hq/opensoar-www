@@ -12,13 +12,13 @@ const c = {
   warning: '#d29922',
 }
 
-const commands = [
+const defaultCommands = [
   'git clone https://github.com/opensoar-hq/opensoar-deploy',
   'cd opensoar-deploy && cp .env.example .env',
   'docker compose up -d',
 ]
 
-const outputs = [
+const defaultOutputs = [
   { text: 'PostgreSQL + Redis ready', delay: 0 },
   { text: 'API running on :8000', delay: 150 },
   { text: 'Dashboard ready at :3000', delay: 300 },
@@ -32,7 +32,19 @@ const OUTPUT_START_DELAY = 300 // pause before output starts
 
 type Phase = 'typing' | 'pausing' | 'output' | 'done'
 
-export function AnimatedTerminal() {
+interface AnimatedTerminalProps {
+  commands?: string[]
+  outputs?: { text: string; delay: number }[]
+  title?: string
+  height?: string
+}
+
+export function AnimatedTerminal({
+  commands = defaultCommands,
+  outputs = defaultOutputs,
+  title,
+  height = '220px',
+}: AnimatedTerminalProps = {}) {
   const [typedCommands, setTypedCommands] = useState<string[]>([])
   const [currentCmd, setCurrentCmd] = useState(0)
   const [currentChar, setCurrentChar] = useState(0)
@@ -127,7 +139,7 @@ export function AnimatedTerminal() {
         <div style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: c.warning, opacity: 0.5 }} />
         <div style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: c.success, opacity: 0.5 }} />
         <span style={{ marginLeft: '0.5rem', fontSize: '0.6875rem', color: c.muted, fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace' }}>
-          terminal — 4 commands to production
+          {title ?? `terminal — ${commands.length} command${commands.length === 1 ? '' : 's'} to production`}
         </span>
       </div>
 
@@ -139,7 +151,7 @@ export function AnimatedTerminal() {
         textAlign: 'left',
         color: c.text,
         lineHeight: 1.9,
-        height: '220px',
+        height,
       }}>
         {/* Already typed commands */}
         {typedCommands.map((cmd, i) => (

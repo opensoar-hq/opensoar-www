@@ -90,11 +90,13 @@ const { title, description, badge, heading, subheading } = Astro.props;
 </Layout>
 
 <script>
-  // Auto-generate table of contents from h2 elements
+  // Auto-generate table of contents from h2 elements with scroll spy
   const tocNav = document.querySelector('.toc-nav');
   const h2s = document.querySelectorAll('.prose-content h2');
 
   if (tocNav && h2s.length > 0) {
+    const linkMap = new Map<string, HTMLAnchorElement>();
+
     h2s.forEach((h2, i) => {
       const id = h2.textContent?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `section-${i}`;
       h2.id = id;
@@ -102,8 +104,35 @@ const { title, description, badge, heading, subheading } = Astro.props;
       const link = document.createElement('a');
       link.href = `#${id}`;
       link.textContent = h2.textContent || '';
-      link.className = 'block text-xs text-text hover:text-heading transition-colors truncate';
+      link.className = 'block text-xs text-text hover:text-heading transition-colors truncate pl-2 border-l-2 border-transparent';
       tocNav.appendChild(link);
+      linkMap.set(id, link);
     });
+
+    function setActive(id: string) {
+      linkMap.forEach((link, linkId) => {
+        if (linkId === id) {
+          link.classList.remove('text-text', 'border-transparent');
+          link.classList.add('text-heading', 'border-success');
+        } else {
+          link.classList.remove('text-heading', 'border-success');
+          link.classList.add('text-text', 'border-transparent');
+        }
+      });
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActive(entry.target.id);
+            break;
+          }
+        }
+      },
+      { rootMargin: '0px 0px -60% 0px', threshold: 0 }
+    );
+
+    h2s.forEach((h2) => observer.observe(h2));
   }
 </script>

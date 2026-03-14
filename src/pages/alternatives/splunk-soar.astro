@@ -30,8 +30,8 @@ import ContentLayout from '../../layouts/ContentLayout.astro';
     <tbody>
       <tr>
         <td>Price</td>
-        <td>Free (Apache 2.0)</td>
-        <td>~$50,000+/year</td>
+        <td><span class="indicator indicator--positive"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" fill="#3fb950"/></svg> Free (Apache 2.0)</span></td>
+        <td><span class="indicator indicator--negative"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.75.75 0 1 1 1.06 1.06L9.06 8l3.22 3.22a.75.75 0 1 1-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 0 1-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z" fill="#f85149"/></svg> ~$50,000+/year</span></td>
       </tr>
       <tr>
         <td>Playbook format</td>
@@ -45,13 +45,13 @@ import ContentLayout from '../../layouts/ContentLayout.astro';
       </tr>
       <tr>
         <td>Source code</td>
-        <td>Fully open</td>
-        <td>Proprietary</td>
+        <td><span class="indicator indicator--positive"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" fill="#3fb950"/></svg> Fully open</span></td>
+        <td><span class="indicator indicator--negative"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.75.75 0 1 1 1.06 1.06L9.06 8l3.22 3.22a.75.75 0 1 1-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 0 1-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z" fill="#f85149"/></svg> Proprietary</span></td>
       </tr>
       <tr>
         <td>SIEM dependency</td>
-        <td>None — works with any SIEM</td>
-        <td>Best with Splunk ES</td>
+        <td><span class="indicator indicator--positive"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" fill="#3fb950"/></svg> None — works with any SIEM</span></td>
+        <td><span class="indicator indicator--limited"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="4" fill="#d29922"/></svg> Best with Splunk ES</span></td>
       </tr>
       <tr>
         <td>Integrations</td>
@@ -60,8 +60,8 @@ import ContentLayout from '../../layouts/ContentLayout.astro';
       </tr>
       <tr>
         <td>AI triage</td>
-        <td>Built-in</td>
-        <td>Add-on</td>
+        <td><span class="indicator indicator--positive"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" fill="#3fb950"/></svg> Built-in</span></td>
+        <td><span class="indicator indicator--limited"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="4" fill="#d29922"/></svg> Add-on</span></td>
       </tr>
       <tr>
         <td>Community</td>
@@ -108,6 +108,11 @@ import ContentLayout from '../../layouts/ContentLayout.astro';
   <p>
     If you're considering moving from Splunk SOAR to OpenSOAR, the main work is rewriting your playbooks in Python. Since Splunk SOAR supports Python blocks within its visual editor, much of your existing logic can be directly ported. OpenSOAR can ingest alerts from the same sources and connect to the same tools.
   </p>
+
+  <div class="callout-card callout-card--verdict">
+    <strong>Why choose OpenSOAR over Splunk SOAR?</strong>
+    <p>Zero licensing costs, no Splunk/Cisco ecosystem lock-in, Python-native playbooks you can test and review like real code, and full source code transparency. If you want SOAR automation without a six-figure budget or vendor dependency, OpenSOAR is the open-source path forward.</p>
+  </div>
 
   <hr />
 
