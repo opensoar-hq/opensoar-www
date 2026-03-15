@@ -53,8 +53,8 @@ export function SoarOrbital() {
   const radius = 95
 
   return (
-    <div style={{ position: 'relative', width: '100%', maxWidth: '550px', margin: '0 auto', overflow: 'hidden' }}>
-      <svg viewBox="0 0 300 230" width="100%" style={{ overflow: 'visible' }}>
+    <div style={{ position: 'relative', width: '100%', maxWidth: '550px', margin: '0 auto', padding: '16px', overflow: 'hidden' }}>
+      <svg viewBox="-16 -16 332 262" width="100%" style={{ overflow: 'visible' }}>
         {/* Orbit ring */}
         <circle
           cx={cx} cy={cy} r={radius}
