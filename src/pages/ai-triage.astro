@@ -37,7 +37,7 @@ const multiModelCode = `from opensoar.ai import triage, configure_provider
 configure_provider("claude", api_key="sk-...")
 configure_provider("gemini", api_key="AIza...")
 configure_provider("ollama", base_url="http://localhost:11434",
-                   model="llama3")
+                   model="llama3.3")
 
 # Switch providers per-playbook or globally
 assessment = await triage(alert, provider="claude")
@@ -104,7 +104,7 @@ assessment = await triage(alert, provider="ollama")  # fully local, no data leav
       </tr>
       <tr>
         <td>OpenAI</td>
-        <td>GPT-4 ecosystem, function calling</td>
+        <td>Broad model ecosystem, function calling</td>
         <td>Yes (OpenAI API)</td>
       </tr>
       <tr>
