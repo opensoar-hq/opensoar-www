@@ -1,0 +1,90 @@
+---
+---
+
+<section class="relative py-20 md:py-28">
+  <div class="mx-auto max-w-6xl px-6">
+    <div class="text-center mb-14">
+      <span class="text-heading bg-heading/10 px-2 py-0.5 rounded font-medium text-xs">How It Works</span>
+      <h2 class="text-2xl md:text-3xl font-bold text-heading mt-4 mb-3">
+        Three steps. Zero vendor meetings.
+      </h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <!-- Step 1 -->
+      <div class="relative rounded-lg border border-border bg-surface p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="flex items-center justify-center w-8 h-8 rounded-full bg-heading/10 text-heading text-sm font-bold">1</div>
+          <h3 class="text-sm font-semibold text-heading">Alerts flow in</h3>
+        </div>
+        <p class="text-xs text-text leading-relaxed mb-5">
+          Connect any source &mdash; SIEM, EDR, monitoring, custom webhooks. OpenSOAR normalizes payloads, extracts IOCs, and deduplicates automatically.
+        </p>
+        <div class="space-y-1.5">
+          <div class="flex items-center gap-2 text-[11px] font-mono">
+            <span class="w-1.5 h-1.5 rounded-full bg-success"></span>
+            <span class="text-muted">Elastic Security</span>
+            <span class="text-success/60 ml-auto">connected</span>
+          </div>
+          <div class="flex items-center gap-2 text-[11px] font-mono">
+            <span class="w-1.5 h-1.5 rounded-full bg-success"></span>
+            <span class="text-muted">PagerDuty</span>
+            <span class="text-success/60 ml-auto">connected</span>
+          </div>
+          <div class="flex items-center gap-2 text-[11px] font-mono">
+            <span class="w-1.5 h-1.5 rounded-full bg-success"></span>
+            <span class="text-muted">Custom webhook</span>
+            <span class="text-success/60 ml-auto">connected</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="relative rounded-lg border border-border bg-surface p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="flex items-center justify-center w-8 h-8 rounded-full bg-heading/10 text-heading text-sm font-bold">2</div>
+          <h3 class="text-sm font-semibold text-heading">Playbooks run</h3>
+        </div>
+        <p class="text-xs text-text leading-relaxed mb-5">
+          Your Python playbooks trigger automatically based on alert conditions. Enrich, triage, escalate, contain &mdash; all async, all testable.
+        </p>
+        <div class="rounded-md bg-bg border border-border overflow-hidden">
+          <pre class="px-3 py-2.5 text-[11px] leading-relaxed font-mono overflow-x-auto no-scrollbar"><code><span class="text-[#ff7b72]">@playbook</span>(<span class="text-[#a5d6ff]">"on_critical_alert"</span>)
+<span class="text-[#ff7b72]">async def</span> <span class="text-[#d2a8ff]">handle</span>(alert):
+    ctx = <span class="text-[#ff7b72]">await</span> enrich(alert)
+    <span class="text-[#ff7b72]">if</span> ctx.is_threat:
+        <span class="text-[#ff7b72]">await</span> contain(alert)
+        <span class="text-[#ff7b72]">await</span> notify(alert)</code></pre>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="relative rounded-lg border border-border bg-surface p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="flex items-center justify-center w-8 h-8 rounded-full bg-heading/10 text-heading text-sm font-bold">3</div>
+          <h3 class="text-sm font-semibold text-heading">Humans decide what matters</h3>
+        </div>
+        <p class="text-xs text-text leading-relaxed mb-5">
+          Automation handles the volume. Your team handles the judgment calls. Every action is logged with full context for audit and review.
+        </p>
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 rounded-md bg-bg border border-border px-3 py-2">
+            <div class="w-1.5 h-1.5 rounded-full bg-danger"></div>
+            <span class="text-[11px] text-heading font-medium">Critical: Lateral movement detected</span>
+            <span class="text-[10px] text-warning ml-auto">Needs approval</span>
+          </div>
+          <div class="flex items-center gap-2 rounded-md bg-bg border border-border px-3 py-2">
+            <div class="w-1.5 h-1.5 rounded-full bg-success"></div>
+            <span class="text-[11px] text-muted">Failed login brute force</span>
+            <span class="text-[10px] text-success ml-auto">Auto-resolved</span>
+          </div>
+          <div class="flex items-center gap-2 rounded-md bg-bg border border-border px-3 py-2">
+            <div class="w-1.5 h-1.5 rounded-full bg-success"></div>
+            <span class="text-[11px] text-muted">Port scan from known scanner</span>
+            <span class="text-[10px] text-success ml-auto">Auto-resolved</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
