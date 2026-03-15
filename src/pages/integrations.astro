@@ -84,6 +84,35 @@ const categories = [
     ],
   },
   {
+    name: "Monitoring & Observability",
+    color: "#e3b341",
+    tools: [
+      { name: "Datadog", desc: "Infrastructure and application monitoring" },
+      { name: "Grafana", desc: "Dashboards and alerting" },
+      { name: "Prometheus", desc: "Metrics and alerting" },
+      { name: "New Relic", desc: "Full-stack observability" },
+    ],
+  },
+  {
+    name: "Cloud Platforms",
+    color: "#56d364",
+    tools: [
+      { name: "AWS", desc: "EC2, Lambda, CloudWatch, S3" },
+      { name: "Google Cloud", desc: "GKE, Cloud Functions, Cloud Monitoring" },
+      { name: "Azure", desc: "VMs, Functions, Monitor, Key Vault" },
+    ],
+  },
+  {
+    name: "DevOps & CI/CD",
+    color: "#f0883e",
+    tools: [
+      { name: "GitHub", desc: "Actions, Issues, Webhooks" },
+      { name: "GitLab", desc: "Pipelines, Issues, Webhooks" },
+      { name: "Terraform", desc: "Infrastructure state and drift" },
+      { name: "Kubernetes", desc: "Pod health, scaling, rollbacks" },
+    ],
+  },
+  {
     name: "Custom",
     color: "#8b949e",
     tools: [
@@ -96,7 +125,7 @@ const categories = [
 ];
 ---
 
-<Layout title="Integrations: Connect Your Security Stack | OpenSOAR" description="OpenSOAR integrates with SIEMs, EDR, cloud security, threat intelligence, ticketing, and more. Connect your entire security stack with Python-native integrations.">
+<Layout title="Integrations: Connect Your Stack | OpenSOAR" description="OpenSOAR integrates with SIEMs, EDR, cloud platforms, monitoring, DevOps tools, ticketing, and more. Connect your entire stack with Python-native integrations.">
   <Nav />
   <main>
     <!-- Hero -->
@@ -105,10 +134,10 @@ const categories = [
         <div class="max-w-3xl">
           <span class="text-heading bg-heading/10 px-2 py-0.5 rounded font-medium text-xs mb-4 inline-block">Integrations</span>
           <h1 class="text-2xl md:text-3xl font-bold text-heading leading-tight tracking-tight mb-4">
-            Connect Your Security Stack
+            Connect Your Stack
           </h1>
           <p class="text-sm text-text leading-relaxed max-w-2xl">
-            OpenSOAR connects to the tools your SOC already uses — SIEMs, EDR, threat intel feeds, ticketing systems, and more. Every integration is open source and extensible via Python.
+            OpenSOAR connects to the tools your team already uses — security, monitoring, ticketing, communication, and any API.
           </p>
         </div>
       </div>
@@ -171,7 +200,7 @@ const categories = [
           <div class="max-w-2xl">
             <h2 class="text-sm font-semibold text-heading mb-3">Build Your Own Integrations</h2>
             <p class="text-xs text-text leading-relaxed mb-4">
-              Any tool with an API can be integrated into OpenSOAR. Integrations are standard Python classes — import any library, call any endpoint, parse any response format. No vendor SDK required, no sandbox limitations.
+              Any tool with an API can be integrated into OpenSOAR in a few lines of Python. Integrations are standard Python classes — import any library, call any endpoint, parse any response format. No vendor SDK required, no sandbox limitations.
             </p>
             <div class="rounded-md bg-bg border border-border overflow-hidden">
               <div class="flex items-center gap-1.5 px-3 py-1.5 border-b border-border">

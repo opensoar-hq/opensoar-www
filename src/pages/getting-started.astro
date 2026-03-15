@@ -1,0 +1,192 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+import { AnimatedTerminal } from '../components/AnimatedTerminal';
+import OpenSource from '../components/OpenSource.astro';
+import Footer from '../components/Footer.astro';
+
+const playbookCode = `from opensoar import playbook
+
+@playbook(trigger="alert.created")
+async def enrich_and_decide(alert):
+    # Enrich with threat intelligence
+    reputation = await check_ip(alert.source_ip)
+
+    if reputation.malicious:
+        await notify_slack(f"Threat detected: {alert.title}")
+        await isolate_host(alert.hostname)
+    else:
+        await resolve(alert, determination="benign")`;
+
+const testCode = `import pytest
+from my_first_playbook import enrich_and_decide
+from opensoar.testing import MockAlert, mock_action
+
+@pytest.mark.asyncio
+async def test_malicious_ip_triggers_isolation():
+    alert = MockAlert(source_ip="45.33.32.156")
+
+    with mock_action("check_ip", returns={"malicious": True}):
+        await enrich_and_decide(alert)
+
+    assert "isolate_host" in alert.actions_taken`;
+
+const nextSteps = [
+  {
+    title: "Python Playbooks",
+    href: "/python-security-playbooks",
+    description: "Deep dive into playbook patterns",
+  },
+  {
+    title: "AI Triage",
+    href: "/ai-triage",
+    description: "Add LLM-powered alert analysis",
+  },
+  {
+    title: "Integrations",
+    href: "/integrations",
+    description: "Connect your existing tools",
+  },
+];
+---
+
+<Layout
+  title="Getting Started with OpenSOAR — Install, Write, Deploy in 60 Seconds"
+  description="Install OpenSOAR, write your first security automation playbook in Python, test it, and deploy — all in one terminal session. Free and open source."
+>
+  <Nav />
+  <main>
+
+    <!-- Hero -->
+    <section class="pt-32 pb-16 md:pt-40 md:pb-20">
+      <div class="mx-auto max-w-3xl px-6 text-center">
+        <span class="inline-block text-[11px] font-medium text-muted border border-border rounded-full px-3 py-1 mb-6">
+          Getting Started
+        </span>
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-heading leading-tight mb-4">
+          From zero to automated in 60&nbsp;seconds
+        </h1>
+        <p class="text-base md:text-lg text-text leading-relaxed max-w-2xl mx-auto">
+          Install OpenSOAR, write your first playbook, and deploy it — all in one terminal session.
+        </p>
+      </div>
+    </section>
+
+    <!-- Step 1: Install -->
+    <section class="py-16">
+      <div class="mx-auto max-w-4xl px-6">
+        <div class="flex items-baseline gap-4 mb-6">
+          <span class="text-4xl md:text-5xl font-bold text-heading/15 leading-none">1</span>
+          <h2 class="text-xl md:text-2xl font-bold text-heading">Install</h2>
+        </div>
+        <div class="max-w-3xl mb-4">
+          <p class="text-sm text-text leading-relaxed">
+            A single command pulls down OpenSOAR and starts all services locally.
+          </p>
+        </div>
+        <AnimatedTerminal
+          client:visible
+          commands={["curl -fsSL https://opensoar.app/install.sh | sh"]}
+          outputs={[
+            { text: "Downloading OpenSOAR v0.5.0...", delay: 400 },
+            { text: "Installing dependencies...", delay: 800 },
+            { text: "Starting services (PostgreSQL, Redis, API, Worker)...", delay: 1200 },
+            { text: "\u2713 OpenSOAR is running at http://localhost:8000", delay: 1600 },
+          ]}
+          title="terminal — install"
+          height="200px"
+        />
+        <p class="text-xs text-muted mt-4">
+          Or use Docker: <code class="text-text bg-surface border border-border rounded px-1.5 py-0.5 font-mono text-[11px]">docker compose up -d</code>
+        </p>
+      </div>
+    </section>
+
+    <!-- Step 2: Write your first playbook -->
+    <section class="py-16">
+      <div class="mx-auto max-w-4xl px-6">
+        <div class="flex items-baseline gap-4 mb-6">
+          <span class="text-4xl md:text-5xl font-bold text-heading/15 leading-none">2</span>
+          <h2 class="text-xl md:text-2xl font-bold text-heading">Write your first playbook</h2>
+        </div>
+        <div class="max-w-3xl mb-6">
+          <p class="text-sm text-text leading-relaxed">
+            Playbooks are plain Python. This one enriches every new alert with threat intel, then either escalates or closes it automatically.
+          </p>
+        </div>
+        <CodeBlock code={playbookCode} filename="my_first_playbook.py" />
+      </div>
+    </section>
+
+    <!-- Step 3: Test it -->
+    <section class="py-16">
+      <div class="mx-auto max-w-4xl px-6">
+        <div class="flex items-baseline gap-4 mb-6">
+          <span class="text-4xl md:text-5xl font-bold text-heading/15 leading-none">3</span>
+          <h2 class="text-xl md:text-2xl font-bold text-heading">Test it</h2>
+        </div>
+        <div class="max-w-3xl mb-6">
+          <p class="text-sm text-text leading-relaxed">
+            Because playbooks are real code, you can test them with pytest. Mock external actions and assert on outcomes — no staging environment needed.
+          </p>
+        </div>
+        <CodeBlock code={testCode} filename="test_playbook.py" />
+      </div>
+    </section>
+
+    <!-- Step 4: Deploy -->
+    <section class="py-16">
+      <div class="mx-auto max-w-4xl px-6">
+        <div class="flex items-baseline gap-4 mb-6">
+          <span class="text-4xl md:text-5xl font-bold text-heading/15 leading-none">4</span>
+          <h2 class="text-xl md:text-2xl font-bold text-heading">Deploy</h2>
+        </div>
+        <div class="max-w-3xl mb-4">
+          <p class="text-sm text-text leading-relaxed">
+            Push your playbook to Git. OpenSOAR picks it up and starts watching for matching alerts.
+          </p>
+        </div>
+        <AnimatedTerminal
+          client:visible
+          commands={["git add playbooks/", "git commit -m 'Add enrichment playbook'", "git push origin main"]}
+          outputs={[
+            { text: "\u2713 Playbook deployed. Watching for new alerts...", delay: 400 },
+          ]}
+          title="terminal — deploy"
+          height="180px"
+        />
+      </div>
+    </section>
+
+    <!-- Next Steps -->
+    <section class="py-16">
+      <div class="mx-auto max-w-4xl px-6">
+        <h2 class="text-xl md:text-2xl font-bold text-heading mb-8 text-center">Next steps</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {nextSteps.map((item) => (
+            <a
+              href={item.href}
+              class="group flex flex-col justify-between rounded-lg border border-border bg-surface p-5 transition-colors hover:border-heading/30"
+            >
+              <div>
+                <h3 class="text-sm font-semibold text-heading mb-1.5">{item.title}</h3>
+                <p class="text-xs text-muted leading-relaxed">{item.description}</p>
+              </div>
+              <div class="mt-4 flex items-center text-xs text-muted group-hover:text-heading transition-colors">
+                <span>Learn more</span>
+                <svg class="w-3.5 h-3.5 ml-1 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <OpenSource />
+  </main>
+  <Footer />
+</Layout>

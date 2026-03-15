@@ -16,10 +16,10 @@ const pathname = Astro.url.pathname;
     <div id="nav-divider" class="w-px h-4 transition-colors duration-300" style="background-color: transparent;"></div>
 
     <div class="hidden md:flex items-center gap-0.5 text-[13px]">
-      <!-- Product dropdown -->
+      <!-- Platform dropdown -->
       <div class="nav-dropdown relative">
         <button class={`nav-link px-2.5 py-1 rounded-md transition-colors duration-150 flex items-center gap-1 ${pathname.startsWith('/python-security-playbooks') || pathname.startsWith('/ai-triage') || pathname.startsWith('/integrations') ? 'text-heading' : 'text-text hover:text-heading'}`}>
-          Product
+          Platform
           <svg class="w-3 h-3 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
         <div class="nav-dropdown-menu absolute top-full left-0 pt-2 opacity-0 invisible transition-all duration-150">
@@ -28,7 +28,7 @@ const pathname = Astro.url.pathname;
               <svg class="w-3.5 h-3.5 mt-0.5 shrink-0 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
               <div>
                 <div class="font-medium text-heading">Python Playbooks</div>
-                <div class="text-muted text-[11px] mt-0.5">Write automation in real code</div>
+                <div class="text-muted text-[11px] mt-0.5">Automation in real code</div>
               </div>
             </a>
             <a href="/ai-triage" class={`flex items-start gap-2.5 px-3 py-2 rounded-md text-xs transition-colors ${pathname.startsWith('/ai-triage') ? 'bg-heading/6 text-heading' : 'text-text hover:text-heading hover:bg-heading/5'}`}>
@@ -38,18 +38,44 @@ const pathname = Astro.url.pathname;
                 <div class="text-muted text-[11px] mt-0.5">LLM-powered alert analysis</div>
               </div>
             </a>
-            <a href="/security-automation" class={`flex items-start gap-2.5 px-3 py-2 rounded-md text-xs transition-colors ${pathname.startsWith('/security-automation') ? 'bg-heading/6 text-heading' : 'text-text hover:text-heading hover:bg-heading/5'}`}>
-              <svg class="w-3.5 h-3.5 mt-0.5 shrink-0 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-              <div>
-                <div class="font-medium text-heading">Security Automation</div>
-                <div class="text-muted text-[11px] mt-0.5">Automate SOC workflows</div>
-              </div>
-            </a>
             <a href="/integrations" class={`flex items-start gap-2.5 px-3 py-2 rounded-md text-xs transition-colors ${pathname.startsWith('/integrations') ? 'bg-heading/6 text-heading' : 'text-text hover:text-heading hover:bg-heading/5'}`}>
               <svg class="w-3.5 h-3.5 mt-0.5 shrink-0 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a6 6 0 0 1-6 6 6 6 0 0 1-6-6V8z"/></svg>
               <div>
                 <div class="font-medium text-heading">Integrations</div>
-                <div class="text-muted text-[11px] mt-0.5">Connect your security stack</div>
+                <div class="text-muted text-[11px] mt-0.5">Connect any tool or API</div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Learn dropdown -->
+      <div class="nav-dropdown relative">
+        <button class={`nav-link px-2.5 py-1 rounded-md transition-colors duration-150 flex items-center gap-1 ${pathname.startsWith('/getting-started') || pathname.startsWith('/what-is-soar') || pathname.startsWith('/security-automation') ? 'text-heading' : 'text-text hover:text-heading'}`}>
+          Learn
+          <svg class="w-3 h-3 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="nav-dropdown-menu absolute top-full left-0 pt-2 opacity-0 invisible transition-all duration-150">
+          <div class="bg-surface border border-border rounded-lg p-1.5 shadow-xl shadow-black/30 min-w-[220px]">
+            <a href="/getting-started" class={`flex items-start gap-2.5 px-3 py-2 rounded-md text-xs transition-colors ${pathname.startsWith('/getting-started') ? 'bg-heading/6 text-heading' : 'text-text hover:text-heading hover:bg-heading/5'}`}>
+              <svg class="w-3.5 h-3.5 mt-0.5 shrink-0 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              <div>
+                <div class="font-medium text-heading">Getting Started</div>
+                <div class="text-muted text-[11px] mt-0.5">Up and running in 60 seconds</div>
+              </div>
+            </a>
+            <a href="/what-is-soar" class={`flex items-start gap-2.5 px-3 py-2 rounded-md text-xs transition-colors ${pathname.startsWith('/what-is-soar') ? 'bg-heading/6 text-heading' : 'text-text hover:text-heading hover:bg-heading/5'}`}>
+              <svg class="w-3.5 h-3.5 mt-0.5 shrink-0 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <div>
+                <div class="font-medium text-heading">What is SOAR?</div>
+                <div class="text-muted text-[11px] mt-0.5">SOAR concepts explained</div>
+              </div>
+            </a>
+            <a href="/security-automation" class={`flex items-start gap-2.5 px-3 py-2 rounded-md text-xs transition-colors ${pathname.startsWith('/security-automation') ? 'bg-heading/6 text-heading' : 'text-text hover:text-heading hover:bg-heading/5'}`}>
+              <svg class="w-3.5 h-3.5 mt-0.5 shrink-0 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              <div>
+                <div class="font-medium text-heading">Automation Guide</div>
+                <div class="text-muted text-[11px] mt-0.5">How to automate workflows</div>
               </div>
             </a>
           </div>
@@ -117,11 +143,6 @@ const pathname = Astro.url.pathname;
           </div>
         </div>
       </div>
-
-      <!-- What is SOAR — direct link -->
-      <a href="/what-is-soar" class={`nav-link px-2.5 py-1 rounded-md transition-colors duration-150 ${pathname.startsWith('/what-is-soar') ? 'text-heading bg-heading/6' : 'text-text hover:text-heading'}`}>
-        What is SOAR?
-      </a>
     </div>
 
     <div id="nav-divider-2" class="hidden md:block w-px h-4 transition-colors duration-300" style="background-color: transparent;"></div>
@@ -148,11 +169,15 @@ const pathname = Astro.url.pathname;
 <!-- Mobile menu overlay -->
 <div id="mobile-menu" class="fixed inset-0 z-40 bg-bg/95 backdrop-blur-sm opacity-0 invisible transition-all duration-200 overflow-y-auto" aria-hidden="true">
   <div class="pt-20 pb-8 px-6 space-y-1">
-    <div class="text-[10px] font-medium text-muted uppercase tracking-wider px-3 py-2">Product</div>
+    <div class="text-[10px] font-medium text-muted uppercase tracking-wider px-3 py-2">Platform</div>
     <a href="/python-security-playbooks" class={`mobile-nav-link block px-3 py-2 text-sm rounded-md transition-colors ${pathname.startsWith('/python-security-playbooks') ? 'text-heading bg-heading/6' : 'text-text hover:text-heading hover:bg-heading/5'}`}>Python Playbooks</a>
     <a href="/ai-triage" class={`mobile-nav-link block px-3 py-2 text-sm rounded-md transition-colors ${pathname.startsWith('/ai-triage') ? 'text-heading bg-heading/6' : 'text-text hover:text-heading hover:bg-heading/5'}`}>AI Triage</a>
-    <a href="/security-automation" class={`mobile-nav-link block px-3 py-2 text-sm rounded-md transition-colors ${pathname.startsWith('/security-automation') ? 'text-heading bg-heading/6' : 'text-text hover:text-heading hover:bg-heading/5'}`}>Security Automation</a>
     <a href="/integrations" class={`mobile-nav-link block px-3 py-2 text-sm rounded-md transition-colors ${pathname.startsWith('/integrations') ? 'text-heading bg-heading/6' : 'text-text hover:text-heading hover:bg-heading/5'}`}>Integrations</a>
+    <div class="h-px bg-border my-3"></div>
+    <div class="text-[10px] font-medium text-muted uppercase tracking-wider px-3 py-2">Learn</div>
+    <a href="/getting-started" class={`mobile-nav-link block px-3 py-2 text-sm rounded-md transition-colors ${pathname.startsWith('/getting-started') ? 'text-heading bg-heading/6' : 'text-text hover:text-heading hover:bg-heading/5'}`}>Getting Started</a>
+    <a href="/what-is-soar" class={`mobile-nav-link block px-3 py-2 text-sm rounded-md transition-colors ${pathname.startsWith('/what-is-soar') ? 'text-heading bg-heading/6' : 'text-text hover:text-heading hover:bg-heading/5'}`}>What is SOAR?</a>
+    <a href="/security-automation" class={`mobile-nav-link block px-3 py-2 text-sm rounded-md transition-colors ${pathname.startsWith('/security-automation') ? 'text-heading bg-heading/6' : 'text-text hover:text-heading hover:bg-heading/5'}`}>Automation Guide</a>
     <div class="h-px bg-border my-3"></div>
     <div class="text-[10px] font-medium text-muted uppercase tracking-wider px-3 py-2">Use Cases</div>
     <a href="/use-cases/alert-triage" class={`mobile-nav-link block px-3 py-2 text-sm rounded-md transition-colors ${pathname === '/use-cases/alert-triage/' ? 'text-heading bg-heading/6' : 'text-text hover:text-heading hover:bg-heading/5'}`}>Alert Triage</a>
@@ -170,8 +195,6 @@ const pathname = Astro.url.pathname;
     <a href="/alternatives/swimlane" class={`mobile-nav-link block px-3 py-2 text-sm rounded-md transition-colors ${pathname.startsWith('/alternatives/swimlane') ? 'text-heading bg-heading/6' : 'text-text hover:text-heading hover:bg-heading/5'}`}>
       <span class="text-muted mr-1">vs</span> Swimlane
     </a>
-    <div class="h-px bg-border my-3"></div>
-    <a href="/what-is-soar" class={`mobile-nav-link block px-3 py-2 text-sm rounded-md transition-colors ${pathname.startsWith('/what-is-soar') ? 'text-heading bg-heading/6' : 'text-text hover:text-heading hover:bg-heading/5'}`}>What is SOAR?</a>
     <div class="h-px bg-border my-3"></div>
     <a href="https://github.com/opensoar-hq/opensoar-core" target="_blank" rel="noopener" class="mobile-nav-link inline-flex items-center gap-2 px-3 py-2 text-sm text-heading">
       <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
