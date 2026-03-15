@@ -6,31 +6,29 @@
     <div class="grid lg:grid-cols-2 gap-10 items-center">
       <!-- Left: Description -->
       <div>
-        <span class="text-heading bg-heading/10 px-2 py-0.5 rounded font-medium text-xs">Developer Experience</span>
+        <span class="text-heading bg-heading/10 px-2 py-0.5 rounded font-medium text-xs">No DSL. No Sandbox.</span>
         <h2 class="text-2xl md:text-3xl font-bold text-heading mt-4 mb-5">
-          Playbooks that feel like<br/>writing real code
+          Not "code-like."<br/>Actual Python.
         </h2>
         <p class="text-sm text-text leading-relaxed mb-5">
-          Because they <em>are</em> real code. Define triggers with decorators,
-          enrich data with async/await, escalate with function calls.
-          No proprietary DSL to learn, no visual flowcharts to untangle.
+          Other platforms say "Python support" but mean a sandboxed runtime with vendor imports and no debugger. OpenSOAR playbooks are plain async functions &mdash; <code class="text-xs text-heading bg-surface px-1.5 py-0.5 rounded border border-border font-mono">import anything</code>, run locally, ship like software.
         </p>
         <ul class="space-y-2.5 text-sm text-text">
           <li class="flex items-start gap-2.5">
             <svg class="w-4 h-4 text-success mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            <span>Type hints, autocomplete, linting &mdash; your IDE just works</span>
+            <span><strong class="text-heading">pytest your playbooks</strong> &mdash; catch bugs before they hit production, not after</span>
           </li>
           <li class="flex items-start gap-2.5">
             <svg class="w-4 h-4 text-success mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            <span>Unit test playbooks with pytest like any other code</span>
+            <span><strong class="text-heading">Deploy with git push</strong> &mdash; PRs, code review, CI/CD. Standard engineering workflow</span>
           </li>
           <li class="flex items-start gap-2.5">
             <svg class="w-4 h-4 text-success mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            <span>Version control, code review, CI/CD &mdash; standard workflows</span>
+            <span><strong class="text-heading">asyncio.gather()</strong> &mdash; enrich from 10 APIs in parallel, not chained sequentially</span>
           </li>
           <li class="flex items-start gap-2.5">
             <svg class="w-4 h-4 text-success mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            <span>Async-first &mdash; enrich from 10 APIs in parallel, not sequentially</span>
+            <span><strong class="text-heading">Any pip package</strong> &mdash; not a marketplace of vendor-approved integrations</span>
           </li>
         </ul>
       </div>
