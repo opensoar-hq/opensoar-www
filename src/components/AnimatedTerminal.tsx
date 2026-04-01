@@ -13,9 +13,7 @@ const c = {
 }
 
 const defaultCommands = [
-  'git clone https://github.com/opensoar-hq/opensoar-deploy',
-  'cd opensoar-deploy && cp .env.example .env',
-  'docker compose up -d',
+  'curl -fsSL https://opensoar.app/install.sh | sh',
 ]
 
 const defaultOutputs = [
