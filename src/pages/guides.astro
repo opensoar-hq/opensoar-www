@@ -1,0 +1,71 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+
+const guides = [
+  {
+    href: "/getting-started",
+    title: "Getting Started",
+    description: "High-level onboarding path for evaluating and trying OpenSOAR.",
+  },
+  {
+    href: "/python-security-playbooks",
+    title: "Python Security Playbooks",
+    description: "Why code-first automation beats YAML and drag-and-drop builders.",
+  },
+  {
+    href: "/security-automation",
+    title: "Security Automation",
+    description: "How teams automate repetitive SOC work without buying a six-figure SOAR.",
+  },
+  {
+    href: "/ai-triage",
+    title: "AI-Powered Alert Triage",
+    description: "How OpenSOAR uses LLMs to summarize, classify, and prioritize alerts.",
+  },
+  {
+    href: "/what-is-soar",
+    title: "What is SOAR?",
+    description: "Category-level explainer for teams evaluating orchestration and automation tools.",
+  },
+  {
+    href: "/compare",
+    title: "Compare Platforms",
+    description: "Alternatives and comparison pages for OpenSOAR, XSOAR, Splunk SOAR, and more.",
+  },
+];
+---
+
+<ContentLayout
+  title="OpenSOAR Guides | Security Automation, SOAR, AI Triage"
+  description="Editorial guides for security automation, SOAR, Python playbooks, and AI-powered alert triage. Canonical product setup and reference docs live at docs.opensoar.app."
+  badge="Guides"
+  heading="Guides"
+  subheading="Editorial and SEO-focused content for evaluating OpenSOAR and the security automation landscape. Canonical setup, reference, and operational docs live at docs.opensoar.app."
+>
+  <h2>What belongs here</h2>
+  <p>
+    These pages explain concepts, use cases, alternatives, and product positioning. They are meant for discovery, evaluation, and category education.
+  </p>
+  <ul>
+    <li>Use guides for overview, comparison, and strategy.</li>
+    <li>Use docs for setup, deployment, API reference, and operational truth.</li>
+  </ul>
+
+  <h2>Browse guides</h2>
+  <div class="grid gap-4 sm:grid-cols-2 my-6">
+    {guides.map((guide) => (
+      <a
+        href={guide.href}
+        class="rounded-lg border border-border bg-surface p-5 transition-colors hover:border-heading/30"
+      >
+        <h3 class="text-base font-semibold text-heading mb-2">{guide.title}</h3>
+        <p class="text-sm text-text leading-relaxed">{guide.description}</p>
+      </a>
+    ))}
+  </div>
+
+  <h2>Canonical docs</h2>
+  <p>
+    For installation, playbook loading, deployment, troubleshooting, and engineering references, go to <a href="https://docs.opensoar.app" target="_blank" rel="noopener">docs.opensoar.app</a>.
+  </p>
+</ContentLayout>

@@ -51,12 +51,19 @@ const pathname = Astro.url.pathname;
 
       <!-- Learn dropdown -->
       <div class="nav-dropdown relative">
-        <button class={`nav-link px-2.5 py-1 rounded-md transition-colors duration-150 flex items-center gap-1 ${pathname.startsWith('/getting-started') || pathname.startsWith('/what-is-soar') || pathname.startsWith('/security-automation') ? 'text-heading' : 'text-text hover:text-heading'}`}>
+        <button class={`nav-link px-2.5 py-1 rounded-md transition-colors duration-150 flex items-center gap-1 ${pathname.startsWith('/getting-started') || pathname.startsWith('/what-is-soar') || pathname.startsWith('/security-automation') || pathname.startsWith('/guides') ? 'text-heading' : 'text-text hover:text-heading'}`}>
           Learn
           <svg class="w-3 h-3 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
         <div class="nav-dropdown-menu absolute top-full left-0 pt-2 opacity-0 invisible transition-all duration-150">
           <div class="bg-surface border border-border rounded-lg p-1.5 shadow-xl shadow-black/30 min-w-[220px]">
+            <a href="/guides" class={`flex items-start gap-2.5 px-3 py-2 rounded-md text-xs transition-colors ${pathname.startsWith('/guides') ? 'bg-heading/6 text-heading' : 'text-text hover:text-heading hover:bg-heading/5'}`}>
+              <svg class="w-3.5 h-3.5 mt-0.5 shrink-0 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              <div>
+                <div class="font-medium text-heading">Guides</div>
+                <div class="text-muted text-[11px] mt-0.5">Editorial and SEO content</div>
+              </div>
+            </a>
             <a href="/getting-started" class={`flex items-start gap-2.5 px-3 py-2 rounded-md text-xs transition-colors ${pathname.startsWith('/getting-started') ? 'bg-heading/6 text-heading' : 'text-text hover:text-heading hover:bg-heading/5'}`}>
               <svg class="w-3.5 h-3.5 mt-0.5 shrink-0 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
               <div>
@@ -184,6 +191,7 @@ const pathname = Astro.url.pathname;
     <a href="/integrations" class={`mobile-nav-link block px-3 py-2 text-sm rounded-md transition-colors ${pathname.startsWith('/integrations') ? 'text-heading bg-heading/6' : 'text-text hover:text-heading hover:bg-heading/5'}`}>Integrations</a>
     <div class="h-px bg-border my-3"></div>
     <div class="text-[10px] font-medium text-muted uppercase tracking-wider px-3 py-2">Learn</div>
+    <a href="/guides" class={`mobile-nav-link block px-3 py-2 text-sm rounded-md transition-colors ${pathname.startsWith('/guides') ? 'text-heading bg-heading/6' : 'text-text hover:text-heading hover:bg-heading/5'}`}>Guides</a>
     <a href="/getting-started" class={`mobile-nav-link block px-3 py-2 text-sm rounded-md transition-colors ${pathname.startsWith('/getting-started') ? 'text-heading bg-heading/6' : 'text-text hover:text-heading hover:bg-heading/5'}`}>Getting Started</a>
     <a href="/what-is-soar" class={`mobile-nav-link block px-3 py-2 text-sm rounded-md transition-colors ${pathname.startsWith('/what-is-soar') ? 'text-heading bg-heading/6' : 'text-text hover:text-heading hover:bg-heading/5'}`}>What is SOAR?</a>
     <a href="/security-automation" class={`mobile-nav-link block px-3 py-2 text-sm rounded-md transition-colors ${pathname.startsWith('/security-automation') ? 'text-heading bg-heading/6' : 'text-text hover:text-heading hover:bg-heading/5'}`}>Automation Guide</a>
