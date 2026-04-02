@@ -68,7 +68,10 @@ const nextSteps = [
           From zero to automated in 60&nbsp;seconds
         </h1>
         <p class="text-base md:text-lg text-text leading-relaxed max-w-2xl mx-auto">
-          Install OpenSOAR, write your first playbook, and deploy it — all in one terminal session.
+          A fast editorial walkthrough of what the first OpenSOAR experience feels like. For canonical setup and operational docs, use docs.opensoar.app.
+        </p>
+        <p class="text-sm text-muted leading-relaxed max-w-2xl mx-auto mt-4">
+          Need the exact install and deployment path? <a href="https://docs.opensoar.app/getting-started/" target="_blank" rel="noopener" class="text-heading hover:underline">Go to the docs</a>.
         </p>
       </div>
     </section>
@@ -82,7 +85,7 @@ const nextSteps = [
         </div>
         <div class="max-w-3xl mb-4">
           <p class="text-sm text-text leading-relaxed">
-            A single command pulls down OpenSOAR and starts all services locally.
+            This is the shortest path to seeing the product live locally. The docs cover the full setup, verification, and operational details.
           </p>
         </div>
         <AnimatedTerminal
@@ -112,7 +115,7 @@ const nextSteps = [
         </div>
         <div class="max-w-3xl mb-6">
           <p class="text-sm text-text leading-relaxed">
-            Playbooks are plain Python. This one enriches every new alert with threat intel, then either escalates or closes it automatically.
+            This is the core product idea in one screen: playbooks are plain Python, not visual blocks or YAML definitions.
           </p>
         </div>
         <CodeBlock code={playbookCode} filename="my_first_playbook.py" />
@@ -128,7 +131,7 @@ const nextSteps = [
         </div>
         <div class="max-w-3xl mb-6">
           <p class="text-sm text-text leading-relaxed">
-            Because playbooks are real code, you can test them with pytest. Mock external actions and assert on outcomes — no staging environment needed.
+            Because playbooks are real code, you can test them with pytest. This page is showing the shape of the workflow, not replacing the full docs.
           </p>
         </div>
         <CodeBlock code={testCode} filename="test_playbook.py" />
@@ -144,7 +147,7 @@ const nextSteps = [
         </div>
         <div class="max-w-3xl mb-4">
           <p class="text-sm text-text leading-relaxed">
-            Deploy your playbook code, then reload or restart the API and worker so the updated playbooks are discovered consistently.
+            In practice, deployment means shipping code and reloading the services that discover and run it. The detailed loading model is documented separately.
           </p>
         </div>
         <AnimatedTerminal
@@ -157,7 +160,7 @@ const nextSteps = [
           height="180px"
         />
         <p class="text-xs text-muted mt-4">
-          See the full guide at <a href="https://docs.opensoar.app/playbooks/loading-and-sync/" target="_blank" rel="noopener" class="text-heading hover:underline">docs.opensoar.app</a>.
+          For the exact loading and sync behavior, see <a href="https://docs.opensoar.app/playbooks/loading-and-sync/" target="_blank" rel="noopener" class="text-heading hover:underline">the docs</a>.
         </p>
       </div>
     </section>

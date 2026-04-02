@@ -80,10 +80,14 @@ async def test_confirmed_malicious_triggers_isolation():
 <ContentLayout
   title="Python Security Playbooks: Write SOAR Automation in Real Code | OpenSOAR"
   description="Build security automation playbooks in Python instead of YAML or drag-and-drop builders. Use asyncio, any Python library, and real testing frameworks."
-  badge="Platform"
+  badge="Guide"
   heading="Python Security Playbooks"
   subheading="Write alert-to-response automation in real Python — not YAML, not drag-and-drop. Use asyncio for parallel execution, pip packages for integrations, and pytest for testing."
 >
+  <p>
+    This page explains why the Python-native approach matters. For canonical implementation details, loading behavior, and operational guidance, use <a href="https://docs.opensoar.app/playbooks/overview/" target="_blank" rel="noopener">docs.opensoar.app</a>.
+  </p>
+
   <h2>Why Python for security playbooks?</h2>
   <p>
     Every commercial SOAR platform invents its own way to define playbooks: visual drag-and-drop builders, YAML files, proprietary DSLs. They're easy to demo but painful to work with at scale.
@@ -103,7 +107,7 @@ async def test_confirmed_malicious_triggers_isolation():
     <li><strong>Libraries</strong> — any pip package, not just vendor-provided integrations</li>
   </ul>
 
-  <h2>How OpenSOAR playbooks work</h2>
+  <h2>What the model looks like</h2>
   <p>
     An OpenSOAR playbook is a Python module with decorated functions. The <code>@playbook</code> decorator defines when it triggers. The <code>@action</code> decorator wraps individual steps with tracking, retries, and timeout handling.
   </p>
@@ -140,6 +144,9 @@ async def test_confirmed_malicious_triggers_isolation():
     <li><strong>Deploy</strong> it by shipping the updated playbook code and reloading or restarting the API and worker</li>
     <li><strong>Monitor</strong> execution in the OpenSOAR dashboard — every action is tracked with timing and results</li>
   </ol>
+  <p>
+    For the exact discovery and sync model, see <a href="https://docs.opensoar.app/playbooks/loading-and-sync/" target="_blank" rel="noopener">Loading and Syncing Playbooks</a>.
+  </p>
 
   <h2>Compare: Python vs visual vs YAML playbooks</h2>
   <table>
