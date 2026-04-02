@@ -1,12 +1,16 @@
 ---
 import ContentLayout from '../layouts/ContentLayout.astro';
+import { getCollection } from 'astro:content';
 
-const guides = [
-  {
-    href: "/guides/migrate-from-thehive",
-    title: "Migrate from TheHive",
-    description: "Editorial migration overview for teams replacing TheHive with OpenSOAR.",
-  },
+const guideEntries = (await getCollection('guides'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((guide) => ({
+    href: `/guides/${guide.id}`,
+    title: guide.data.heading,
+    description: guide.data.description,
+  }));
+
+const supportingPages = [
   {
     href: "/getting-started",
     title: "Getting Started",
@@ -58,13 +62,26 @@ const guides = [
 
   <h2>Browse guides</h2>
   <div class="grid gap-4 sm:grid-cols-2 my-6">
-    {guides.map((guide) => (
+    {guideEntries.map((guide) => (
       <a
         href={guide.href}
         class="rounded-lg border border-border bg-surface p-5 transition-colors hover:border-heading/30"
       >
         <h3 class="text-base font-semibold text-heading mb-2">{guide.title}</h3>
         <p class="text-sm text-text leading-relaxed">{guide.description}</p>
+      </a>
+    ))}
+  </div>
+
+  <h2>Supporting pages</h2>
+  <div class="grid gap-4 sm:grid-cols-2 my-6">
+    {supportingPages.map((page) => (
+      <a
+        href={page.href}
+        class="rounded-lg border border-border bg-surface p-5 transition-colors hover:border-heading/30"
+      >
+        <h3 class="text-base font-semibold text-heading mb-2">{page.title}</h3>
+        <p class="text-sm text-text leading-relaxed">{page.description}</p>
       </a>
     ))}
   </div>
