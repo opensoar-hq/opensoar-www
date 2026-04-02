@@ -34,9 +34,9 @@ async def test_malicious_ip_triggers_isolation():
 
 const nextSteps = [
   {
-    title: "Python Playbooks",
-    href: "/python-security-playbooks",
-    description: "Deep dive into playbook patterns",
+    title: "Docs: Playbooks",
+    href: "https://docs.opensoar.app/playbooks/overview/",
+    description: "Canonical playbook docs",
   },
   {
     title: "AI Triage",
@@ -144,18 +144,21 @@ const nextSteps = [
         </div>
         <div class="max-w-3xl mb-4">
           <p class="text-sm text-text leading-relaxed">
-            Push your playbook to Git. OpenSOAR picks it up and starts watching for matching alerts.
+            Deploy your playbook code, then reload or restart the API and worker so the updated playbooks are discovered consistently.
           </p>
         </div>
         <AnimatedTerminal
           client:visible
-          commands={["git add playbooks/", "git commit -m 'Add enrichment playbook'", "git push origin main"]}
+          commands={["git add playbooks/", "git commit -m 'Add enrichment playbook'", "git push origin main", "docker compose restart api worker"]}
           outputs={[
-            { text: "\u2713 Playbook deployed. Watching for new alerts...", delay: 400 },
+            { text: "\u2713 Playbook code deployed. API and worker restarted.", delay: 400 },
           ]}
           title="terminal — deploy"
           height="180px"
         />
+        <p class="text-xs text-muted mt-4">
+          See the full guide at <a href="https://docs.opensoar.app/playbooks/loading-and-sync/" target="_blank" rel="noopener" class="text-heading hover:underline">docs.opensoar.app</a>.
+        </p>
       </div>
     </section>
 
