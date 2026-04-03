@@ -1,0 +1,65 @@
+---
+const paths = [
+  {
+    href: 'https://docs.opensoar.app',
+    title: 'Docs',
+    description: 'Canonical setup, deployment, playbook loading, and operational references.',
+    eyebrow: 'Build',
+    external: true,
+  },
+  {
+    href: '/guides',
+    title: 'Guides',
+    description: 'Evergreen explainers, migration content, and high-intent SEO pages.',
+    eyebrow: 'Learn',
+    external: false,
+  },
+  {
+    href: '/blog',
+    title: 'Blog',
+    description: 'Market analysis, engineering essays, and editorial content around open-source SOAR.',
+    eyebrow: 'Research',
+    external: false,
+  },
+  {
+    href: 'https://github.com/opensoar-hq/opensoar-core',
+    title: 'GitHub',
+    description: 'Go straight to the source, run the platform, and inspect the codebase.',
+    eyebrow: 'Ship',
+    external: true,
+  },
+];
+---
+
+<section class="pb-16 md:pb-20">
+  <div class="mx-auto max-w-6xl px-6">
+    <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between mb-8">
+      <div class="max-w-2xl">
+        <span class="inline-block text-[11px] font-medium text-muted border border-border rounded-full px-3 py-1 mb-4">
+          Pick a path
+        </span>
+        <h2 class="text-2xl md:text-3xl font-bold text-heading tracking-tight mb-3">
+          Know where to go next
+        </h2>
+        <p class="text-sm text-text leading-relaxed">
+          The site is split on purpose. Use docs for product truth, guides for evaluation, the blog for category thinking, and GitHub when you want the code right now.
+        </p>
+      </div>
+    </div>
+
+    <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      {paths.map((path) => (
+        <a
+          href={path.href}
+          target={path.external ? '_blank' : undefined}
+          rel={path.external ? 'noopener' : undefined}
+          class="rounded-lg border border-border bg-surface p-5 transition-colors hover:border-heading/30"
+        >
+          <div class="text-[11px] uppercase tracking-wider text-muted mb-3">{path.eyebrow}</div>
+          <h3 class="text-base font-semibold text-heading mb-2">{path.title}</h3>
+          <p class="text-sm text-text leading-relaxed">{path.description}</p>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

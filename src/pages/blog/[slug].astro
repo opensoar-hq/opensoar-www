@@ -12,6 +12,37 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+const allPosts = (await getCollection('blog')).sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+const relatedPosts = allPosts
+  .filter((entry) => entry.id !== post.id)
+  .slice(0, 3)
+  .map((entry) => ({
+    href: `/blog/${entry.data.slug ?? entry.id}`,
+    title: entry.data.heading,
+    description: entry.data.description,
+    category: entry.data.category,
+  }));
+const slug = post.data.slug ?? post.id;
+const canonical = `https://opensoar.app/blog/${slug}`;
+const ogImage = post.data.ogImage ?? `/og/blog/${slug}.svg`;
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.heading,
+  description: post.data.description,
+  datePublished: post.data.publishedAt.toISOString(),
+  author: {
+    '@type': 'Organization',
+    name: post.data.author,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'OpenSOAR',
+  },
+  mainEntityOfPage: canonical,
+  image: new URL(ogImage, Astro.site).toString(),
+  articleSection: post.data.category,
+};
 const publishedAt = post.data.publishedAt.toLocaleDateString('en-US', {
   month: 'long',
   day: 'numeric',
@@ -24,7 +55,26 @@ const publishedAt = post.data.publishedAt.toLocaleDateString('en-US', {
   description={post.data.description}
   badge={post.data.badge}
   heading={post.data.heading}
-  subheading={`${post.data.category} · ${publishedAt} · ${post.data.subheading}`}
+  subheading={`${post.data.category} · ${post.data.author} · ${publishedAt} · ${post.data.subheading}`}
+  canonical={canonical}
+  ogImage={ogImage}
+  structuredData={structuredData}
 >
   <Content />
+
+  <hr />
+
+  <h2>Related posts</h2>
+  <div class="grid gap-4 sm:grid-cols-2 my-6">
+    {relatedPosts.map((entry) => (
+      <a
+        href={entry.href}
+        class="rounded-lg border border-border bg-surface p-5 transition-colors hover:border-heading/30"
+      >
+        <div class="text-[11px] uppercase tracking-wider text-muted mb-3">{entry.category}</div>
+        <h3 class="text-base font-semibold text-heading mb-2">{entry.title}</h3>
+        <p class="text-sm text-text leading-relaxed">{entry.description}</p>
+      </a>
+    ))}
+  </div>
 </ContentLayout>

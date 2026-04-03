@@ -9,6 +9,7 @@ const posts = (await getCollection('blog'))
     title: post.data.heading,
     description: post.data.description,
     category: post.data.category,
+    author: post.data.author,
     publishedAt: post.data.publishedAt.toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
@@ -40,6 +41,8 @@ const recentPosts = posts.filter((post) => !post.featured);
             <div class="flex items-center gap-2 text-[11px] uppercase tracking-wider text-muted mb-3">
               <span>{post.category}</span>
               <span aria-hidden="true">·</span>
+              <span>{post.author}</span>
+              <span aria-hidden="true">·</span>
               <span>{post.publishedAt}</span>
             </div>
             <h3 class="text-base font-semibold text-heading mb-2">{post.title}</h3>
@@ -59,6 +62,8 @@ const recentPosts = posts.filter((post) => !post.featured);
       >
         <div class="flex items-center gap-2 text-[11px] uppercase tracking-wider text-muted mb-3">
           <span>{post.category}</span>
+          <span aria-hidden="true">·</span>
+          <span>{post.author}</span>
           <span aria-hidden="true">·</span>
           <span>{post.publishedAt}</span>
         </div>

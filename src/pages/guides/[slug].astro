@@ -11,7 +11,35 @@ export async function getStaticPaths() {
 }
 
 const { guide } = Astro.props;
+const allGuides = (await getCollection('guides')).sort((a, b) => a.data.order - b.data.order);
+const relatedGuides = allGuides
+  .filter((entry) => entry.id !== guide.id)
+  .slice(0, 3)
+  .map((entry) => ({
+    href: `/guides/${entry.data.slug ?? entry.id}`,
+    title: entry.data.heading,
+    description: entry.data.description,
+  }));
 const { Content } = await render(guide);
+const slug = guide.data.slug ?? guide.id;
+const canonical = `https://opensoar.app/guides/${slug}`;
+const ogImage = guide.data.ogImage ?? `/og/guides/${slug}.svg`;
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: guide.data.heading,
+  description: guide.data.description,
+  author: {
+    '@type': 'Organization',
+    name: 'OpenSOAR',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'OpenSOAR',
+  },
+  mainEntityOfPage: canonical,
+  image: new URL(ogImage, Astro.site).toString(),
+};
 ---
 
 <ContentLayout
@@ -20,6 +48,24 @@ const { Content } = await render(guide);
   badge={guide.data.badge}
   heading={guide.data.heading}
   subheading={guide.data.subheading}
+  canonical={canonical}
+  ogImage={ogImage}
+  structuredData={structuredData}
 >
   <Content />
+
+  <hr />
+
+  <h2>Related guides</h2>
+  <div class="grid gap-4 sm:grid-cols-2 my-6">
+    {relatedGuides.map((entry) => (
+      <a
+        href={entry.href}
+        class="rounded-lg border border-border bg-surface p-5 transition-colors hover:border-heading/30"
+      >
+        <h3 class="text-base font-semibold text-heading mb-2">{entry.title}</h3>
+        <p class="text-sm text-text leading-relaxed">{entry.description}</p>
+      </a>
+    ))}
+  </div>
 </ContentLayout>

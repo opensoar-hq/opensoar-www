@@ -6,13 +6,46 @@ interface Props {
   description?: string;
   canonical?: string;
   ogImage?: string;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const defaultDescription = "OpenSOAR is an open-source security automation platform. Automate alert triage, enrich threats with AI, and build incident response playbooks in Python. Free, self-hosted, Apache 2.0.";
 
-const { title, description = defaultDescription, canonical, ogImage = "/og.png" } = Astro.props;
+const {
+  title,
+  description = defaultDescription,
+  canonical,
+  ogImage = "/og/default.svg",
+  structuredData,
+} = Astro.props;
 const canonicalURL = canonical || new URL(Astro.url.pathname, Astro.site).toString();
 const ogImageURL = new URL(ogImage, Astro.site).toString();
+const defaultStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "OpenSOAR",
+  "applicationCategory": "SecurityApplication",
+  "operatingSystem": "Linux, macOS, Windows (Docker)",
+  "description": description,
+  "url": "https://opensoar.app",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "license": "https://opensource.org/licenses/Apache-2.0",
+  "author": {
+    "@type": "Organization",
+    "name": "OpenSOAR",
+    "url": "https://opensoar.app"
+  },
+  "codeRepository": "https://github.com/opensoar-hq/opensoar-core",
+  "programmingLanguage": "Python"
+};
+const structuredDataNodes = [
+  defaultStructuredData,
+  ...(structuredData ? (Array.isArray(structuredData) ? structuredData : [structuredData]) : []),
+];
 ---
 
 <!doctype html>
@@ -21,6 +54,7 @@ const ogImageURL = new URL(ogImage, Astro.site).toString();
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="OpenSOAR Blog RSS Feed" href="/rss.xml" />
     <link rel="canonical" href={canonicalURL} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -45,29 +79,9 @@ const ogImageURL = new URL(ogImage, Astro.site).toString();
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageURL} />
 
-    <!-- Structured Data -->
-    <script type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "OpenSOAR",
-      "applicationCategory": "SecurityApplication",
-      "operatingSystem": "Linux, macOS, Windows (Docker)",
-      "description": description,
-      "url": "https://opensoar.app",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "license": "https://opensource.org/licenses/Apache-2.0",
-      "author": {
-        "@type": "Organization",
-        "name": "OpenSOAR",
-        "url": "https://opensoar.app"
-      },
-      "codeRepository": "https://github.com/opensoar-hq/opensoar-core",
-      "programmingLanguage": "Python"
-    })} />
+    {structuredDataNodes.map((node) => (
+      <script type="application/ld+json" set:html={JSON.stringify(node)} />
+    ))}
 
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>

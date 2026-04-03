@@ -10,12 +10,15 @@ interface Props {
   badge?: string;
   heading: string;
   subheading?: string;
+  canonical?: string;
+  ogImage?: string;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
 }
 
-const { title, description, badge, heading, subheading } = Astro.props;
+const { title, description, badge, heading, subheading, canonical, ogImage, structuredData } = Astro.props;
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} canonical={canonical} ogImage={ogImage} structuredData={structuredData}>
   <Nav />
   <main>
     <!-- Hero section — matches homepage section spacing -->

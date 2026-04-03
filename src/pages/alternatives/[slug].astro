@@ -1,0 +1,78 @@
+---
+import { getCollection, render } from 'astro:content';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+
+export async function getStaticPaths() {
+  const alternatives = await getCollection('alternatives');
+  return alternatives.map((alternative) => ({
+    params: { slug: alternative.data.slug ?? alternative.id },
+    props: { alternative },
+  }));
+}
+
+const { alternative } = Astro.props;
+const allAlternatives = (await getCollection('alternatives')).sort((a, b) => a.data.order - b.data.order);
+const relatedAlternatives = allAlternatives
+  .filter((entry) => entry.id !== alternative.id)
+  .slice(0, 2)
+  .map((entry) => ({
+    href: `/alternatives/${entry.data.slug ?? entry.id}`,
+    title: entry.data.heading,
+    description: entry.data.description,
+  }));
+const { Content } = await render(alternative);
+const slug = alternative.data.slug ?? alternative.id;
+const canonical = `https://opensoar.app/alternatives/${slug}`;
+const ogImage = alternative.data.ogImage ?? `/og/alternatives/${slug}.svg`;
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: alternative.data.heading,
+  description: alternative.data.description,
+  author: {
+    '@type': 'Organization',
+    name: 'OpenSOAR',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'OpenSOAR',
+  },
+  mainEntityOfPage: canonical,
+  image: new URL(ogImage, Astro.site).toString(),
+};
+---
+
+<ContentLayout
+  title={alternative.data.title}
+  description={alternative.data.description}
+  badge={alternative.data.badge}
+  heading={alternative.data.heading}
+  subheading={alternative.data.subheading}
+  canonical={canonical}
+  ogImage={ogImage}
+  structuredData={structuredData}
+>
+  <Content />
+
+  <hr />
+
+  <h2>Related comparisons</h2>
+  <div class="grid gap-4 sm:grid-cols-2 my-6">
+    {relatedAlternatives.map((entry) => (
+      <a
+        href={entry.href}
+        class="rounded-lg border border-border bg-surface p-5 transition-colors hover:border-heading/30"
+      >
+        <h3 class="text-base font-semibold text-heading mb-2">{entry.title}</h3>
+        <p class="text-sm text-text leading-relaxed">{entry.description}</p>
+      </a>
+    ))}
+    <a
+      href="/compare"
+      class="rounded-lg border border-border bg-surface p-5 transition-colors hover:border-heading/30"
+    >
+      <h3 class="text-base font-semibold text-heading mb-2">Comparison hub</h3>
+      <p class="text-sm text-text leading-relaxed">Start from the platform model, then go deeper into the individual alternatives.</p>
+    </a>
+  </div>
+</ContentLayout>
