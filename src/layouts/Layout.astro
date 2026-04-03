@@ -20,6 +20,7 @@ const {
 } = Astro.props;
 const canonicalURL = canonical || new URL(Astro.url.pathname, Astro.site).toString();
 const ogImageURL = new URL(ogImage, Astro.site).toString();
+const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID?.trim();
 const defaultStructuredData = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -78,6 +79,19 @@ const structuredDataNodes = [
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageURL} />
+
+    {gaMeasurementId && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}></script>
+        <script
+          is:inline
+          set:html={`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${gaMeasurementId}');`}
+        />
+      </>
+    )}
 
     {structuredDataNodes.map((node) => (
       <script type="application/ld+json" set:html={JSON.stringify(node)} />

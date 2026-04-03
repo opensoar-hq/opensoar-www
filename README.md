@@ -24,6 +24,16 @@ npm run build
 
 Output is written to `./dist/`.
 
+## Analytics
+
+GA4 is optional and can be enabled with a public env var:
+
+```bash
+PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+```
+
+Set that in Cloudflare Pages environment variables for production, then redeploy.
+
 ## Deployment
 
 Deployed automatically via Cloudflare Pages on push to `main`.
