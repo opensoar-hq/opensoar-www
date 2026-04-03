@@ -1,20 +1,93 @@
 ---
 import ContentLayout from '../layouts/ContentLayout.astro';
+
+const comparisonPages = [
+  {
+    href: '/alternatives/splunk-soar',
+    title: 'OpenSOAR vs Splunk SOAR',
+    description: 'How open-source, Python-native automation compares to a commercial Phantom-era workflow model.',
+  },
+  {
+    href: '/alternatives/xsoar',
+    title: 'OpenSOAR vs Palo Alto XSOAR',
+    description: 'Compare a self-hosted code-first SOAR with a large commercial marketplace-driven platform.',
+  },
+  {
+    href: '/alternatives/swimlane',
+    title: 'OpenSOAR vs Swimlane',
+    description: 'A practical comparison between code-first automation and enterprise-focused workflow orchestration.',
+  },
+  {
+    href: '/guides/opensoar-vs-shuffle',
+    title: 'OpenSOAR vs Shuffle',
+    description: 'The open-source comparison that matters most if you are choosing visual automation versus Python playbooks.',
+  },
+];
+
+const evaluationSignals = [
+  {
+    title: 'Choose OpenSOAR if',
+    points: [
+      'you want playbooks treated like code',
+      'your team can own Python workflows',
+      'you care about self-hosting and source access',
+      'you want to avoid six-figure licensing',
+    ],
+  },
+  {
+    title: 'Choose a commercial platform if',
+    points: [
+      'you need very broad marketplace coverage immediately',
+      'you need packaged enterprise support now',
+      'your organization buys platforms faster than it builds systems',
+      'you prefer vendor workflow tooling over code ownership',
+    ],
+  },
+];
+
+const editorialLinks = [
+  {
+    href: '/blog/best-open-source-soar-platforms',
+    title: 'Best open-source SOAR platforms',
+    description: 'Editorial market view across the open-source landscape.',
+  },
+  {
+    href: '/blog/why-code-first-security-automation-wins',
+    title: 'Why code-first automation wins',
+    description: 'The engineering case behind the OpenSOAR model.',
+  },
+];
 ---
 
 <ContentLayout
   title="OpenSOAR vs Commercial SOAR Platforms: Feature Comparison | OpenSOAR"
-  description="Compare OpenSOAR with Splunk SOAR, Palo Alto XSOAR, and Swimlane. See how an open-source Python-native SOAR platform stacks up against commercial alternatives."
+  description="Compare OpenSOAR with Splunk SOAR, Palo Alto XSOAR, Swimlane, and other automation models. See where code-first open-source SOAR fits."
   badge="Comparison"
-  heading="OpenSOAR vs Commercial SOAR"
-  subheading="How an open-source, Python-native SOAR platform compares to Splunk SOAR, XSOAR, and Swimlane."
+  heading="Compare OpenSOAR"
+  subheading="Start with the platform model, not just the checklist. Compare OpenSOAR against commercial SOAR suites and adjacent open-source options."
 >
-  <h2>The SOAR market today</h2>
+  <h2>Where to start</h2>
   <p>
-    The SOAR market is dominated by three commercial platforms: Splunk SOAR (formerly Phantom), Palo Alto XSOAR (formerly Demisto), and Swimlane. They're all capable platforms — but they come with significant trade-offs around cost, flexibility, and vendor lock-in.
+    Most teams do not need a giant comparison matrix first. They need to know which platform families are even worth evaluating.
+  </p>
+  <div class="grid gap-4 sm:grid-cols-2 my-6">
+    {comparisonPages.map((page) => (
+      <a
+        href={page.href}
+        class="rounded-lg border border-border bg-surface p-5 transition-colors hover:border-heading/30"
+      >
+        <h3 class="text-base font-semibold text-heading mb-2">{page.title}</h3>
+        <p class="text-sm text-text leading-relaxed">{page.description}</p>
+      </a>
+    ))}
+  </div>
+
+  <h2>The core tradeoff</h2>
+  <p>
+    The real split in this category is not just open-source versus commercial. It is also <strong>code-first versus workflow-builder-first</strong>.
   </p>
   <p>
-    OpenSOAR takes a different approach: open-source, Python-native, and built for teams that want to own their automation.
+    OpenSOAR is built for teams that want automation to behave like software: Python playbooks, Git review, testable logic, and self-hosted control. Commercial suites usually win on marketplace breadth, packaging, and enterprise support, but often at the cost of price and vendor-shaped workflow models.
   </p>
 
   <h2>Feature comparison</h2>
@@ -31,152 +104,110 @@ import ContentLayout from '../layouts/ContentLayout.astro';
     <tbody>
       <tr>
         <td>License</td>
-        <td><span class="indicator indicator--positive"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" fill="#3fb950"/></svg> Apache 2.0</span></td>
-        <td><span class="indicator indicator--negative"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.75.75 0 1 1 1.06 1.06L9.06 8l3.22 3.22a.75.75 0 1 1-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 0 1-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z" fill="#f85149"/></svg> Commercial</span></td>
-        <td><span class="indicator indicator--negative"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.75.75 0 1 1 1.06 1.06L9.06 8l3.22 3.22a.75.75 0 1 1-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 0 1-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z" fill="#f85149"/></svg> Commercial</span></td>
-        <td><span class="indicator indicator--negative"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.75.75 0 1 1 1.06 1.06L9.06 8l3.22 3.22a.75.75 0 1 1-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 0 1-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z" fill="#f85149"/></svg> Commercial</span></td>
+        <td><span class="indicator indicator--positive">Apache 2.0</span></td>
+        <td><span class="indicator indicator--negative">Commercial</span></td>
+        <td><span class="indicator indicator--negative">Commercial</span></td>
+        <td><span class="indicator indicator--negative">Commercial</span></td>
       </tr>
       <tr>
         <td>Starting price</td>
-        <td><span class="indicator indicator--positive"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" fill="#3fb950"/></svg> Free</span></td>
-        <td><span class="indicator indicator--negative"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.75.75 0 1 1 1.06 1.06L9.06 8l3.22 3.22a.75.75 0 1 1-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 0 1-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z" fill="#f85149"/></svg> ~$50k/yr</span></td>
-        <td><span class="indicator indicator--negative"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.75.75 0 1 1 1.06 1.06L9.06 8l3.22 3.22a.75.75 0 1 1-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 0 1-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z" fill="#f85149"/></svg> ~$75k/yr</span></td>
-        <td><span class="indicator indicator--negative"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.75.75 0 1 1 1.06 1.06L9.06 8l3.22 3.22a.75.75 0 1 1-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 0 1-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z" fill="#f85149"/></svg> ~$60k/yr</span></td>
+        <td><span class="indicator indicator--positive">Free</span></td>
+        <td><span class="indicator indicator--negative">Enterprise pricing</span></td>
+        <td><span class="indicator indicator--negative">Enterprise pricing</span></td>
+        <td><span class="indicator indicator--negative">Enterprise pricing</span></td>
       </tr>
       <tr>
-        <td>Playbook format</td>
+        <td>Playbook model</td>
         <td>Python</td>
         <td>Visual + Python</td>
-        <td>YAML + JavaScript</td>
+        <td>YAML + scripts</td>
         <td>Visual + Python</td>
       </tr>
       <tr>
         <td>Self-hosted</td>
-        <td><span class="indicator indicator--positive"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" fill="#3fb950"/></svg> Yes</span></td>
-        <td><span class="indicator indicator--positive"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" fill="#3fb950"/></svg> Yes</span></td>
-        <td><span class="indicator indicator--positive"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" fill="#3fb950"/></svg> Yes (or cloud)</span></td>
-        <td><span class="indicator indicator--positive"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" fill="#3fb950"/></svg> Yes (or cloud)</span></td>
-      </tr>
-      <tr>
-        <td>Alert ingestion</td>
-        <td>Webhooks, pollers</td>
-        <td>Webhooks, pollers</td>
-        <td>Webhooks, pollers</td>
-        <td>Webhooks, pollers</td>
-      </tr>
-      <tr>
-        <td>Case management</td>
-        <td><span class="indicator indicator--positive"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" fill="#3fb950"/></svg> Built-in</span></td>
-        <td><span class="indicator indicator--positive"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" fill="#3fb950"/></svg> Built-in</span></td>
-        <td><span class="indicator indicator--positive"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" fill="#3fb950"/></svg> Built-in</span></td>
-        <td><span class="indicator indicator--positive"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" fill="#3fb950"/></svg> Built-in</span></td>
-      </tr>
-      <tr>
-        <td>Integrations</td>
-        <td>Growing (open-source)</td>
-        <td>300+ (marketplace)</td>
-        <td>700+ (marketplace)</td>
-        <td>200+ (marketplace)</td>
+        <td>Yes</td>
+        <td>Yes</td>
+        <td>Yes / cloud</td>
+        <td>Yes / cloud</td>
       </tr>
       <tr>
         <td>AI-assisted triage</td>
-        <td><span class="indicator indicator--positive"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" fill="#3fb950"/></svg> Built-in</span></td>
-        <td><span class="indicator indicator--limited"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="4" fill="#d29922"/></svg> Add-on</span></td>
-        <td><span class="indicator indicator--limited"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="4" fill="#d29922"/></svg> Limited</span></td>
-        <td><span class="indicator indicator--limited"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="4" fill="#d29922"/></svg> Limited</span></td>
-      </tr>
-      <tr>
-        <td>Multi-tenancy</td>
-        <td><span class="indicator indicator--limited"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="4" fill="#d29922"/></svg> Planned</span></td>
-        <td><span class="indicator indicator--limited"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="4" fill="#d29922"/></svg> Enterprise tier</span></td>
-        <td><span class="indicator indicator--limited"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="4" fill="#d29922"/></svg> Enterprise tier</span></td>
-        <td><span class="indicator indicator--limited"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="4" fill="#d29922"/></svg> Enterprise tier</span></td>
-      </tr>
-      <tr>
-        <td>Async execution</td>
-        <td><span class="indicator indicator--positive"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" fill="#3fb950"/></svg> Native (asyncio)</span></td>
-        <td>Celery-based</td>
-        <td>Proprietary</td>
-        <td>Proprietary</td>
+        <td>Built-in</td>
+        <td>Add-on / vendor-dependent</td>
+        <td>Varies by product tier</td>
+        <td>Limited</td>
       </tr>
       <tr>
         <td>Playbook testing</td>
-        <td><span class="indicator indicator--positive"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" fill="#3fb950"/></svg> pytest</span></td>
-        <td><span class="indicator indicator--limited"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="4" fill="#d29922"/></svg> Limited</span></td>
-        <td><span class="indicator indicator--limited"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="4" fill="#d29922"/></svg> Limited</span></td>
-        <td><span class="indicator indicator--limited"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="4" fill="#d29922"/></svg> Limited</span></td>
+        <td>pytest</td>
+        <td>Limited</td>
+        <td>Limited</td>
+        <td>Limited</td>
       </tr>
       <tr>
-        <td>Source code access</td>
-        <td><span class="indicator indicator--positive"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" fill="#3fb950"/></svg> Full</span></td>
-        <td><span class="indicator indicator--negative"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.75.75 0 1 1 1.06 1.06L9.06 8l3.22 3.22a.75.75 0 1 1-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 0 1-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z" fill="#f85149"/></svg> No</span></td>
-        <td><span class="indicator indicator--negative"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.75.75 0 1 1 1.06 1.06L9.06 8l3.22 3.22a.75.75 0 1 1-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 0 1-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z" fill="#f85149"/></svg> No</span></td>
-        <td><span class="indicator indicator--negative"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.75.75 0 1 1 1.06 1.06L9.06 8l3.22 3.22a.75.75 0 1 1-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 0 1-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z" fill="#f85149"/></svg> No</span></td>
+        <td>Source access</td>
+        <td>Full</td>
+        <td>No</td>
+        <td>No</td>
+        <td>No</td>
       </tr>
     </tbody>
   </table>
 
   <div class="callout-card callout-card--success">
-    <strong>OpenSOAR is free and open-source.</strong> No license fees, no per-action pricing, no vendor lock-in. Deploy on your own infrastructure, own your playbooks and data, and contribute back to the community. Apache 2.0 licensed.
-    <div style="margin-top: 0.75rem;">
-      <a href="https://github.com/opensoar-hq/opensoar-core" style="color: #3fb950; font-weight: 600;">Get started on GitHub &rarr;</a>
-    </div>
+    <strong>OpenSOAR is the strongest fit for engineering-led teams.</strong> If your team wants to review playbooks in Git, test them in CI, and run the platform in your own infrastructure, the open-source code-first model is usually the cleaner long-term choice.
+  </div>
+
+  <h2>How to decide faster</h2>
+  <div class="grid gap-4 sm:grid-cols-2 my-6">
+    {evaluationSignals.map((group) => (
+      <div class="rounded-lg border border-border bg-surface p-5">
+        <h3 class="text-base font-semibold text-heading mb-3">{group.title}</h3>
+        <ul>
+          {group.points.map((point) => (
+            <li>{point}</li>
+          ))}
+        </ul>
+      </div>
+    ))}
   </div>
 
   <h2>Where OpenSOAR wins</h2>
-
-  <h3>Cost</h3>
   <p>
-    OpenSOAR is free and open-source under the Apache 2.0 license. Commercial SOAR platforms typically start at $50,000-$100,000 per year, with costs increasing based on the number of users, actions, or integrations. For many security teams — especially startups, SMBs, and MSSPs — this pricing is prohibitive.
+    OpenSOAR wins on ownership, cost, and workflow durability. If your team expects automations to become an internal system rather than a set of demo diagrams, the code-first model is a real advantage.
   </p>
-
-  <h3>Playbook flexibility</h3>
-  <p>
-    OpenSOAR playbooks are standard Python. You can use any pip package, write complex conditional logic naturally, test with pytest, and review changes in pull requests. Commercial platforms use visual builders or proprietary formats that become unwieldy as complexity grows.
-  </p>
-
-  <h3>No vendor lock-in</h3>
-  <p>
-    Your playbooks are Python files. Your data is in your PostgreSQL database. Your deployment is Docker containers. If you ever want to move away from OpenSOAR, you keep everything you built. With commercial platforms, your playbooks, integrations, and data are trapped in proprietary formats.
-  </p>
-
-  <h3>Transparency</h3>
-  <p>
-    With open source, you can inspect every line of code. You know exactly how your alerts are processed, how your data is stored, and what happens when an action executes. This matters for security teams — you shouldn't have to trust a black box.
-  </p>
-
-  <h2>Where commercial platforms win (for now)</h2>
-
-  <h3>Integration breadth</h3>
-  <p>
-    XSOAR has 700+ integrations. Splunk SOAR has 300+. OpenSOAR is growing its integration library, with community contributions welcome. If you need out-of-the-box integrations for niche tools, commercial platforms have a head start.
-  </p>
-
-  <h3>Enterprise support</h3>
-  <p>
-    Commercial platforms come with SLAs, dedicated support engineers, and professional services. OpenSOAR is community-supported (enterprise support coming soon).
-  </p>
-
-  <h3>Mature multi-tenancy</h3>
-  <p>
-    If you're an MSSP managing dozens of tenants, commercial platforms have more mature multi-tenancy features today. OpenSOAR has multi-tenancy on its roadmap.
-  </p>
-
-  <h2>Who should use OpenSOAR?</h2>
   <ul>
-    <li><strong>Security teams</strong> that want real automation without a six-figure budget</li>
-    <li><strong>Engineers</strong> who prefer writing Python over clicking through visual builders</li>
-    <li><strong>MSSPs</strong> looking for a white-label SOAR platform they can deploy per-tenant</li>
-    <li><strong>Organizations</strong> that need full control over their security automation data and logic</li>
+    <li>Playbooks are readable Python modules, not proprietary workflow shapes.</li>
+    <li>Automation changes fit normal software delivery and review workflows.</li>
+    <li>You keep your deployment, code, and data without vendor lock-in.</li>
+    <li>The pricing model is open-source rather than license-gated.</li>
   </ul>
 
+  <h2>Where commercial platforms still win</h2>
   <p>
-    Detailed comparisons: <a href="/alternatives/splunk-soar">vs Splunk SOAR</a> · <a href="/alternatives/xsoar">vs XSOAR</a> · <a href="/alternatives/swimlane">vs Swimlane</a>
+    Commercial tools still have real strengths. For some organizations, those strengths matter more than ownership.
   </p>
+  <ul>
+    <li>Broader integration marketplaces out of the box.</li>
+    <li>More mature enterprise packaging and procurement paths.</li>
+    <li>Dedicated support and professional services.</li>
+    <li>Familiarity for teams already standardized on a specific vendor stack.</li>
+  </ul>
 
-  <hr />
+  <h2>Read next</h2>
+  <div class="grid gap-4 sm:grid-cols-2 my-6">
+    {editorialLinks.map((link) => (
+      <a
+        href={link.href}
+        class="rounded-lg border border-border bg-surface p-5 transition-colors hover:border-heading/30"
+      >
+        <h3 class="text-base font-semibold text-heading mb-2">{link.title}</h3>
+        <p class="text-sm text-text leading-relaxed">{link.description}</p>
+      </a>
+    ))}
+  </div>
 
   <p>
-    <a href="https://github.com/opensoar-hq/opensoar-core">Try OpenSOAR free on GitHub →</a>
+    For product setup, deployment, and playbook behavior, use <a href="https://docs.opensoar.app" target="_blank" rel="noopener">docs.opensoar.app</a>.
   </p>
 </ContentLayout>

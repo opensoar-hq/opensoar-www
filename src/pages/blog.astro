@@ -1,0 +1,75 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
+  .map((post) => ({
+    href: `/blog/${post.data.slug ?? post.id}`,
+    title: post.data.heading,
+    description: post.data.description,
+    category: post.data.category,
+    publishedAt: post.data.publishedAt.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    }),
+    featured: post.data.featured,
+  }));
+
+const featuredPosts = posts.filter((post) => post.featured);
+const recentPosts = posts.filter((post) => !post.featured);
+---
+
+<ContentLayout
+  title="OpenSOAR Blog | Security Automation, SOAR, and AI"
+  description="Editorial posts on security automation, open-source SOAR, AI triage, and the market around code-first security operations."
+  badge="Blog"
+  heading="Blog"
+  subheading="Essays, market analysis, and engineering perspectives around open-source security automation, SOAR, and AI-assisted operations."
+>
+  {featuredPosts.length > 0 && (
+    <>
+      <h2>Featured posts</h2>
+      <div class="grid gap-4 sm:grid-cols-2 my-6">
+        {featuredPosts.map((post) => (
+          <a
+            href={post.href}
+            class="rounded-lg border border-border bg-surface p-5 transition-colors hover:border-heading/30"
+          >
+            <div class="flex items-center gap-2 text-[11px] uppercase tracking-wider text-muted mb-3">
+              <span>{post.category}</span>
+              <span aria-hidden="true">·</span>
+              <span>{post.publishedAt}</span>
+            </div>
+            <h3 class="text-base font-semibold text-heading mb-2">{post.title}</h3>
+            <p class="text-sm text-text leading-relaxed">{post.description}</p>
+          </a>
+        ))}
+      </div>
+    </>
+  )}
+
+  <h2>Recent posts</h2>
+  <div class="grid gap-4 sm:grid-cols-2 my-6">
+    {(recentPosts.length > 0 ? recentPosts : posts).map((post) => (
+      <a
+        href={post.href}
+        class="rounded-lg border border-border bg-surface p-5 transition-colors hover:border-heading/30"
+      >
+        <div class="flex items-center gap-2 text-[11px] uppercase tracking-wider text-muted mb-3">
+          <span>{post.category}</span>
+          <span aria-hidden="true">·</span>
+          <span>{post.publishedAt}</span>
+        </div>
+        <h3 class="text-base font-semibold text-heading mb-2">{post.title}</h3>
+        <p class="text-sm text-text leading-relaxed">{post.description}</p>
+      </a>
+    ))}
+  </div>
+
+  <h2>Canonical product docs</h2>
+  <p>
+    The blog is for perspectives, market analysis, and category content. Product setup, playbook loading, deployment, and operational truth live at <a href="https://docs.opensoar.app" target="_blank" rel="noopener">docs.opensoar.app</a>.
+  </p>
+</ContentLayout>

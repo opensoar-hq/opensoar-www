@@ -8,79 +8,110 @@ from opensoar.ai import triage
 
 @playbook(trigger="alert.created")
 async def ai_assisted_triage(alert):
-    # AI analyzes the alert and returns structured assessment
     assessment = await triage(
         alert,
         provider="claude",  # or "gemini", "openai", "ollama"
     )
 
-    # assessment.summary     → natural language explanation
-    # assessment.severity    → suggested severity level
-    # assessment.determination → benign / suspicious / malicious
-    # assessment.confidence  → 0-100 confidence score
-    # assessment.reasoning   → step-by-step analysis
-
     if assessment.confidence > 85 and assessment.determination == "benign":
-        await resolve(alert, determination="false_positive",
-                      note=assessment.summary)
+        await resolve(alert, determination="false_positive", note=assessment.summary)
     elif assessment.determination == "malicious":
         await escalate(alert, reason=assessment.reasoning)
     else:
-        # Enrich alert with AI context for analyst review
         alert.ai_summary = assessment.summary
         alert.suggested_severity = assessment.severity
         await save_alert(alert)`;
 
 const multiModelCode = `from opensoar.ai import triage, configure_provider
 
-# Use any LLM provider — or run locally with Ollama
 configure_provider("claude", api_key="sk-...")
 configure_provider("gemini", api_key="AIza...")
-configure_provider("ollama", base_url="http://localhost:11434",
-                   model="llama3.3")
+configure_provider("ollama", base_url="http://localhost:11434", model="llama3.3")
 
-# Switch providers per-playbook or globally
 assessment = await triage(alert, provider="claude")
-assessment = await triage(alert, provider="ollama")  # fully local, no data leaves your network`;
+assessment = await triage(alert, provider="ollama")`;
+
+const bestFitAreas = [
+  {
+    title: 'High-volume alert queues',
+    description: 'AI is strongest where analysts burn time on first-pass interpretation and prioritization.',
+  },
+  {
+    title: 'Context compression',
+    description: 'Summaries, grouped evidence, and suggested severity reduce time-to-understanding before investigation begins.',
+  },
+  {
+    title: 'Human-in-the-loop routing',
+    description: 'The best operating model is confidence-based automation, not blind autonomous response.',
+  },
+];
+
+const resourceLinks = [
+  {
+    href: 'https://docs.opensoar.app',
+    title: 'Canonical docs',
+    description: 'Installation, configuration, providers, and operational details.',
+  },
+  {
+    href: '/blog/how-ai-alert-triage-changes-the-soc',
+    title: 'AI triage essay',
+    description: 'Editorial view on how LLM-backed triage changes the SOC workflow.',
+  },
+  {
+    href: '/guides/security-automation',
+    title: 'Security automation guide',
+    description: 'Broader context around where AI triage fits in a real automation program.',
+  },
+];
 ---
 
 <ContentLayout
   title="AI-Powered Security Alert Triage | OpenSOAR"
-  description="Automate alert triage with AI. OpenSOAR uses LLMs to classify, summarize, and prioritize security alerts — with any provider (Claude, Gemini, OpenAI, Ollama)."
+  description="Automate alert triage with AI. OpenSOAR uses LLMs to classify, summarize, and prioritize security alerts with cloud or local models."
   badge="AI"
   heading="AI-Powered Alert Triage"
-  subheading="Let AI handle the noise. Classify, summarize, and prioritize hundreds of alerts per day — from any source, not just security tools."
+  subheading="Use LLMs to summarize, classify, and route alerts faster, while keeping the playbook logic and approval model under your control."
 >
-  <h2>Why AI for security alerts?</h2>
   <p>
-    Security analysts spend most of their day on repetitive triage work: reading alerts, looking up context, deciding if something is real or noise. Most alerts are false positives. The real threats hide in the volume.
+    This page is the product view: what AI triage does well, how it fits into the OpenSOAR workflow model, and why it matters. For exact setup and operational details, use <a href="https://docs.opensoar.app" target="_blank" rel="noopener">docs.opensoar.app</a>.
+  </p>
+
+  <h2>Why AI belongs in triage</h2>
+  <p>
+    The first step in alert handling is usually interpretation. Analysts read payloads, inspect context, decide whether the signal looks real, and then document their reasoning. That is exactly where modern LLMs are useful.
   </p>
   <p>
-    AI doesn't replace your analysts — it gives them superpowers. By handling the initial assessment of every alert, AI lets your team focus on the 10% that actually matter.
+    AI does not replace incident response judgment. It compresses the cost of understanding what the alert means before a human decides what to do next.
   </p>
 
   <h2>What OpenSOAR's AI triage does</h2>
   <ul>
-    <li><strong>Alert summarization</strong> — turns raw JSON payloads into natural language: "Brute-force login attempt from IP 45.33.x.x targeting admin account, 47 failed attempts in 3 minutes"</li>
-    <li><strong>Severity assessment</strong> — suggests severity based on alert content, asset criticality, and enrichment data</li>
-    <li><strong>Determination</strong> — classifies as benign, suspicious, or malicious with a confidence score</li>
-    <li><strong>Reasoning</strong> — explains the assessment step by step, so analysts can verify the logic</li>
-    <li><strong>Deduplication</strong> — identifies semantically similar alerts that should be grouped, not just exact hash matches</li>
-    <li><strong>Correlation</strong> — connects related alerts across different sources into a single incident</li>
+    <li><strong>Summarization</strong> turns raw payloads into readable analyst context.</li>
+    <li><strong>Severity suggestion</strong> proposes how urgent the alert likely is.</li>
+    <li><strong>Determination</strong> classifies alerts as benign, suspicious, or malicious.</li>
+    <li><strong>Reasoning</strong> provides an explanation that analysts can review.</li>
+    <li><strong>Correlation support</strong> helps connect similar or related alerts across sources.</li>
   </ul>
 
-  <h2>How it works</h2>
+  <h2>Where this model fits best</h2>
+  <div class="grid gap-4 sm:grid-cols-3 my-6">
+    {bestFitAreas.map((area) => (
+      <div class="rounded-lg border border-border bg-surface p-5">
+        <h3 class="text-base font-semibold text-heading mb-2">{area.title}</h3>
+        <p class="text-sm text-text leading-relaxed">{area.description}</p>
+      </div>
+    ))}
+  </div>
+
+  <h2>How it works inside a playbook</h2>
   <p>
-    AI triage is a playbook action — just another step in your automation. Call it from any playbook, configure thresholds, and decide what happens at each confidence level.
+    AI triage is not a separate product tier or disconnected chatbot. It is just another step in the automation flow, which means your playbook controls what happens at each confidence level.
   </p>
   <CodeBlock code={triageCode} filename="ai_triage.py" />
-  <p>
-    The AI sees the full alert context: raw payload, enrichment data from VirusTotal/AbuseIPDB, asset information, historical patterns. It returns a structured assessment your playbook can act on.
-  </p>
 
   <h2>Bring your own model</h2>
   <p>
-    OpenSOAR is model-agnostic. Use whichever LLM fits your requirements — cloud providers for convenience or local models for data sovereignty.
+    OpenSOAR is model-agnostic. Use cloud providers when convenience matters, or local inference when data residency and network control matter more.
   </p>
   <CodeBlock code={multiModelCode} filename="configure_providers.py" />
   <table>
@@ -93,67 +124,68 @@ assessment = await triage(alert, provider="ollama")  # fully local, no data leav
     </thead>
     <tbody>
       <tr>
-        <td>Claude (Anthropic)</td>
-        <td>Complex reasoning, nuanced analysis</td>
-        <td>Yes (Anthropic API)</td>
+        <td>Claude</td>
+        <td>Reasoning-heavy triage</td>
+        <td>Yes</td>
       </tr>
       <tr>
-        <td>Gemini (Google)</td>
-        <td>Speed, Google Cloud integration</td>
-        <td>Yes (Google API)</td>
+        <td>Gemini</td>
+        <td>Speed and GCP alignment</td>
+        <td>Yes</td>
       </tr>
       <tr>
         <td>OpenAI</td>
-        <td>Broad model ecosystem, function calling</td>
-        <td>Yes (OpenAI API)</td>
+        <td>Broad model ecosystem</td>
+        <td>Yes</td>
       </tr>
       <tr>
-        <td>Ollama (local)</td>
-        <td>Air-gapped, compliance, no data egress</td>
-        <td>No — fully local</td>
+        <td>Ollama</td>
+        <td>Local-only and air-gapped environments</td>
+        <td>No</td>
       </tr>
     </tbody>
   </table>
 
-  <h2>Human-in-the-loop</h2>
+  <h2>Human-in-the-loop still matters</h2>
   <p>
-    AI triage doesn't mean autonomous triage. You control the thresholds:
+    The useful pattern is confidence-based routing:
   </p>
   <ul>
-    <li><strong>High confidence (85%+)</strong> — auto-resolve false positives, auto-escalate confirmed threats</li>
-    <li><strong>Medium confidence (50-85%)</strong> — queue for analyst review with AI summary and recommendation</li>
-    <li><strong>Low confidence (&lt;50%)</strong> — flag for manual triage, AI provides context but no action</li>
+    <li><strong>High confidence</strong> can resolve noise or escalate clear threats faster.</li>
+    <li><strong>Medium confidence</strong> should queue to analysts with better context.</li>
+    <li><strong>Low confidence</strong> should stay human-led.</li>
   </ul>
   <p>
-    Every AI decision is logged with the full reasoning chain, so you can audit, adjust thresholds, and build trust over time.
+    That is the difference between AI triage and AI theater. The model helps where it is strong and hands off where judgment still matters.
   </p>
 
-  <h2>What AI triage looks like for your SOC</h2>
+  <h2>What the analyst experience looks like</h2>
   <div style="border: 1px solid #30363d; background-color: #161b22; border-radius: 0.5rem; padding: 1.5rem; margin: 1.5rem 0;">
     <AlertDisplayCards client:visible />
   </div>
   <ul>
-    <li><strong>Before:</strong> Analyst opens alert → manually copies IOCs → checks VirusTotal → checks AbuseIPDB → reads SIEM context → decides severity → documents decision → 15-20 minutes per alert</li>
-    <li><strong>After:</strong> Alert arrives → AI enriches + analyzes → analyst sees summary + recommendation → confirms or overrides → 30 seconds per alert</li>
+    <li><strong>Before:</strong> analysts read the payload, switch between systems, gather context, and then decide what the alert even means.</li>
+    <li><strong>After:</strong> the alert arrives with a summary, proposed severity, supporting context, and a suggested path forward.</li>
   </ul>
-  <p>
-    That's not 10% faster. That's 30x faster. Your team handles the same volume with a fraction of the effort.
-  </p>
 
-  <h2>Privacy and security</h2>
-  <p>
-    We take data handling seriously:
-  </p>
+  <h2>Privacy and deployment model</h2>
   <ul>
-    <li>OpenSOAR never sends your data to our servers — AI calls go directly from your deployment to your chosen provider</li>
-    <li>Use Ollama for fully local inference — no data leaves your network</li>
-    <li>All AI interactions are logged in your database for audit</li>
-    <li>You control exactly which alert fields are sent to the AI</li>
+    <li>AI calls go from your deployment to your chosen provider.</li>
+    <li>Use Ollama for fully local inference.</li>
+    <li>Keep the decision logic in your own playbooks.</li>
+    <li>Audit the results in your own system.</li>
   </ul>
 
-  <hr />
-
-  <p>
-    AI-powered alert triage is built into OpenSOAR. <a href="https://github.com/opensoar-hq/opensoar-core">Get started on GitHub →</a>
-  </p>
+  <h2>Read next</h2>
+  <div class="grid gap-4 sm:grid-cols-3 my-6">
+    {resourceLinks.map((link) => (
+      <a
+        href={link.href}
+        class="rounded-lg border border-border bg-surface p-5 transition-colors hover:border-heading/30"
+      >
+        <h3 class="text-base font-semibold text-heading mb-2">{link.title}</h3>
+        <p class="text-sm text-text leading-relaxed">{link.description}</p>
+      </a>
+    ))}
+  </div>
 </ContentLayout>
