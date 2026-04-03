@@ -5,7 +5,7 @@ import ContentLayout from '../../layouts/ContentLayout.astro';
 export async function getStaticPaths() {
   const guides = await getCollection('guides');
   return guides.map((guide) => ({
-    params: { slug: guide.id },
+    params: { slug: guide.data.slug ?? guide.id },
     props: { guide },
   }));
 }

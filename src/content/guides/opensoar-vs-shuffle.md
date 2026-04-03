@@ -73,7 +73,7 @@ A lot of teams start with a visual builder because they want velocity, then end 
 
 - [Playbooks Overview](https://docs.opensoar.app/playbooks/overview/)
 - [Loading and Syncing Playbooks](https://docs.opensoar.app/playbooks/loading-and-sync/)
-- [Python Security Playbooks](/python-security-playbooks)
+- [Python Security Playbooks](/guides/python-security-playbooks)
 - [Commercial platform comparison](/compare)
 
 ---

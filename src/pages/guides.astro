@@ -5,7 +5,7 @@ import { getCollection } from 'astro:content';
 const guideEntries = (await getCollection('guides'))
   .sort((a, b) => a.data.order - b.data.order)
   .map((guide) => ({
-    href: `/guides/${guide.id}`,
+    href: `/guides/${guide.data.slug ?? guide.id}`,
     title: guide.data.heading,
     description: guide.data.description,
   }));
@@ -17,24 +17,9 @@ const supportingPages = [
     description: "High-level onboarding path for evaluating and trying OpenSOAR.",
   },
   {
-    href: "/python-security-playbooks",
-    title: "Python Security Playbooks",
-    description: "Why code-first automation beats YAML and drag-and-drop builders.",
-  },
-  {
-    href: "/security-automation",
-    title: "Security Automation",
-    description: "How teams automate repetitive SOC work without buying a six-figure SOAR.",
-  },
-  {
     href: "/ai-triage",
     title: "AI-Powered Alert Triage",
     description: "How OpenSOAR uses LLMs to summarize, classify, and prioritize alerts.",
-  },
-  {
-    href: "/what-is-soar",
-    title: "What is SOAR?",
-    description: "Category-level explainer for teams evaluating orchestration and automation tools.",
   },
   {
     href: "/compare",
@@ -73,7 +58,7 @@ const supportingPages = [
     ))}
   </div>
 
-  <h2>Supporting pages</h2>
+  <h2>Product pages</h2>
   <div class="grid gap-4 sm:grid-cols-2 my-6">
     {supportingPages.map((page) => (
       <a

@@ -8,6 +8,11 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://opensoar.app',
   integrations: [react(), sitemap()],
+  redirects: {
+    '/python-security-playbooks': '/guides/python-security-playbooks',
+    '/security-automation': '/guides/security-automation',
+    '/what-is-soar': '/guides/what-is-soar',
+  },
 
   vite: {
     plugins: [tailwindcss()]

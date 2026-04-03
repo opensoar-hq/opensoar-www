@@ -9,6 +9,7 @@ const guides = defineCollection({
     heading: z.string(),
     subheading: z.string(),
     badge: z.string().default("Guide"),
+    slug: z.string().optional(),
     order: z.number().int().nonnegative(),
   }),
 });
