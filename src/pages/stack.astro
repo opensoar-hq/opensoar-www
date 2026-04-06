@@ -1,0 +1,92 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+
+const stack = [
+  {
+    name: 'pwnkit',
+    role: 'Detect',
+    tagline: 'AI agent pentester',
+    description:
+      'Fully autonomous agentic pentesting framework. Runs real attacks against web apps, AI/LLM apps, npm packages, and source code. Every finding is independently re-exploited by a blind verify agent to kill false positives.',
+    href: 'https://github.com/peaktwilight/pwnkit',
+    site: 'https://pwnkit.com',
+  },
+  {
+    name: 'foxguard',
+    role: 'Prevent',
+    tagline: 'Rust security scanner',
+    description:
+      'Security scanner as fast as a linter. 100+ built-in rules across 10 languages in a single Rust binary. Sub-second scans mean developers run it on every save, not just in CI.',
+    href: 'https://github.com/peaktwilight/foxguard',
+    site: 'https://foxguard.dev',
+  },
+  {
+    name: 'opensoar',
+    role: 'Respond',
+    tagline: 'Python-native SOAR platform',
+    description:
+      'Open-source orchestration and automation for the modern SOC. Write playbooks in plain Python — no sandboxes, no per-action billing, no vendor lock-in. Sits between your SIEM and your response tools.',
+    href: 'https://github.com/opensoar-hq/opensoar-core',
+    site: 'https://opensoar.app',
+  },
+];
+---
+
+<ContentLayout
+  title="The Open-Source Modern SOC Stack | OpenSOAR"
+  description="pwnkit, foxguard, and opensoar — three open-source tools that cover detect, prevent, and respond for the modern security operations center."
+  badge="Stack"
+  heading="The open-source modern SOC"
+  subheading="Three tools. Detect, prevent, respond. All open source, all built to work together."
+>
+  <p>
+    Most security teams stitch together a dozen commercial products to cover the basics. The open-source modern SOC stack gets you the three capabilities that actually matter — finding real vulnerabilities, stopping them before they ship, and responding when something slips through — without the license bill.
+  </p>
+
+  <div class="grid gap-4 sm:grid-cols-1 my-6">
+    {stack.map((tool) => (
+      <a
+        href={tool.href}
+        target="_blank"
+        rel="noopener"
+        class="rounded-lg border border-border bg-surface p-5 transition-colors hover:border-heading/30"
+      >
+        <div class="flex items-baseline gap-3 mb-2">
+          <h3 class="text-base font-semibold text-heading">{tool.name}</h3>
+          <span class="indicator indicator--positive">{tool.role}</span>
+          <span class="text-sm text-text">{tool.tagline}</span>
+        </div>
+        <p class="text-sm text-text leading-relaxed">{tool.description}</p>
+      </a>
+    ))}
+  </div>
+
+  <h2>How they fit together</h2>
+  <p>
+    <strong>foxguard</strong> runs on every save and every commit, catching hardcoded secrets, SQL injection, XSS, and other well-known patterns before code ever reaches production. It is the fast, cheap first line.
+  </p>
+  <p>
+    <strong>pwnkit</strong> picks up where static analysis stops. It drives an autonomous AI agent against running applications, chaining real exploits the way a human pentester would, and verifies every finding with a blind re-exploit to eliminate false positives. This is where real IDORs, auth bypasses, and business logic flaws get found.
+  </p>
+  <p>
+    <strong>opensoar</strong> is the response layer. When an alert fires — from your SIEM, from pwnkit, from anywhere — opensoar runs the Python playbook that triages, enriches, and resolves it. No YAML DSLs, no per-action billing, no vendor lock-in.
+  </p>
+
+  <h2>Why open source</h2>
+  <ul>
+    <li>You can read every line of code that runs against your infrastructure.</li>
+    <li>You can self-host, fork, and embed without license negotiations.</li>
+    <li>You keep your data, your deployment, and your automation logic.</li>
+    <li>You can contribute a rule, a playbook, or an integration and ship it the same day.</li>
+  </ul>
+
+  <h2>Get started</h2>
+  <p>
+    Each tool installs and runs on its own. Pick whichever one maps to your most painful gap today, and add the others as your stack matures.
+  </p>
+  <ul>
+    <li><a href="https://pwnkit.com" target="_blank" rel="noopener">pwnkit.com</a> — autonomous pentesting</li>
+    <li><a href="https://foxguard.dev" target="_blank" rel="noopener">foxguard.dev</a> — fast static scanning</li>
+    <li><a href="https://docs.opensoar.app" target="_blank" rel="noopener">docs.opensoar.app</a> — SOAR platform docs</li>
+  </ul>
+</ContentLayout>
