@@ -2,6 +2,8 @@
 
 Landing page for the OpenSOAR project at [opensoar.app](https://opensoar.app).
 
+**OpenSOAR is a PwnKit Labs product.**
+
 ## Tech Stack
 
 - [Astro](https://astro.build)
