@@ -1,321 +1,579 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useState, useMemo } from "react";
+import {
+  Activity,
+  AlertTriangle,
+  Briefcase,
+  CheckCircle2,
+  ChevronRight,
+  Clock3,
+  Globe,
+  LayoutGrid,
+  Play,
+  Search,
+  Shield,
+  UserRound,
+} from "lucide-react";
+import { useMemo, useState } from "react";
 
 type Severity = "critical" | "high" | "medium" | "low";
-type Status = "new" | "in_progress" | "resolved";
+type AlertStatus = "new" | "in_progress" | "resolved";
+type IncidentStatus = "open" | "investigating" | "contained";
+type PanelTab = "timeline" | "incident" | "observables";
 
-interface Alert {
+interface AlertRecord {
   id: string;
-  timestamp: string;
-  severity: Severity;
   title: string;
   source: string;
-  source_ip: string;
-  status: Status;
-  rule_name: string;
-  description: string;
+  sourceIp: string;
+  host: string;
+  severity: Severity;
+  status: AlertStatus;
+  time: string;
+  analyst: string | null;
+  incidentId: string;
+  summary: string;
+  tags: string[];
   iocs: string[];
 }
 
-const SAMPLE_ALERTS: Alert[] = [
+interface IncidentRecord {
+  id: string;
+  title: string;
+  severity: Severity;
+  status: IncidentStatus;
+  owner: string;
+  alerts: number;
+  summary: string;
+  observables: Array<{ type: string; value: string; status: string }>;
+  timeline: Array<{ time: string; label: string; detail: string; tone: "neutral" | "success" | "warning" }>;
+}
+
+const alerts: AlertRecord[] = [
   {
-    id: "1",
-    timestamp: "2025-03-13T14:32:45Z",
+    id: "AL-1042",
+    title: "Brute force into production SSH bastion",
+    source: "CrowdStrike",
+    sourceIp: "203.0.113.42",
+    host: "prod-bastion-01",
     severity: "critical",
-    title: "Brute Force SSH Login Detected",
-    source: "crowdstrike",
-    source_ip: "203.0.113.42",
     status: "new",
-    rule_name: "ssh_brute_force",
-    description: "Multiple failed SSH login attempts detected from external IP. 847 attempts in 5 minutes targeting root account on prod-db-01.",
-    iocs: ["203.0.113.42", "prod-db-01", "root"],
+    time: "2m ago",
+    analyst: null,
+    incidentId: "IN-204",
+    summary: "847 failed SSH attempts against root in 5 minutes from a single external IP.",
+    tags: ["ssh", "auth", "linux"],
+    iocs: ["203.0.113.42", "prod-bastion-01", "root"],
   },
   {
-    id: "2",
-    timestamp: "2025-03-13T14:31:12Z",
+    id: "AL-1041",
+    title: "Impossible travel for privileged account",
+    source: "Azure AD",
+    sourceIp: "185.220.101.6",
+    host: "identity",
     severity: "high",
-    title: "Malware Hash Matched — Cobalt Strike Beacon",
-    source: "sentinelone",
-    source_ip: "10.0.12.88",
     status: "in_progress",
-    rule_name: "malware_hash_match",
-    description: "Known Cobalt Strike beacon payload detected on endpoint WKSTN-0421. SHA256 matches TI feed entry from 2025-03-10.",
-    iocs: ["10.0.12.88", "WKSTN-0421", "a1b2c3d4e5f6..."],
+    time: "5m ago",
+    analyst: "Mia",
+    incidentId: "IN-204",
+    summary: "Admin account authenticated from New York and Sao Paulo within 7 minutes.",
+    tags: ["identity", "mfa", "travel"],
+    iocs: ["admin@company.com", "185.220.101.6"],
   },
   {
-    id: "3",
-    timestamp: "2025-03-13T14:28:33Z",
+    id: "AL-1039",
+    title: "Suspicious DNS beaconing pattern",
+    source: "Elastic",
+    sourceIp: "10.0.8.15",
+    host: "wkstn-0421",
     severity: "high",
-    title: "DNS Exfiltration — Unusually Long Queries",
-    source: "elastic",
-    source_ip: "10.0.8.15",
-    status: "new",
-    rule_name: "dns_exfil_long_query",
-    description: "Host sending DNS queries with encoded data in subdomain labels. Average query length 187 chars, destination: suspicious-ns.example.com.",
-    iocs: ["10.0.8.15", "suspicious-ns.example.com"],
-  },
-  {
-    id: "4",
-    timestamp: "2025-03-13T14:25:01Z",
-    severity: "medium",
-    title: "Impossible Travel — Login from Two Countries",
-    source: "azure-ad",
-    source_ip: "185.220.101.6",
-    status: "new",
-    rule_name: "impossible_travel",
-    description: "User jsmith@corp.com authenticated from New York (10:15 UTC) then São Paulo (10:22 UTC). Travel distance implies impossible physical movement.",
-    iocs: ["185.220.101.6", "jsmith@corp.com"],
-  },
-  {
-    id: "5",
-    timestamp: "2025-03-13T14:22:18Z",
-    severity: "critical",
-    title: "Privilege Escalation — New Domain Admin",
-    source: "windows-ad",
-    source_ip: "10.0.1.50",
     status: "in_progress",
-    rule_name: "priv_escalation_domain_admin",
-    description: "Account svc-backup was added to Domain Admins group by non-privileged user. Potential compromised service account.",
-    iocs: ["10.0.1.50", "svc-backup", "Domain Admins"],
+    time: "9m ago",
+    analyst: "Mia",
+    incidentId: "IN-205",
+    summary: "Encoded subdomain labels suggest exfiltration over DNS to a newly observed domain.",
+    tags: ["dns", "endpoint"],
+    iocs: ["suspicious-ns.example.com", "10.0.8.15"],
   },
   {
-    id: "6",
-    timestamp: "2025-03-13T14:18:44Z",
+    id: "AL-1034",
+    title: "GuardDuty scanner noise",
+    source: "AWS GuardDuty",
+    sourceIp: "198.51.100.23",
+    host: "i-0abc123",
     severity: "low",
-    title: "AWS GuardDuty — Recon:EC2/PortProbeUnprotectedPort",
-    source: "aws-guardduty",
-    source_ip: "198.51.100.23",
     status: "resolved",
-    rule_name: "guardduty_port_probe",
-    description: "External IP probing unprotected port 22 on EC2 instance i-0abc123. Low confidence, likely automated scanner.",
+    time: "21m ago",
+    analyst: "Noah",
+    incidentId: "IN-203",
+    summary: "Internet-wide scanner hit an unprotected port; triage resolved as benign.",
+    tags: ["cloud", "noise"],
     iocs: ["198.51.100.23", "i-0abc123"],
   },
 ];
 
-const severityColors: Record<Severity, string> = {
-  critical: "bg-[#da3633]/15 text-[#f85149] border-[#da3633]/30",
-  high: "bg-[#f85149]/10 text-[#f85149] border-[#f85149]/20",
-  medium: "bg-[#d29922]/10 text-[#d29922] border-[#d29922]/20",
-  low: "bg-[#848d97]/10 text-[#848d97] border-[#848d97]/20",
+const incidents: Record<string, IncidentRecord> = {
+  "IN-204": {
+    id: "IN-204",
+    title: "Potential credential access chain",
+    severity: "critical",
+    status: "investigating",
+    owner: "Mia",
+    alerts: 2,
+    summary:
+      "Multiple auth signals point to credential abuse against privileged infrastructure. Analyst is validating source reputation and access scope.",
+    observables: [
+      { type: "ip", value: "203.0.113.42", status: "malicious" },
+      { type: "user", value: "admin@company.com", status: "watch" },
+      { type: "host", value: "prod-bastion-01", status: "isolated" },
+    ],
+    timeline: [
+      { time: "now", label: "Containment queued", detail: "Blocklist push staged for the source IP and bastion access logs are being preserved.", tone: "warning" },
+      { time: "3m", label: "Incident linked", detail: "Impossible-travel alert merged into the same case based on shared account context.", tone: "neutral" },
+      { time: "7m", label: "Claimed by Mia", detail: "Ownership moved to the on-call analyst with local admin approval pending.", tone: "success" },
+    ],
+  },
+  "IN-205": {
+    id: "IN-205",
+    title: "Possible DNS exfiltration",
+    severity: "high",
+    status: "open",
+    owner: "Queue",
+    alerts: 1,
+    summary:
+      "Single workstation beaconing to an unusual domain. Waiting on enrichment before escalation.",
+    observables: [
+      { type: "domain", value: "suspicious-ns.example.com", status: "unknown" },
+      { type: "ip", value: "10.0.8.15", status: "watch" },
+    ],
+    timeline: [
+      { time: "1m", label: "Alert enriched", detail: "Passive DNS lookup queued and endpoint owner resolved from CMDB.", tone: "neutral" },
+      { time: "9m", label: "Alert ingested", detail: "Elastic webhook normalized and routed into the active queue.", tone: "success" },
+    ],
+  },
+  "IN-203": {
+    id: "IN-203",
+    title: "Internet scanner noise",
+    severity: "low",
+    status: "contained",
+    owner: "Noah",
+    alerts: 1,
+    summary:
+      "Benign cloud perimeter scan resolved after source reputation and host exposure review.",
+    observables: [
+      { type: "ip", value: "198.51.100.23", status: "benign" },
+    ],
+    timeline: [
+      { time: "4m", label: "Resolved", detail: "Marked benign after confirming known scanner behavior.", tone: "success" },
+    ],
+  },
 };
 
-const statusColors: Record<Status, string> = {
-  new: "bg-[#848d97]/10 text-[#848d97]",
-  in_progress: "bg-[#d29922]/10 text-[#d29922]",
-  resolved: "bg-[#3fb950]/10 text-[#3fb950]",
+const severityClasses: Record<Severity, string> = {
+  critical: "border-[#f85149]/30 bg-[#f85149]/12 text-[#ffb4b4]",
+  high: "border-[#ff7b72]/25 bg-[#ff7b72]/10 text-[#ff7b72]",
+  medium: "border-[#d29922]/25 bg-[#d29922]/10 text-[#f2cc60]",
+  low: "border-[#6e7681]/25 bg-[#6e7681]/10 text-[#9da7b3]",
 };
 
-const statusLabels: Record<Status, string> = {
-  new: "New",
-  in_progress: "In Progress",
-  resolved: "Resolved",
+const alertStatusClasses: Record<AlertStatus, string> = {
+  new: "bg-[#6e7681]/12 text-[#9da7b3]",
+  in_progress: "bg-[#d29922]/10 text-[#f2cc60]",
+  resolved: "bg-[#3fb950]/10 text-[#73d48d]",
 };
 
-function timeAgo(ts: string): string {
-  const now = new Date("2025-03-13T14:35:00Z");
-  const then = new Date(ts);
-  const diffMin = Math.round((now.getTime() - then.getTime()) / 60000);
-  if (diffMin < 1) return "just now";
-  if (diffMin < 60) return `${diffMin}m ago`;
-  return `${Math.round(diffMin / 60)}h ago`;
-}
+const incidentStatusClasses: Record<IncidentStatus, string> = {
+  open: "bg-[#6e7681]/12 text-[#9da7b3]",
+  investigating: "bg-[#f85149]/10 text-[#ff938d]",
+  contained: "bg-[#3fb950]/10 text-[#73d48d]",
+};
 
-function AlertRow({
-  alert,
-  expanded,
-  onToggle,
-}: {
-  alert: Alert;
-  expanded: boolean;
-  onToggle: () => void;
-}) {
+const navItems = [
+  { id: "queue", label: "Alerts", icon: AlertTriangle },
+  { id: "cases", label: "Incidents", icon: Briefcase },
+  { id: "runs", label: "Runs", icon: Play },
+  { id: "actions", label: "Actions", icon: Activity },
+];
+
+function Pill({ children, className }: { children: string; className: string }) {
   return (
-    <>
-      <button
-        onClick={onToggle}
-        type="button"
-        className="w-full px-4 py-3 text-left transition-colors hover:bg-[#1c2129] border-none bg-transparent cursor-pointer"
-      >
-        <div className="flex items-center gap-3">
-          <motion.div
-            animate={{ rotate: expanded ? 180 : 0 }}
-            transition={{ duration: 0.2 }}
-            className="flex-shrink-0"
-          >
-            <svg className="w-3.5 h-3.5 text-[#6e7681]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
-          </motion.div>
-
-          <span className={`flex-shrink-0 px-2 py-0.5 rounded text-[11px] font-medium uppercase tracking-wide border ${severityColors[alert.severity]}`}>
-            {alert.severity}
-          </span>
-
-          <span className="flex-1 text-[13px] text-[#e6edf3] truncate font-medium">
-            {alert.title}
-          </span>
-
-          <span className={`flex-shrink-0 px-2 py-0.5 rounded text-[11px] font-medium ${statusColors[alert.status]}`}>
-            {statusLabels[alert.status]}
-          </span>
-
-          <span className="flex-shrink-0 text-[11px] text-[#6e7681] font-mono w-28 text-right hidden sm:block">
-            {alert.source}
-          </span>
-
-          <span className="flex-shrink-0 text-[11px] text-[#6e7681] font-mono w-16 text-right hidden md:block">
-            {timeAgo(alert.timestamp)}
-          </span>
-        </div>
-      </button>
-
-      <AnimatePresence initial={false}>
-        {expanded && (
-          <motion.div
-            key="details"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="overflow-hidden border-t border-[#30363d] bg-[#0d1117]/60"
-          >
-            <div className="p-4 space-y-3">
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6e7681] mb-1.5">Description</p>
-                <p className="text-[12px] text-[#8b949e] leading-relaxed font-mono bg-[#161b22] rounded p-2.5 border border-[#30363d]">
-                  {alert.description}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-3 gap-3 text-[12px]">
-                <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6e7681] mb-1">Source IP</p>
-                  <p className="font-mono text-[#e6edf3]">{alert.source_ip}</p>
-                </div>
-                <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6e7681] mb-1">Rule</p>
-                  <p className="font-mono text-[#e6edf3]">{alert.rule_name}</p>
-                </div>
-                <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6e7681] mb-1">Timestamp</p>
-                  <p className="font-mono text-[#8b949e] text-[11px]">{alert.timestamp}</p>
-                </div>
-              </div>
-
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6e7681] mb-1.5">IOCs</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {alert.iocs.map((ioc) => (
-                    <span key={ioc} className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#21262d] text-[#8b949e] border border-[#30363d]">
-                      {ioc}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+    <span className={`inline-flex items-center rounded-md border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] ${className}`}>
+      {children}
+    </span>
   );
 }
 
 export function AlertDemo() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [expandedId, setExpandedId] = useState<string | null>("1");
-  const [severityFilter, setSeverityFilter] = useState<Severity | "">("");
+  const [selectedAlertId, setSelectedAlertId] = useState("AL-1042");
+  const [search, setSearch] = useState("");
+  const [tab, setTab] = useState<PanelTab>("timeline");
+  const [nav, setNav] = useState("queue");
+
+  const selectedAlert = alerts.find((alert) => alert.id === selectedAlertId) ?? alerts[0];
+  const selectedIncident = incidents[selectedAlert.incidentId];
 
   const filteredAlerts = useMemo(() => {
-    return SAMPLE_ALERTS.filter((alert) => {
-      const matchSearch = !searchQuery ||
-        alert.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        alert.source.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        alert.source_ip.includes(searchQuery);
-      const matchSeverity = !severityFilter || alert.severity === severityFilter;
-      return matchSearch && matchSeverity;
+    return alerts.filter((alert) => {
+      const haystack = `${alert.title} ${alert.source} ${alert.sourceIp} ${alert.host}`.toLowerCase();
+      return haystack.includes(search.toLowerCase());
     });
-  }, [searchQuery, severityFilter]);
+  }, [search]);
 
   return (
-    <div className="rounded-lg border border-[#30363d] bg-[#161b22] overflow-hidden">
-      {/* Header bar */}
-      <div className="flex items-center gap-2 px-4 py-3 border-b border-[#30363d]">
-        <div className="flex items-center gap-1.5 mr-2">
-          <div className="w-2.5 h-2.5 rounded-full bg-[#f85149]/50" />
-          <div className="w-2.5 h-2.5 rounded-full bg-[#d29922]/50" />
-          <div className="w-2.5 h-2.5 rounded-full bg-[#3fb950]/50" />
+    <div className="overflow-hidden rounded-[22px] border border-[#30363d] bg-[#0b1117] shadow-[0_30px_120px_rgba(0,0,0,0.45)]">
+      <div className="border-b border-[#222b36] bg-[#0f141b] px-4 py-3">
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
+          </div>
+          <div className="flex min-w-0 flex-1 items-center justify-center">
+            <div className="flex w-full max-w-3xl items-center gap-2 rounded-full border border-[#293341] bg-[#0b1117] px-3 py-2 text-[11px] text-[#7d8794]">
+              <Shield className="h-3.5 w-3.5 shrink-0 text-[#8b949e]" />
+              <span className="truncate font-mono">https://demo.opensoar.app/incidents/IN-204</span>
+            </div>
+          </div>
+          <div className="hidden items-center gap-2 lg:flex">
+            <Pill className="border-[#3fb950]/25 bg-[#3fb950]/10 text-[#73d48d]">Queue live</Pill>
+            <Pill className="border-[#6e7681]/20 bg-[#161b22] text-[#9da7b3]">Fake but clickable</Pill>
+          </div>
         </div>
-        <span className="text-[11px] text-[#6e7681] font-mono mr-auto">opensoar — alerts</span>
-
-        {/* Search */}
-        <div className="relative hidden sm:block">
-          <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6e7681] pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" />
-          </svg>
-          <input
-            type="text"
-            placeholder="Search alerts..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-44 h-7 pl-8 pr-3 text-[12px] rounded border border-[#30363d] bg-[#0d1117] text-[#e6edf3] placeholder:text-[#6e7681] focus:outline-none focus:border-[#e6edf3]/50 transition-colors"
-          />
-        </div>
-
-        {/* Severity filter */}
-        <select
-          value={severityFilter}
-          onChange={(e) => setSeverityFilter(e.target.value as Severity | "")}
-          className="h-7 px-2 text-[12px] rounded border border-[#30363d] bg-[#0d1117] text-[#8b949e] focus:outline-none focus:border-[#e6edf3]/50 cursor-pointer"
-        >
-          <option value="">All severities</option>
-          <option value="critical">Critical</option>
-          <option value="high">High</option>
-          <option value="medium">Medium</option>
-          <option value="low">Low</option>
-        </select>
       </div>
 
-      {/* Alert rows */}
-      <div className="divide-y divide-[#30363d] max-h-[420px] overflow-y-auto">
-        <AnimatePresence mode="popLayout">
-          {filteredAlerts.length > 0 ? (
-            filteredAlerts.map((alert, index) => (
-              <motion.div
-                key={alert.id}
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.15, delay: index * 0.02 }}
-              >
-                <AlertRow
-                  alert={alert}
-                  expanded={expandedId === alert.id}
-                  onToggle={() =>
-                    setExpandedId((c) => (c === alert.id ? null : alert.id))
-                  }
-                />
-              </motion.div>
-            ))
-          ) : (
-            <motion.div
-              key="empty"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="p-8 text-center text-[#6e7681] text-sm"
-            >
-              No alerts match your search.
-            </motion.div>
-          )}
-        </AnimatePresence>
+      <div className="grid lg:grid-cols-[220px_minmax(0,1fr)]">
+        <aside className="border-b border-[#222b36] bg-[#0f141b] lg:border-b-0 lg:border-r">
+          <div className="px-4 py-4">
+            <div className="mb-4 flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#161b22] text-[#e6edf3]">
+                <Shield className="h-4.5 w-4.5" />
+              </div>
+              <div>
+                <div className="text-[11px] uppercase tracking-[0.14em] text-[#6e7681]">Workspace</div>
+                <div className="text-sm font-semibold text-[#e6edf3]">Northwind SOC</div>
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const active = nav === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => setNav(item.id)}
+                    className={`flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-sm transition-colors ${
+                      active
+                        ? "bg-[#161b22] text-[#e6edf3]"
+                        : "text-[#8b949e] hover:bg-[#131a23] hover:text-[#e6edf3]"
+                    }`}
+                  >
+                    <Icon className="h-4 w-4 shrink-0" />
+                    <span className="flex-1">{item.label}</span>
+                    {item.id === "queue" && <span className="text-[11px] text-[#ff7b72]">24</span>}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="mt-6 rounded-2xl border border-[#26313c] bg-[#111821] p-3">
+              <div className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#6e7681]">Shift Snapshot</div>
+              <div className="grid grid-cols-2 gap-2 text-[11px]">
+                <div className="rounded-xl bg-[#0b1117] p-2">
+                  <div className="text-[#6e7681]">Open alerts</div>
+                  <div className="mt-1 text-lg font-semibold text-[#e6edf3]">24</div>
+                </div>
+                <div className="rounded-xl bg-[#0b1117] p-2">
+                  <div className="text-[#6e7681]">Active cases</div>
+                  <div className="mt-1 text-lg font-semibold text-[#e6edf3]">7</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <div className="bg-[#0d1117]">
+          <div className="grid gap-0 xl:grid-cols-[minmax(0,1.06fr)_minmax(360px,0.94fr)]">
+            <section className="border-b border-[#222b36] xl:border-b-0 xl:border-r">
+              <div className="border-b border-[#222b36] px-5 py-4">
+                <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <div className="text-[10px] uppercase tracking-[0.16em] text-[#6e7681]">Operator Queue</div>
+                    <div className="mt-1 text-lg font-semibold text-[#e6edf3]">Alerts needing judgment</div>
+                  </div>
+                  <div className="flex items-center gap-2 rounded-full border border-[#293341] bg-[#0b1117] px-3 py-2 text-[12px] text-[#8b949e]">
+                    <Search className="h-3.5 w-3.5 shrink-0" />
+                    <input
+                      value={search}
+                      onChange={(event) => setSearch(event.target.value)}
+                      placeholder="Search alerts, hosts, IPs"
+                      className="w-44 bg-transparent text-[#e6edf3] outline-none placeholder:text-[#6e7681]"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-3">
+                  <div className="rounded-2xl border border-[#26313c] bg-[#111821] p-3">
+                    <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Critical queue</div>
+                    <div className="mt-2 flex items-end justify-between">
+                      <div className="text-2xl font-semibold text-[#ff7b72]">3</div>
+                      <div className="text-[11px] text-[#8b949e]">2 unassigned</div>
+                    </div>
+                  </div>
+                  <div className="rounded-2xl border border-[#26313c] bg-[#111821] p-3">
+                    <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Automation runs</div>
+                    <div className="mt-2 flex items-end justify-between">
+                      <div className="text-2xl font-semibold text-[#e6edf3]">11</div>
+                      <div className="text-[11px] text-[#73d48d]">8 completed</div>
+                    </div>
+                  </div>
+                  <div className="rounded-2xl border border-[#26313c] bg-[#111821] p-3">
+                    <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Mean triage</div>
+                    <div className="mt-2 flex items-end justify-between">
+                      <div className="text-2xl font-semibold text-[#e6edf3]">6m</div>
+                      <div className="text-[11px] text-[#8b949e]">today</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="divide-y divide-[#202834]">
+                {filteredAlerts.map((alert, index) => {
+                  const active = alert.id === selectedAlertId;
+                  return (
+                    <motion.button
+                      key={alert.id}
+                      type="button"
+                      onClick={() => setSelectedAlertId(alert.id)}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.2, delay: index * 0.03 }}
+                      className={`w-full px-5 py-4 text-left transition-colors ${
+                        active ? "bg-[#111821]" : "hover:bg-[#10161f]"
+                      }`}
+                    >
+                      <div className="mb-2 flex items-start gap-3">
+                        <Pill className={severityClasses[alert.severity]}>{alert.severity}</Pill>
+                        <div className="min-w-0 flex-1">
+                          <div className="truncate text-[14px] font-semibold text-[#e6edf3]">{alert.title}</div>
+                          <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-[#8b949e]">
+                            <span>{alert.source}</span>
+                            <span className="font-mono">{alert.sourceIp}</span>
+                            <span>{alert.host}</span>
+                          </div>
+                        </div>
+                        <ChevronRight className={`mt-0.5 h-4 w-4 shrink-0 transition-transform ${active ? "translate-x-1 text-[#e6edf3]" : "text-[#6e7681]"}`} />
+                      </div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className={`rounded-md px-2 py-0.5 text-[10px] font-medium ${alertStatusClasses[alert.status]}`}>
+                          {alert.status.replace("_", " ")}
+                        </span>
+                        {alert.analyst ? (
+                          <span className="inline-flex items-center gap-1 text-[10px] text-[#73d48d]">
+                            <UserRound className="h-3 w-3" />
+                            {alert.analyst}
+                          </span>
+                        ) : (
+                          <span className="text-[10px] text-[#ffb86c]">Unassigned</span>
+                        )}
+                        <span className="inline-flex items-center gap-1 text-[10px] text-[#6e7681]">
+                          <Clock3 className="h-3 w-3" />
+                          {alert.time}
+                        </span>
+                      </div>
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </section>
+
+            <section className="bg-[#0f141b]">
+              <div className="border-b border-[#222b36] px-5 py-4">
+                <div className="mb-3 flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <div className="text-[10px] uppercase tracking-[0.16em] text-[#6e7681]">Selected alert</div>
+                    <div className="mt-1 text-lg font-semibold text-[#e6edf3]">{selectedAlert.title}</div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className={`rounded-md px-2 py-0.5 text-[10px] font-medium ${alertStatusClasses[selectedAlert.status]}`}>
+                      {selectedAlert.status.replace("_", " ")}
+                    </span>
+                    <Pill className={severityClasses[selectedAlert.severity]}>{selectedAlert.severity}</Pill>
+                  </div>
+                </div>
+
+                <div className="mb-4 rounded-2xl border border-[#293341] bg-[#0b1117] p-4">
+                  <div className="mb-2 text-[10px] uppercase tracking-[0.16em] text-[#6e7681]">Analyst summary</div>
+                  <p className="text-[13px] leading-relaxed text-[#8b949e]">{selectedAlert.summary}</p>
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {selectedAlert.tags.map((tag) => (
+                      <span key={tag} className="rounded-md border border-[#2c3643] bg-[#111821] px-2 py-0.5 text-[10px] uppercase tracking-[0.12em] text-[#9da7b3]">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  {([
+                    { id: "timeline", label: "Timeline" },
+                    { id: "incident", label: "Incident" },
+                    { id: "observables", label: "Observables" },
+                  ] as Array<{ id: PanelTab; label: string }>).map((entry) => (
+                    <button
+                      key={entry.id}
+                      type="button"
+                      onClick={() => setTab(entry.id)}
+                      className={`rounded-full px-3 py-1.5 text-[11px] font-medium transition-colors ${
+                        tab === entry.id
+                          ? "bg-[#e6edf3] text-[#0d1117]"
+                          : "bg-[#111821] text-[#8b949e] hover:text-[#e6edf3]"
+                      }`}
+                    >
+                      {entry.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <AnimatePresence mode="wait">
+                {tab === "timeline" && (
+                  <motion.div
+                    key="timeline"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    className="space-y-4 px-5 py-5"
+                  >
+                    {selectedIncident.timeline.map((entry) => (
+                      <div key={`${selectedIncident.id}-${entry.time}-${entry.label}`} className="flex gap-3">
+                        <div className="mt-1">
+                          <span
+                            className={`block h-2.5 w-2.5 rounded-full ${
+                              entry.tone === "success"
+                                ? "bg-[#3fb950]"
+                                : entry.tone === "warning"
+                                  ? "bg-[#ff7b72]"
+                                  : "bg-[#6e7681]"
+                            }`}
+                          />
+                        </div>
+                        <div className="min-w-0 flex-1 rounded-2xl border border-[#26313c] bg-[#111821] px-4 py-3">
+                          <div className="mb-1 flex items-center justify-between gap-3">
+                            <div className="text-[12px] font-semibold text-[#e6edf3]">{entry.label}</div>
+                            <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">{entry.time}</div>
+                          </div>
+                          <div className="text-[12px] leading-relaxed text-[#8b949e]">{entry.detail}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </motion.div>
+                )}
+
+                {tab === "incident" && (
+                  <motion.div
+                    key="incident"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    className="space-y-4 px-5 py-5"
+                  >
+                    <div className="rounded-2xl border border-[#26313c] bg-[#111821] p-4">
+                      <div className="mb-3 flex items-start justify-between gap-3">
+                        <div>
+                          <div className="text-[10px] uppercase tracking-[0.16em] text-[#6e7681]">Linked incident</div>
+                          <div className="mt-1 text-[16px] font-semibold text-[#e6edf3]">{selectedIncident.title}</div>
+                        </div>
+                        <span className={`rounded-md px-2 py-0.5 text-[10px] font-medium ${incidentStatusClasses[selectedIncident.status]}`}>
+                          {selectedIncident.status}
+                        </span>
+                      </div>
+                      <p className="text-[12px] leading-relaxed text-[#8b949e]">{selectedIncident.summary}</p>
+                    </div>
+
+                    <div className="grid gap-3 sm:grid-cols-3">
+                      <div className="rounded-2xl border border-[#26313c] bg-[#111821] p-4">
+                        <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Owner</div>
+                        <div className="mt-2 flex items-center gap-2 text-sm font-semibold text-[#e6edf3]">
+                          <UserRound className="h-4 w-4 text-[#73d48d]" />
+                          {selectedIncident.owner}
+                        </div>
+                      </div>
+                      <div className="rounded-2xl border border-[#26313c] bg-[#111821] p-4">
+                        <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Linked alerts</div>
+                        <div className="mt-2 text-2xl font-semibold text-[#e6edf3]">{selectedIncident.alerts}</div>
+                      </div>
+                      <div className="rounded-2xl border border-[#26313c] bg-[#111821] p-4">
+                        <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Escalation</div>
+                        <div className="mt-2 inline-flex items-center gap-2 text-[12px] text-[#ffb86c]">
+                          <AlertTriangle className="h-4 w-4" />
+                          Approval pending
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {tab === "observables" && (
+                  <motion.div
+                    key="observables"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    className="space-y-3 px-5 py-5"
+                  >
+                    {selectedIncident.observables.map((observable) => (
+                      <div key={`${selectedIncident.id}-${observable.type}-${observable.value}`} className="flex items-start justify-between gap-3 rounded-2xl border border-[#26313c] bg-[#111821] px-4 py-3">
+                        <div className="min-w-0">
+                          <div className="mb-1 flex items-center gap-2">
+                            <span className="rounded-md border border-[#2c3643] bg-[#0b1117] px-2 py-0.5 text-[10px] uppercase tracking-[0.12em] text-[#9da7b3]">
+                              {observable.type}
+                            </span>
+                            <span className="text-[12px] font-mono text-[#e6edf3] break-all">{observable.value}</span>
+                          </div>
+                          <div className="text-[11px] text-[#6e7681]">Attached to case {selectedIncident.id}</div>
+                        </div>
+                        <span
+                          className={`rounded-full px-2 py-1 text-[10px] font-medium ${
+                            observable.status === "malicious"
+                              ? "bg-[#f85149]/10 text-[#ff938d]"
+                              : observable.status === "isolated"
+                                ? "bg-[#3fb950]/10 text-[#73d48d]"
+                                : "bg-[#d29922]/10 text-[#f2cc60]"
+                          }`}
+                        >
+                          {observable.status}
+                        </span>
+                      </div>
+                    ))}
+                    <div className="rounded-2xl border border-dashed border-[#2f3946] px-4 py-3 text-[11px] text-[#6e7681]">
+                      + analysts can add new observables, enrich them, and keep the whole case narrative in one place
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </section>
+          </div>
+        </div>
       </div>
 
-      {/* Footer */}
-      <div className="flex items-center justify-between px-4 py-2.5 border-t border-[#30363d] text-[11px] text-[#6e7681]">
-        <span>{filteredAlerts.length} of {SAMPLE_ALERTS.length} alerts</span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#3fb950] animate-pulse" />
-          Live
-        </span>
+      <div className="border-t border-[#222b36] bg-[#0f141b] px-4 py-3">
+        <div className="flex flex-wrap items-center justify-between gap-3 text-[11px] text-[#6e7681]">
+          <div className="flex items-center gap-4">
+            <span className="inline-flex items-center gap-1.5">
+              <LayoutGrid className="h-3.5 w-3.5" />
+              Queue, case, and context in one operator surface
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <Globe className="h-3.5 w-3.5" />
+              Search, assignment, incidents, observables, timeline
+            </span>
+          </div>
+          <div className="inline-flex items-center gap-1.5 text-[#73d48d]">
+            <CheckCircle2 className="h-3.5 w-3.5" />
+            Fake UI, real product shape
+          </div>
+        </div>
       </div>
     </div>
   );
