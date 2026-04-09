@@ -224,7 +224,7 @@ export function AlertDemo() {
       <div
         className="transition-transform duration-500 ease-out will-change-transform"
         style={{
-          transform: `translate3d(0, ${parallax * -0.85}px, 0) scale(${1 + Math.abs(parallax) * 0.00035})`,
+          transform: `translate3d(0, ${parallax * -1.55}px, 0)`,
         }}
       >
       <div className="border-b border-[#30363d] bg-[#161b22] px-4 py-3">
