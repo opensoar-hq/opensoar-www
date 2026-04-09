@@ -188,7 +188,7 @@ export function AlertDemo() {
       initial={{ opacity: 0, y: 20, scale: 0.985 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={shellTransition}
-      className="max-h-[min(76vh,920px)] overflow-hidden rounded-t-lg rounded-b-none border border-[#30363d] border-b-0 bg-[#0d1117] shadow-[0_20px_80px_rgba(0,0,0,0.35)]"
+      className="max-h-[min(72vh,860px)] overflow-hidden rounded-t-lg rounded-b-none border border-[#30363d] border-b-0 bg-[#0d1117] shadow-[0_20px_80px_rgba(0,0,0,0.35)]"
     >
       <motion.div
         initial={{ opacity: 0, y: 8 }}
@@ -262,7 +262,7 @@ export function AlertDemo() {
           initial={{ opacity: 0, x: 14 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="px-5 py-5"
+          className="origin-top scale-[0.92] px-5 py-5"
         >
           <div className="grid grid-cols-12 gap-5">
             <div className="col-span-12 lg:col-span-8 space-y-4">
