@@ -196,7 +196,7 @@ const navItems = [
 
 function Pill({ children, className }: { children: string; className: string }) {
   return (
-    <span className={`inline-flex items-center rounded-md border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] ${className}`}>
+    <span className={`inline-flex items-center rounded text-[10px] font-medium uppercase tracking-[0.12em] ${className}`}>
       {children}
     </span>
   );
@@ -219,8 +219,8 @@ export function AlertDemo() {
   }, [search]);
 
   return (
-    <div className="overflow-hidden rounded-[22px] border border-[#30363d] bg-[#0b1117] shadow-[0_30px_120px_rgba(0,0,0,0.45)]">
-      <div className="border-b border-[#222b36] bg-[#0f141b] px-4 py-3">
+    <div className="overflow-hidden rounded-lg border border-[#30363d] bg-[#0d1117] shadow-[0_20px_80px_rgba(0,0,0,0.35)]">
+      <div className="border-b border-[#30363d] bg-[#161b22] px-4 py-3">
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-1.5">
             <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
@@ -228,23 +228,19 @@ export function AlertDemo() {
             <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
           </div>
           <div className="flex min-w-0 flex-1 items-center justify-center">
-            <div className="flex w-full max-w-3xl items-center gap-2 rounded-full border border-[#293341] bg-[#0b1117] px-3 py-2 text-[11px] text-[#7d8794]">
+            <div className="flex w-full max-w-3xl items-center gap-2 rounded-md border border-[#30363d] bg-[#0d1117] px-3 py-2 text-[11px] text-[#6e7681]">
               <Shield className="h-3.5 w-3.5 shrink-0 text-[#8b949e]" />
               <span className="truncate font-mono">https://demo.opensoar.app/incidents/IN-204</span>
             </div>
-          </div>
-          <div className="hidden items-center gap-2 lg:flex">
-            <Pill className="border-[#3fb950]/25 bg-[#3fb950]/10 text-[#73d48d]">Queue live</Pill>
-            <Pill className="border-[#6e7681]/20 bg-[#161b22] text-[#9da7b3]">Fake but clickable</Pill>
           </div>
         </div>
       </div>
 
       <div className="grid lg:grid-cols-[220px_minmax(0,1fr)]">
-        <aside className="border-b border-[#222b36] bg-[#0f141b] lg:border-b-0 lg:border-r">
+        <aside className="border-b border-[#30363d] bg-[#161b22] lg:border-b-0 lg:border-r">
           <div className="px-4 py-4">
             <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#161b22] text-[#e6edf3]">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#0d1117] text-[#e6edf3] border border-[#30363d]">
                 <Shield className="h-4.5 w-4.5" />
               </div>
               <div>
@@ -262,10 +258,10 @@ export function AlertDemo() {
                     key={item.id}
                     type="button"
                     onClick={() => setNav(item.id)}
-                    className={`flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-sm transition-colors ${
+                    className={`flex w-full items-center gap-2.5 rounded-md px-3 py-2.5 text-left text-sm transition-colors ${
                       active
-                        ? "bg-[#161b22] text-[#e6edf3]"
-                        : "text-[#8b949e] hover:bg-[#131a23] hover:text-[#e6edf3]"
+                        ? "bg-[#0d1117] text-[#e6edf3] border border-[#30363d]"
+                        : "text-[#8b949e] hover:bg-[#1c2129] hover:text-[#e6edf3] border border-transparent"
                     }`}
                   >
                     <Icon className="h-4 w-4 shrink-0" />
@@ -276,14 +272,14 @@ export function AlertDemo() {
               })}
             </div>
 
-            <div className="mt-6 rounded-2xl border border-[#26313c] bg-[#111821] p-3">
+            <div className="mt-6 rounded-lg border border-[#30363d] bg-[#0d1117] p-3">
               <div className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#6e7681]">Shift Snapshot</div>
               <div className="grid grid-cols-2 gap-2 text-[11px]">
-                <div className="rounded-xl bg-[#0b1117] p-2">
+                <div className="rounded-md bg-[#161b22] p-2">
                   <div className="text-[#6e7681]">Open alerts</div>
                   <div className="mt-1 text-lg font-semibold text-[#e6edf3]">24</div>
                 </div>
-                <div className="rounded-xl bg-[#0b1117] p-2">
+                <div className="rounded-md bg-[#161b22] p-2">
                   <div className="text-[#6e7681]">Active cases</div>
                   <div className="mt-1 text-lg font-semibold text-[#e6edf3]">7</div>
                 </div>
@@ -294,14 +290,14 @@ export function AlertDemo() {
 
         <div className="bg-[#0d1117]">
           <div className="grid gap-0 xl:grid-cols-[minmax(0,1.06fr)_minmax(360px,0.94fr)]">
-            <section className="border-b border-[#222b36] xl:border-b-0 xl:border-r">
-              <div className="border-b border-[#222b36] px-5 py-4">
+            <section className="border-b border-[#30363d] xl:border-b-0 xl:border-r">
+              <div className="border-b border-[#30363d] px-5 py-4">
                 <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <div className="text-[10px] uppercase tracking-[0.16em] text-[#6e7681]">Operator Queue</div>
-                    <div className="mt-1 text-lg font-semibold text-[#e6edf3]">Alerts needing judgment</div>
+                    <div className="text-[10px] uppercase tracking-[0.16em] text-[#6e7681]">Alerts</div>
+                    <div className="mt-1 text-lg font-semibold text-[#e6edf3]">Triage queue</div>
                   </div>
-                  <div className="flex items-center gap-2 rounded-full border border-[#293341] bg-[#0b1117] px-3 py-2 text-[12px] text-[#8b949e]">
+                  <div className="flex items-center gap-2 rounded-md border border-[#30363d] bg-[#161b22] px-3 py-2 text-[12px] text-[#8b949e]">
                     <Search className="h-3.5 w-3.5 shrink-0" />
                     <input
                       value={search}
@@ -313,21 +309,21 @@ export function AlertDemo() {
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-3">
-                  <div className="rounded-2xl border border-[#26313c] bg-[#111821] p-3">
+                  <div className="rounded-lg border border-[#30363d] bg-[#161b22] p-3">
                     <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Critical queue</div>
                     <div className="mt-2 flex items-end justify-between">
                       <div className="text-2xl font-semibold text-[#ff7b72]">3</div>
                       <div className="text-[11px] text-[#8b949e]">2 unassigned</div>
                     </div>
                   </div>
-                  <div className="rounded-2xl border border-[#26313c] bg-[#111821] p-3">
+                  <div className="rounded-lg border border-[#30363d] bg-[#161b22] p-3">
                     <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Automation runs</div>
                     <div className="mt-2 flex items-end justify-between">
                       <div className="text-2xl font-semibold text-[#e6edf3]">11</div>
                       <div className="text-[11px] text-[#73d48d]">8 completed</div>
                     </div>
                   </div>
-                  <div className="rounded-2xl border border-[#26313c] bg-[#111821] p-3">
+                  <div className="rounded-lg border border-[#30363d] bg-[#161b22] p-3">
                     <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Mean triage</div>
                     <div className="mt-2 flex items-end justify-between">
                       <div className="text-2xl font-semibold text-[#e6edf3]">6m</div>
@@ -353,11 +349,11 @@ export function AlertDemo() {
                       }`}
                     >
                       <div className="mb-2 flex items-start gap-3">
-                        <Pill className={severityClasses[alert.severity]}>{alert.severity}</Pill>
-                        <div className="min-w-0 flex-1">
-                          <div className="truncate text-[14px] font-semibold text-[#e6edf3]">{alert.title}</div>
-                          <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-[#8b949e]">
-                            <span>{alert.source}</span>
+                      <Pill className={severityClasses[alert.severity]}>{alert.severity}</Pill>
+                      <div className="min-w-0 flex-1">
+                        <div className="truncate text-[14px] font-semibold text-[#e6edf3]">{alert.title}</div>
+                        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-[#8b949e]">
+                          <span>{alert.source}</span>
                             <span className="font-mono">{alert.sourceIp}</span>
                             <span>{alert.host}</span>
                           </div>
@@ -387,11 +383,11 @@ export function AlertDemo() {
               </div>
             </section>
 
-            <section className="bg-[#0f141b]">
-              <div className="border-b border-[#222b36] px-5 py-4">
+            <section className="bg-[#161b22]">
+              <div className="border-b border-[#30363d] px-5 py-4">
                 <div className="mb-3 flex flex-wrap items-start justify-between gap-3">
                   <div>
-                    <div className="text-[10px] uppercase tracking-[0.16em] text-[#6e7681]">Selected alert</div>
+                    <div className="text-[10px] uppercase tracking-[0.16em] text-[#6e7681]">Alert</div>
                     <div className="mt-1 text-lg font-semibold text-[#e6edf3]">{selectedAlert.title}</div>
                   </div>
                   <div className="flex items-center gap-2">
@@ -402,12 +398,12 @@ export function AlertDemo() {
                   </div>
                 </div>
 
-                <div className="mb-4 rounded-2xl border border-[#293341] bg-[#0b1117] p-4">
+                <div className="mb-4 rounded-lg border border-[#30363d] bg-[#0d1117] p-4">
                   <div className="mb-2 text-[10px] uppercase tracking-[0.16em] text-[#6e7681]">Analyst summary</div>
                   <p className="text-[13px] leading-relaxed text-[#8b949e]">{selectedAlert.summary}</p>
                   <div className="mt-3 flex flex-wrap gap-1.5">
                     {selectedAlert.tags.map((tag) => (
-                      <span key={tag} className="rounded-md border border-[#2c3643] bg-[#111821] px-2 py-0.5 text-[10px] uppercase tracking-[0.12em] text-[#9da7b3]">
+                      <span key={tag} className="rounded border border-[#30363d] bg-[#161b22] px-2 py-0.5 text-[10px] uppercase tracking-[0.12em] text-[#9da7b3]">
                         {tag}
                       </span>
                     ))}
@@ -427,7 +423,7 @@ export function AlertDemo() {
                       className={`rounded-full px-3 py-1.5 text-[11px] font-medium transition-colors ${
                         tab === entry.id
                           ? "bg-[#e6edf3] text-[#0d1117]"
-                          : "bg-[#111821] text-[#8b949e] hover:text-[#e6edf3]"
+                          : "bg-[#0d1117] text-[#8b949e] hover:text-[#e6edf3]"
                       }`}
                     >
                       {entry.label}
@@ -458,7 +454,7 @@ export function AlertDemo() {
                             }`}
                           />
                         </div>
-                        <div className="min-w-0 flex-1 rounded-2xl border border-[#26313c] bg-[#111821] px-4 py-3">
+                        <div className="min-w-0 flex-1 rounded-lg border border-[#30363d] bg-[#0d1117] px-4 py-3">
                           <div className="mb-1 flex items-center justify-between gap-3">
                             <div className="text-[12px] font-semibold text-[#e6edf3]">{entry.label}</div>
                             <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">{entry.time}</div>
@@ -478,10 +474,10 @@ export function AlertDemo() {
                     exit={{ opacity: 0, y: -8 }}
                     className="space-y-4 px-5 py-5"
                   >
-                    <div className="rounded-2xl border border-[#26313c] bg-[#111821] p-4">
+                    <div className="rounded-lg border border-[#30363d] bg-[#0d1117] p-4">
                       <div className="mb-3 flex items-start justify-between gap-3">
                         <div>
-                          <div className="text-[10px] uppercase tracking-[0.16em] text-[#6e7681]">Linked incident</div>
+                          <div className="text-[10px] uppercase tracking-[0.16em] text-[#6e7681]">Incident</div>
                           <div className="mt-1 text-[16px] font-semibold text-[#e6edf3]">{selectedIncident.title}</div>
                         </div>
                         <span className={`rounded-md px-2 py-0.5 text-[10px] font-medium ${incidentStatusClasses[selectedIncident.status]}`}>
@@ -492,22 +488,22 @@ export function AlertDemo() {
                     </div>
 
                     <div className="grid gap-3 sm:grid-cols-3">
-                      <div className="rounded-2xl border border-[#26313c] bg-[#111821] p-4">
+                      <div className="rounded-lg border border-[#30363d] bg-[#0d1117] p-4">
                         <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Owner</div>
                         <div className="mt-2 flex items-center gap-2 text-sm font-semibold text-[#e6edf3]">
                           <UserRound className="h-4 w-4 text-[#73d48d]" />
                           {selectedIncident.owner}
                         </div>
                       </div>
-                      <div className="rounded-2xl border border-[#26313c] bg-[#111821] p-4">
+                      <div className="rounded-lg border border-[#30363d] bg-[#0d1117] p-4">
                         <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Linked alerts</div>
                         <div className="mt-2 text-2xl font-semibold text-[#e6edf3]">{selectedIncident.alerts}</div>
                       </div>
-                      <div className="rounded-2xl border border-[#26313c] bg-[#111821] p-4">
-                        <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Escalation</div>
+                      <div className="rounded-lg border border-[#30363d] bg-[#0d1117] p-4">
+                        <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">State</div>
                         <div className="mt-2 inline-flex items-center gap-2 text-[12px] text-[#ffb86c]">
                           <AlertTriangle className="h-4 w-4" />
-                          Approval pending
+                          Analyst review
                         </div>
                       </div>
                     </div>
@@ -523,10 +519,10 @@ export function AlertDemo() {
                     className="space-y-3 px-5 py-5"
                   >
                     {selectedIncident.observables.map((observable) => (
-                      <div key={`${selectedIncident.id}-${observable.type}-${observable.value}`} className="flex items-start justify-between gap-3 rounded-2xl border border-[#26313c] bg-[#111821] px-4 py-3">
+                      <div key={`${selectedIncident.id}-${observable.type}-${observable.value}`} className="flex items-start justify-between gap-3 rounded-lg border border-[#30363d] bg-[#0d1117] px-4 py-3">
                         <div className="min-w-0">
                           <div className="mb-1 flex items-center gap-2">
-                            <span className="rounded-md border border-[#2c3643] bg-[#0b1117] px-2 py-0.5 text-[10px] uppercase tracking-[0.12em] text-[#9da7b3]">
+                            <span className="rounded border border-[#30363d] bg-[#161b22] px-2 py-0.5 text-[10px] uppercase tracking-[0.12em] text-[#9da7b3]">
                               {observable.type}
                             </span>
                             <span className="text-[12px] font-mono text-[#e6edf3] break-all">{observable.value}</span>
@@ -546,8 +542,8 @@ export function AlertDemo() {
                         </span>
                       </div>
                     ))}
-                    <div className="rounded-2xl border border-dashed border-[#2f3946] px-4 py-3 text-[11px] text-[#6e7681]">
-                      + analysts can add new observables, enrich them, and keep the whole case narrative in one place
+                    <div className="rounded-lg border border-dashed border-[#30363d] px-4 py-3 text-[11px] text-[#6e7681]">
+                      Analysts can add new observables, enrich them, and keep the whole case narrative in one place.
                     </div>
                   </motion.div>
                 )}
@@ -557,12 +553,12 @@ export function AlertDemo() {
         </div>
       </div>
 
-      <div className="border-t border-[#222b36] bg-[#0f141b] px-4 py-3">
+      <div className="border-t border-[#30363d] bg-[#161b22] px-4 py-3">
         <div className="flex flex-wrap items-center justify-between gap-3 text-[11px] text-[#6e7681]">
           <div className="flex items-center gap-4">
             <span className="inline-flex items-center gap-1.5">
               <LayoutGrid className="h-3.5 w-3.5" />
-              Queue, case, and context in one operator surface
+              Alerts, incidents, and context in one view
             </span>
             <span className="inline-flex items-center gap-1.5">
               <Globe className="h-3.5 w-3.5" />
@@ -571,7 +567,7 @@ export function AlertDemo() {
           </div>
           <div className="inline-flex items-center gap-1.5 text-[#73d48d]">
             <CheckCircle2 className="h-3.5 w-3.5" />
-            Fake UI, real product shape
+            Demo workspace
           </div>
         </div>
       </div>
