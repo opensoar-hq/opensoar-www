@@ -15,7 +15,7 @@ import {
   Shield,
   UserCheck,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Severity = "critical" | "high" | "medium" | "low";
 type AlertStatus = "new" | "in_progress" | "resolved";
@@ -179,9 +179,51 @@ function SidebarField({
 
 export function AlertDemo() {
   const [activeNav, setActiveNav] = useState("alerts");
+  const [parallax, setParallax] = useState(0);
+  const shellRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    let frame = 0;
+
+    const update = () => {
+      frame = 0;
+      const node = shellRef.current;
+      if (!node) return;
+
+      const rect = node.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || 1;
+      const progress = Math.max(
+        0,
+        Math.min(1, (viewportHeight - rect.top) / (viewportHeight + rect.height)),
+      );
+      const centered = progress - 0.5;
+      setParallax(centered * 18);
+    };
+
+    const schedule = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+
+    return () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+    };
+  }, []);
 
   return (
-    <div className="max-h-[min(76vh,920px)] overflow-hidden rounded-t-lg rounded-b-none border border-[#30363d] border-b-0 bg-[#0d1117] shadow-[0_20px_80px_rgba(0,0,0,0.35)]">
+    <div
+      ref={shellRef}
+      className="max-h-[min(76vh,920px)] overflow-hidden rounded-t-lg rounded-b-none border border-[#30363d] border-b-0 bg-[#0d1117] shadow-[0_20px_80px_rgba(0,0,0,0.35)] will-change-transform"
+      style={{
+        transform: `translate3d(0, ${parallax}px, 0)`,
+      }}
+    >
       <div className="border-b border-[#30363d] bg-[#161b22] px-4 py-3">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5">
