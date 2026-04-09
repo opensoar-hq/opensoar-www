@@ -181,7 +181,7 @@ export function AlertDemo() {
   const [activeNav, setActiveNav] = useState("alerts");
 
   return (
-    <div className="max-h-[min(72vh,860px)] overflow-hidden rounded-lg border border-[#30363d] bg-[#0d1117] shadow-[0_20px_80px_rgba(0,0,0,0.35)]">
+    <div className="max-h-[min(76vh,920px)] overflow-hidden rounded-t-lg rounded-b-none border border-[#30363d] border-b-0 bg-[#0d1117] shadow-[0_20px_80px_rgba(0,0,0,0.35)]">
       <div className="border-b border-[#30363d] bg-[#161b22] px-4 py-3">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5">
