@@ -273,14 +273,14 @@ export function AlertDemo() {
             </div>
 
             <div className="mt-6 rounded-lg border border-[#30363d] bg-[#0d1117] p-3">
-              <div className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#6e7681]">Shift Snapshot</div>
+              <div className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#6e7681]">Shift</div>
               <div className="grid grid-cols-2 gap-2 text-[11px]">
                 <div className="rounded-md bg-[#161b22] p-2">
-                  <div className="text-[#6e7681]">Open alerts</div>
+                  <div className="text-[#6e7681]">Open</div>
                   <div className="mt-1 text-lg font-semibold text-[#e6edf3]">24</div>
                 </div>
                 <div className="rounded-md bg-[#161b22] p-2">
-                  <div className="text-[#6e7681]">Active cases</div>
+                  <div className="text-[#6e7681]">Active</div>
                   <div className="mt-1 text-lg font-semibold text-[#e6edf3]">7</div>
                 </div>
               </div>
@@ -310,21 +310,21 @@ export function AlertDemo() {
 
                 <div className="grid gap-3 sm:grid-cols-3">
                   <div className="rounded-lg border border-[#30363d] bg-[#161b22] p-3">
-                    <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Critical queue</div>
+                    <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Critical</div>
                     <div className="mt-2 flex items-end justify-between">
                       <div className="text-2xl font-semibold text-[#ff7b72]">3</div>
                       <div className="text-[11px] text-[#8b949e]">2 unassigned</div>
                     </div>
                   </div>
                   <div className="rounded-lg border border-[#30363d] bg-[#161b22] p-3">
-                    <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Automation runs</div>
+                    <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Automation</div>
                     <div className="mt-2 flex items-end justify-between">
                       <div className="text-2xl font-semibold text-[#e6edf3]">11</div>
                       <div className="text-[11px] text-[#73d48d]">8 completed</div>
                     </div>
                   </div>
                   <div className="rounded-lg border border-[#30363d] bg-[#161b22] p-3">
-                    <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Mean triage</div>
+                    <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Triage</div>
                     <div className="mt-2 flex items-end justify-between">
                       <div className="text-2xl font-semibold text-[#e6edf3]">6m</div>
                       <div className="text-[11px] text-[#8b949e]">today</div>
