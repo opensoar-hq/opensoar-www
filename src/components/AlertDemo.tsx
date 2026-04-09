@@ -60,6 +60,29 @@ const playbooks = [
   { name: "Escalate privileged auth", description: "Open case and notify on-call" },
 ];
 
+const playbookCode = [
+  '@playbook(trigger="webhook", name="contain_ssh_bruteforce")',
+  "async def contain_ssh_bruteforce(alert):",
+  "    if alert.severity != 'critical':",
+  "        return",
+  "",
+  "    source_ip = alert.source_ip",
+  "    host = alert.hostname",
+  "",
+  "    await update_current_alert(",
+  "        status='in_progress',",
+  "        determination='suspicious',",
+  "        reason='Containment workflow started',",
+  "    )",
+  "",
+  "    await add_current_alert_comment(",
+  "        f'Blocking {source_ip} and preserving logs on {host}'",
+  "    )",
+  "",
+  "    await run_action('block_ip', ip=source_ip)",
+  "    await run_action('preserve_auth_logs', host=host)",
+];
+
 const timeline = [
   {
     label: "Mia",
@@ -176,6 +199,45 @@ function SidebarField({
     <div className="flex items-center justify-between">
       <span className="text-[11px] text-[#6e7681] uppercase tracking-wide">{label}</span>
       <span className={`text-xs text-[#e6edf3] ${mono ? "font-mono" : ""}`}>{value}</span>
+    </div>
+  );
+}
+
+function CodePane() {
+  return (
+    <div className="border border-[#30363d] rounded-lg bg-[#161b22] overflow-hidden">
+      <div className="px-5 py-4 border-b border-[#30363d] flex items-center justify-between">
+        <div>
+          <h3 className="text-sm font-medium text-[#e6edf3] m-0">playbook.py</h3>
+          <div className="mt-1 text-[11px] text-[#6e7681]">Pure Python, async, versionable</div>
+        </div>
+        <span className="rounded-md border border-[#30363d] bg-[#0d1117] px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-[#8b949e]">
+          Python
+        </span>
+      </div>
+      <div className="bg-[#0d1117] px-5 py-4">
+        <pre className="m-0 overflow-x-auto text-[11px] leading-6 text-[#8b949e] font-mono">
+          <code>
+            {playbookCode.map((line, index) => {
+              const color =
+                line.startsWith("@playbook") ? "#ff7b72"
+                : line.trim().startsWith("async def") ? "#ff7b72"
+                : line.includes("update_current_alert") || line.includes("add_current_alert_comment") || line.includes("run_action") ? "#79c0ff"
+                : line.includes("status=") || line.includes("determination=") || line.includes("reason=") ? "#a5d6ff"
+                : line.includes("if ") || line.includes("return") ? "#ff7b72"
+                : line.includes("source_ip") || line.includes("host") ? "#d2a8ff"
+                : "#8b949e";
+
+              return (
+                <div key={index} className="flex gap-4">
+                  <span className="w-5 select-none text-right text-[#6e7681]">{index + 1}</span>
+                  <span style={{ color }}>{line || " "}</span>
+                </div>
+              );
+            })}
+          </code>
+        </pre>
+      </div>
     </div>
   );
 }
@@ -468,6 +530,7 @@ export function AlertDemo() {
 
             <div className="col-span-12 lg:col-span-4 space-y-4">
               {[
+                <CodePane key="code" />,
                 <Card
                   key="incidents"
                   title="Incidents"
@@ -497,19 +560,6 @@ export function AlertDemo() {
                           <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium uppercase tracking-wide whitespace-nowrap bg-[#f85149]/10 text-[#ff938d]">
                             {incident.status}
                           </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </Card>,
-                <Card key="playbooks" title="Run Playbook">
-                  <div className="space-y-2">
-                    {playbooks.map((playbook) => (
-                      <div key={playbook.name} className="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-left bg-transparent border border-[#30363d] hover:border-[#e6edf3]/30 hover:bg-[#1c2129]">
-                        <Play className="h-[13px] w-[13px] text-[#8b949e] shrink-0" />
-                        <div className="flex-1 min-w-0">
-                          <div className="text-xs text-[#e6edf3] font-medium truncate">{playbook.name}</div>
-                          <div className="text-[10px] text-[#6e7681] truncate">{playbook.description}</div>
                         </div>
                       </div>
                     ))}
