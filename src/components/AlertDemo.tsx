@@ -197,7 +197,7 @@ export function AlertDemo() {
         Math.min(1, (viewportHeight - rect.top) / (viewportHeight + rect.height)),
       );
       const centered = progress - 0.5;
-      setParallax(centered * 18);
+      setParallax(centered * 34);
     };
 
     const schedule = () => {
@@ -221,7 +221,7 @@ export function AlertDemo() {
       ref={shellRef}
       className="max-h-[min(76vh,920px)] overflow-hidden rounded-t-lg rounded-b-none border border-[#30363d] border-b-0 bg-[#0d1117] shadow-[0_20px_80px_rgba(0,0,0,0.35)] will-change-transform"
       style={{
-        transform: `translate3d(0, ${parallax}px, 0)`,
+        transform: `perspective(1600px) rotateX(${parallax * -0.045}deg) translate3d(0, ${parallax}px, 0) scale(${1 - Math.abs(parallax) * 0.0007})`,
       }}
     >
       <div className="border-b border-[#30363d] bg-[#161b22] px-4 py-3">
