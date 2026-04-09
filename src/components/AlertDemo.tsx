@@ -180,7 +180,6 @@ function SidebarField({
 export function AlertDemo() {
   const [activeNav, setActiveNav] = useState("alerts");
   const [parallax, setParallax] = useState(0);
-  const [tilt, setTilt] = useState({ x: 0, y: 0, innerX: 0, innerY: 0 });
   const shellRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -198,7 +197,7 @@ export function AlertDemo() {
         Math.min(1, (viewportHeight - rect.top) / (viewportHeight + rect.height)),
       );
       const centered = progress - 0.5;
-      setParallax(centered * 24);
+      setParallax(centered * 44);
     };
 
     const schedule = () => {
@@ -217,39 +216,15 @@ export function AlertDemo() {
     };
   }, []);
 
-  const handlePointerMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    const node = shellRef.current;
-    if (!node) return;
-    const rect = node.getBoundingClientRect();
-    const x = (event.clientX - rect.left) / rect.width - 0.5;
-    const y = (event.clientY - rect.top) / rect.height - 0.5;
-
-    setTilt({
-      x: y * -6,
-      y: x * 8,
-      innerX: x * -10,
-      innerY: y * -10,
-    });
-  };
-
-  const resetPointer = () => {
-    setTilt({ x: 0, y: 0, innerX: 0, innerY: 0 });
-  };
-
   return (
     <div
       ref={shellRef}
-      onMouseMove={handlePointerMove}
-      onMouseLeave={resetPointer}
-      className="max-h-[min(76vh,920px)] overflow-hidden rounded-t-lg rounded-b-none border border-[#30363d] border-b-0 bg-[#0d1117] shadow-[0_20px_80px_rgba(0,0,0,0.35)] will-change-transform transition-transform duration-300 ease-out"
-      style={{
-        transform: `perspective(1800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translate3d(0, ${parallax}px, 0) scale(${1 - Math.abs(parallax) * 0.0005})`,
-      }}
+      className="max-h-[min(76vh,920px)] overflow-hidden rounded-t-lg rounded-b-none border border-[#30363d] border-b-0 bg-[#0d1117] shadow-[0_20px_80px_rgba(0,0,0,0.35)]"
     >
       <div
-        className="transition-transform duration-300 ease-out"
+        className="transition-transform duration-500 ease-out will-change-transform"
         style={{
-          transform: `translate3d(${tilt.innerX}px, ${tilt.innerY}px, 0)`,
+          transform: `translate3d(0, ${parallax * -0.85}px, 0) scale(${1 + Math.abs(parallax) * 0.00035})`,
         }}
       >
       <div className="border-b border-[#30363d] bg-[#161b22] px-4 py-3">
