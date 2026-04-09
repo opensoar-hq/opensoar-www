@@ -3,7 +3,7 @@ import { DotMatrixBg } from './ui/dot-matrix-bg';
 import InstallCommand from './InstallCommand.astro';
 ---
 
-<section class="relative pt-28 pb-20 md:pt-36 md:pb-28 overflow-hidden">
+<section class="relative pt-24 pb-8 md:pt-30 md:pb-10 overflow-hidden">
   <!-- Dot matrix background -->
   <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
     <DotMatrixBg
@@ -20,17 +20,17 @@ import InstallCommand from './InstallCommand.astro';
   </div>
   <div class="relative z-10 mx-auto max-w-6xl px-6 text-center">
     <!-- Badge -->
-    <div class="inline-flex items-center gap-2 text-heading bg-heading/10 px-2 py-0.5 rounded font-medium text-xs mb-8">
+    <div class="inline-flex items-center gap-2 text-heading bg-heading/10 px-2 py-0.5 rounded font-medium text-xs mb-6">
       <span class="w-1.5 h-1.5 rounded-full bg-success"></span>
       Currently in Beta &mdash; Apache 2.0 Licensed
     </div>
 
-    <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold text-heading leading-tight tracking-tight mb-5">
+    <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold text-heading leading-tight tracking-tight mb-4">
       Alert comes in.<br/>
       Python handles the rest.
     </h1>
 
-    <p class="text-base md:text-lg text-text max-w-2xl mx-auto mb-10 leading-relaxed">
+    <p class="text-base md:text-lg text-text max-w-2xl mx-auto mb-7 leading-relaxed">
       Open-source platform for automating alert triage, enrichment, and response &mdash; in real Python. No DSL, no sandbox, no per-action billing. Works for security, IT ops, or anything that pages you at 3 AM.
     </p>
 
