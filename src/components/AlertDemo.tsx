@@ -1,16 +1,16 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   Activity,
   AlertTriangle,
   Briefcase,
   CheckCircle2,
-  ChevronRight,
   Clock3,
   Globe,
   LayoutGrid,
   Play,
   Search,
   Shield,
+  Settings2,
   UserRound,
 } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -18,8 +18,6 @@ import { useMemo, useState } from "react";
 type Severity = "critical" | "high" | "medium" | "low";
 type AlertStatus = "new" | "in_progress" | "resolved";
 type IncidentStatus = "open" | "investigating" | "contained";
-type PanelTab = "timeline" | "incident" | "observables";
-
 interface AlertRecord {
   id: string;
   title: string;
@@ -188,10 +186,12 @@ const incidentStatusClasses: Record<IncidentStatus, string> = {
 };
 
 const navItems = [
+  { id: "dashboard", label: "Dashboard", icon: LayoutGrid },
   { id: "queue", label: "Alerts", icon: AlertTriangle },
   { id: "cases", label: "Incidents", icon: Briefcase },
   { id: "runs", label: "Runs", icon: Play },
-  { id: "actions", label: "Actions", icon: Activity },
+  { id: "actions", label: "Activity", icon: Activity },
+  { id: "settings", label: "Settings", icon: Settings2 },
 ];
 
 function Pill({ children, className }: { children: string; className: string }) {
@@ -205,7 +205,6 @@ function Pill({ children, className }: { children: string; className: string }) 
 export function AlertDemo() {
   const [selectedAlertId, setSelectedAlertId] = useState("AL-1042");
   const [search, setSearch] = useState("");
-  const [tab, setTab] = useState<PanelTab>("timeline");
   const [nav, setNav] = useState("queue");
 
   const selectedAlert = alerts.find((alert) => alert.id === selectedAlertId) ?? alerts[0];
@@ -220,22 +219,6 @@ export function AlertDemo() {
 
   return (
     <div className="overflow-hidden rounded-lg border border-[#30363d] bg-[#0d1117] shadow-[0_20px_80px_rgba(0,0,0,0.35)]">
-      <div className="border-b border-[#30363d] bg-[#161b22] px-4 py-3">
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
-            <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
-            <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
-          </div>
-          <div className="flex min-w-0 flex-1 items-center justify-center">
-            <div className="flex w-full max-w-3xl items-center gap-2 rounded-md border border-[#30363d] bg-[#0d1117] px-3 py-2 text-[11px] text-[#6e7681]">
-              <Shield className="h-3.5 w-3.5 shrink-0 text-[#8b949e]" />
-              <span className="truncate font-mono">https://demo.opensoar.app/incidents/IN-204</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div className="grid lg:grid-cols-[220px_minmax(0,1fr)]">
         <aside className="border-b border-[#30363d] bg-[#161b22] lg:border-b-0 lg:border-r">
           <div className="px-4 py-4">
@@ -258,12 +241,13 @@ export function AlertDemo() {
                     key={item.id}
                     type="button"
                     onClick={() => setNav(item.id)}
-                    className={`flex w-full items-center gap-2.5 rounded-md px-3 py-2.5 text-left text-sm transition-colors ${
+                    className={`relative flex w-full items-center gap-2.5 rounded-md px-3 py-2.5 text-left text-sm transition-colors ${
                       active
                         ? "bg-[#0d1117] text-[#e6edf3] border border-[#30363d]"
                         : "text-[#8b949e] hover:bg-[#1c2129] hover:text-[#e6edf3] border border-transparent"
                     }`}
                   >
+                    {active && <span className="absolute left-0 top-2.5 h-5 w-[3px] rounded-r-full bg-[#e6edf3]" />}
                     <Icon className="h-4 w-4 shrink-0" />
                     <span className="flex-1">{item.label}</span>
                     {item.id === "queue" && <span className="text-[11px] text-[#ff7b72]">24</span>}
@@ -289,25 +273,50 @@ export function AlertDemo() {
         </aside>
 
         <div className="bg-[#0d1117]">
+          <div className="border-b border-[#30363d] px-5 py-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="text-[#6e7681]">
+                  <AlertTriangle className="h-[18px] w-[18px]" />
+                </span>
+                <h2 className="m-0 text-base font-semibold text-[#e6edf3]">Alerts</h2>
+                <span className="text-xs text-[#6e7681]">(24)</span>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="flex items-center gap-2 rounded-md border border-[#30363d] bg-[#161b22] px-3 py-2 text-[12px] text-[#8b949e]">
+                  <Search className="h-3.5 w-3.5 shrink-0" />
+                  <input
+                    value={search}
+                    onChange={(event) => setSearch(event.target.value)}
+                    placeholder="Search alerts..."
+                    className="w-40 bg-transparent text-[#e6edf3] outline-none placeholder:text-[#6e7681]"
+                  />
+                </div>
+                <button
+                  type="button"
+                  className="rounded-md border border-[#30363d] bg-[#161b22] px-2.5 py-1.5 text-xs text-[#8b949e]"
+                >
+                  All severities
+                </button>
+                <button
+                  type="button"
+                  className="rounded-md border border-[#30363d] bg-[#161b22] px-2.5 py-1.5 text-xs text-[#8b949e]"
+                >
+                  All statuses
+                </button>
+                <button
+                  type="button"
+                  className="rounded-md border border-[#e6edf3]/30 bg-[#e6edf3]/15 px-2.5 py-1 text-xs font-medium text-[#e6edf3]"
+                >
+                  Create
+                </button>
+              </div>
+            </div>
+          </div>
+
           <div className="grid gap-0 xl:grid-cols-[minmax(0,1.06fr)_minmax(360px,0.94fr)]">
             <section className="border-b border-[#30363d] xl:border-b-0 xl:border-r">
               <div className="border-b border-[#30363d] px-5 py-4">
-                <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <div className="text-[10px] uppercase tracking-[0.16em] text-[#6e7681]">Alerts</div>
-                    <div className="mt-1 text-lg font-semibold text-[#e6edf3]">Triage queue</div>
-                  </div>
-                  <div className="flex items-center gap-2 rounded-md border border-[#30363d] bg-[#161b22] px-3 py-2 text-[12px] text-[#8b949e]">
-                    <Search className="h-3.5 w-3.5 shrink-0" />
-                    <input
-                      value={search}
-                      onChange={(event) => setSearch(event.target.value)}
-                      placeholder="Search alerts, hosts, IPs"
-                      className="w-44 bg-transparent text-[#e6edf3] outline-none placeholder:text-[#6e7681]"
-                    />
-                  </div>
-                </div>
-
                 <div className="grid gap-3 sm:grid-cols-3">
                   <div className="rounded-lg border border-[#30363d] bg-[#161b22] p-3">
                     <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Critical</div>
@@ -333,7 +342,14 @@ export function AlertDemo() {
                 </div>
               </div>
 
-              <div className="divide-y divide-[#202834]">
+              <div className="border border-x-0 border-b-0 border-[#30363d] bg-[#161b22]">
+                <div className="grid grid-cols-[90px_minmax(0,1fr)_110px_96px_92px] border-b border-[#30363d] px-5 py-2.5 text-left text-[11px] font-medium uppercase tracking-wide text-[#6e7681]">
+                  <div>Severity</div>
+                  <div>Title</div>
+                  <div>Status</div>
+                  <div>Source</div>
+                  <div>Time</div>
+                </div>
                 {filteredAlerts.map((alert, index) => {
                   const active = alert.id === selectedAlertId;
                   return (
@@ -344,38 +360,29 @@ export function AlertDemo() {
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.2, delay: index * 0.03 }}
-                      className={`w-full px-5 py-4 text-left transition-colors ${
+                      className={`grid w-full grid-cols-[90px_minmax(0,1fr)_110px_96px_92px] items-center gap-3 border-b border-[#30363d] px-5 py-3 text-left transition-colors ${
                         active ? "bg-[#111821]" : "hover:bg-[#10161f]"
                       }`}
                     >
-                      <div className="mb-2 flex items-start gap-3">
-                      <Pill className={severityClasses[alert.severity]}>{alert.severity}</Pill>
-                      <div className="min-w-0 flex-1">
-                        <div className="truncate text-[14px] font-semibold text-[#e6edf3]">{alert.title}</div>
-                        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-[#8b949e]">
-                          <span>{alert.source}</span>
-                            <span className="font-mono">{alert.sourceIp}</span>
-                            <span>{alert.host}</span>
-                          </div>
-                        </div>
-                        <ChevronRight className={`mt-0.5 h-4 w-4 shrink-0 transition-transform ${active ? "translate-x-1 text-[#e6edf3]" : "text-[#6e7681]"}`} />
+                      <div>
+                        <Pill className={severityClasses[alert.severity]}>{alert.severity}</Pill>
                       </div>
-                      <div className="flex flex-wrap items-center gap-2">
+                      <div className="min-w-0">
+                        <div className="truncate text-[13px] font-medium text-[#e6edf3]">{alert.title}</div>
+                        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-[#8b949e]">
+                          <span className="font-mono">{alert.sourceIp}</span>
+                          <span>{alert.host}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center">
                         <span className={`rounded-md px-2 py-0.5 text-[10px] font-medium ${alertStatusClasses[alert.status]}`}>
                           {alert.status.replace("_", " ")}
                         </span>
-                        {alert.analyst ? (
-                          <span className="inline-flex items-center gap-1 text-[10px] text-[#73d48d]">
-                            <UserRound className="h-3 w-3" />
-                            {alert.analyst}
-                          </span>
-                        ) : (
-                          <span className="text-[10px] text-[#ffb86c]">Unassigned</span>
-                        )}
-                        <span className="inline-flex items-center gap-1 text-[10px] text-[#6e7681]">
-                          <Clock3 className="h-3 w-3" />
-                          {alert.time}
-                        </span>
+                      </div>
+                      <div className="text-[11px] text-[#8b949e]">{alert.source}</div>
+                      <div className="inline-flex items-center gap-1 text-[11px] text-[#6e7681]">
+                        <Clock3 className="h-3 w-3" />
+                        {alert.time}
                       </div>
                     </motion.button>
                   );
@@ -387,12 +394,12 @@ export function AlertDemo() {
               <div className="border-b border-[#30363d] px-5 py-4">
                 <div className="mb-3 flex flex-wrap items-start justify-between gap-3">
                   <div>
-                    <div className="text-[10px] uppercase tracking-[0.16em] text-[#6e7681]">Alert</div>
-                    <div className="mt-1 text-lg font-semibold text-[#e6edf3]">{selectedAlert.title}</div>
+                    <div className="text-[10px] uppercase tracking-[0.16em] text-[#6e7681]">Selected alert</div>
+                    <div className="mt-1 text-base font-semibold text-[#e6edf3]">{selectedAlert.title}</div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className={`rounded-md px-2 py-0.5 text-[10px] font-medium ${alertStatusClasses[selectedAlert.status]}`}>
-                      {selectedAlert.status.replace("_", " ")}
+                      <span className={`rounded-md px-2 py-0.5 text-[10px] font-medium ${alertStatusClasses[selectedAlert.status]}`}>
+                        {selectedAlert.status.replace("_", " ")}
                     </span>
                     <Pill className={severityClasses[selectedAlert.severity]}>{selectedAlert.severity}</Pill>
                   </div>
@@ -410,119 +417,57 @@ export function AlertDemo() {
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-2">
-                  {([
-                    { id: "timeline", label: "Timeline" },
-                    { id: "incident", label: "Incident" },
-                    { id: "observables", label: "Observables" },
-                  ] as Array<{ id: PanelTab; label: string }>).map((entry) => (
-                    <button
-                      key={entry.id}
-                      type="button"
-                      onClick={() => setTab(entry.id)}
-                      className={`rounded-full px-3 py-1.5 text-[11px] font-medium transition-colors ${
-                        tab === entry.id
-                          ? "bg-[#e6edf3] text-[#0d1117]"
-                          : "bg-[#0d1117] text-[#8b949e] hover:text-[#e6edf3]"
-                      }`}
-                    >
-                      {entry.label}
-                    </button>
-                  ))}
-                </div>
               </div>
 
-              <AnimatePresence mode="wait">
-                {tab === "timeline" && (
-                  <motion.div
-                    key="timeline"
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    className="space-y-4 px-5 py-5"
-                  >
-                    {selectedIncident.timeline.map((entry) => (
-                      <div key={`${selectedIncident.id}-${entry.time}-${entry.label}`} className="flex gap-3">
-                        <div className="mt-1">
-                          <span
-                            className={`block h-2.5 w-2.5 rounded-full ${
-                              entry.tone === "success"
-                                ? "bg-[#3fb950]"
-                                : entry.tone === "warning"
-                                  ? "bg-[#ff7b72]"
-                                  : "bg-[#6e7681]"
-                            }`}
-                          />
-                        </div>
-                        <div className="min-w-0 flex-1 rounded-lg border border-[#30363d] bg-[#0d1117] px-4 py-3">
-                          <div className="mb-1 flex items-center justify-between gap-3">
-                            <div className="text-[12px] font-semibold text-[#e6edf3]">{entry.label}</div>
-                            <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">{entry.time}</div>
-                          </div>
-                          <div className="text-[12px] leading-relaxed text-[#8b949e]">{entry.detail}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </motion.div>
-                )}
-
-                {tab === "incident" && (
-                  <motion.div
-                    key="incident"
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    className="space-y-4 px-5 py-5"
-                  >
-                    <div className="rounded-lg border border-[#30363d] bg-[#0d1117] p-4">
-                      <div className="mb-3 flex items-start justify-between gap-3">
-                        <div>
-                          <div className="text-[10px] uppercase tracking-[0.16em] text-[#6e7681]">Incident</div>
-                          <div className="mt-1 text-[16px] font-semibold text-[#e6edf3]">{selectedIncident.title}</div>
-                        </div>
-                        <span className={`rounded-md px-2 py-0.5 text-[10px] font-medium ${incidentStatusClasses[selectedIncident.status]}`}>
-                          {selectedIncident.status}
-                        </span>
-                      </div>
-                      <p className="text-[12px] leading-relaxed text-[#8b949e]">{selectedIncident.summary}</p>
+              <div className="space-y-4 px-5 py-5">
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="rounded-lg border border-[#30363d] bg-[#0d1117] p-4"
+                >
+                  <div className="mb-3 flex items-start justify-between gap-3">
+                    <div>
+                      <div className="text-[10px] uppercase tracking-[0.16em] text-[#6e7681]">Incident</div>
+                      <div className="mt-1 text-[16px] font-semibold text-[#e6edf3]">{selectedIncident.title}</div>
                     </div>
+                    <span className={`rounded-md px-2 py-0.5 text-[10px] font-medium ${incidentStatusClasses[selectedIncident.status]}`}>
+                      {selectedIncident.status}
+                    </span>
+                  </div>
+                  <p className="text-[12px] leading-relaxed text-[#8b949e]">{selectedIncident.summary}</p>
+                </motion.div>
 
-                    <div className="grid gap-3 sm:grid-cols-3">
-                      <div className="rounded-lg border border-[#30363d] bg-[#0d1117] p-4">
-                        <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Owner</div>
-                        <div className="mt-2 flex items-center gap-2 text-sm font-semibold text-[#e6edf3]">
-                          <UserRound className="h-4 w-4 text-[#73d48d]" />
-                          {selectedIncident.owner}
-                        </div>
-                      </div>
-                      <div className="rounded-lg border border-[#30363d] bg-[#0d1117] p-4">
-                        <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Linked alerts</div>
-                        <div className="mt-2 text-2xl font-semibold text-[#e6edf3]">{selectedIncident.alerts}</div>
-                      </div>
-                      <div className="rounded-lg border border-[#30363d] bg-[#0d1117] p-4">
-                        <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">State</div>
-                        <div className="mt-2 inline-flex items-center gap-2 text-[12px] text-[#ffb86c]">
-                          <AlertTriangle className="h-4 w-4" />
-                          Analyst review
-                        </div>
-                      </div>
+                <div className="grid gap-3 sm:grid-cols-3">
+                  <div className="rounded-lg border border-[#30363d] bg-[#0d1117] p-4">
+                    <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Owner</div>
+                    <div className="mt-2 flex items-center gap-2 text-sm font-semibold text-[#e6edf3]">
+                      <UserRound className="h-4 w-4 text-[#73d48d]" />
+                      {selectedIncident.owner}
                     </div>
-                  </motion.div>
-                )}
+                  </div>
+                  <div className="rounded-lg border border-[#30363d] bg-[#0d1117] p-4">
+                    <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Linked alerts</div>
+                    <div className="mt-2 text-2xl font-semibold text-[#e6edf3]">{selectedIncident.alerts}</div>
+                  </div>
+                  <div className="rounded-lg border border-[#30363d] bg-[#0d1117] p-4">
+                    <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Status</div>
+                    <div className="mt-2 inline-flex items-center gap-2 text-[12px] text-[#ffb86c]">
+                      <AlertTriangle className="h-4 w-4" />
+                      Analyst review
+                    </div>
+                  </div>
+                </div>
 
-                {tab === "observables" && (
-                  <motion.div
-                    key="observables"
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    className="space-y-3 px-5 py-5"
-                  >
+                <div className="rounded-lg border border-[#30363d] bg-[#0d1117]">
+                  <div className="border-b border-[#30363d] px-4 py-3">
+                    <div className="text-sm font-medium text-[#e6edf3]">Observables</div>
+                  </div>
+                  <div className="space-y-3 px-4 py-4">
                     {selectedIncident.observables.map((observable) => (
-                      <div key={`${selectedIncident.id}-${observable.type}-${observable.value}`} className="flex items-start justify-between gap-3 rounded-lg border border-[#30363d] bg-[#0d1117] px-4 py-3">
+                      <div key={`${selectedIncident.id}-${observable.type}-${observable.value}`} className="flex items-start justify-between gap-3 rounded-md border border-[#30363d] bg-[#161b22] px-3 py-3">
                         <div className="min-w-0">
                           <div className="mb-1 flex items-center gap-2">
-                            <span className="rounded border border-[#30363d] bg-[#161b22] px-2 py-0.5 text-[10px] uppercase tracking-[0.12em] text-[#9da7b3]">
+                            <span className="rounded border border-[#30363d] bg-[#0d1117] px-2 py-0.5 text-[10px] uppercase tracking-[0.12em] text-[#9da7b3]">
                               {observable.type}
                             </span>
                             <span className="text-[12px] font-mono text-[#e6edf3] break-all">{observable.value}</span>
@@ -542,12 +487,39 @@ export function AlertDemo() {
                         </span>
                       </div>
                     ))}
-                    <div className="rounded-lg border border-dashed border-[#30363d] px-4 py-3 text-[11px] text-[#6e7681]">
-                      Analysts can add new observables, enrich them, and keep the whole case narrative in one place.
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                  </div>
+                </div>
+
+                <div className="rounded-lg border border-[#30363d] bg-[#0d1117]">
+                  <div className="border-b border-[#30363d] px-4 py-3">
+                    <div className="text-sm font-medium text-[#e6edf3]">Timeline</div>
+                  </div>
+                  <div className="space-y-4 px-4 py-4">
+                    {selectedIncident.timeline.map((entry) => (
+                      <div key={`${selectedIncident.id}-${entry.time}-${entry.label}`} className="flex gap-3">
+                        <div className="mt-1">
+                          <span
+                            className={`block h-2.5 w-2.5 rounded-full ${
+                              entry.tone === "success"
+                                ? "bg-[#3fb950]"
+                                : entry.tone === "warning"
+                                  ? "bg-[#ff7b72]"
+                                  : "bg-[#6e7681]"
+                            }`}
+                          />
+                        </div>
+                        <div className="min-w-0 flex-1 rounded-md border border-[#30363d] bg-[#161b22] px-3 py-3">
+                          <div className="mb-1 flex items-center justify-between gap-3">
+                            <div className="text-[12px] font-semibold text-[#e6edf3]">{entry.label}</div>
+                            <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">{entry.time}</div>
+                          </div>
+                          <div className="text-[12px] leading-relaxed text-[#8b949e]">{entry.detail}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </section>
           </div>
         </div>
@@ -558,7 +530,7 @@ export function AlertDemo() {
           <div className="flex items-center gap-4">
             <span className="inline-flex items-center gap-1.5">
               <LayoutGrid className="h-3.5 w-3.5" />
-              Alerts, incidents, and context in one view
+              Alerts, incidents, and context in one workspace
             </span>
             <span className="inline-flex items-center gap-1.5">
               <Globe className="h-3.5 w-3.5" />
