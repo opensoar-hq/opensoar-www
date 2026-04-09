@@ -1,545 +1,488 @@
-import { motion } from "framer-motion";
 import {
   Activity,
   AlertTriangle,
+  ArrowLeft,
   Briefcase,
-  CheckCircle2,
-  Clock3,
+  Clock,
+  Copy,
+  FileJson,
   Globe,
   LayoutGrid,
+  Link2,
   Play,
   Search,
-  Shield,
   Settings2,
-  UserRound,
+  Shield,
+  UserCheck,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 type Severity = "critical" | "high" | "medium" | "low";
 type AlertStatus = "new" | "in_progress" | "resolved";
-type IncidentStatus = "open" | "investigating" | "contained";
-interface AlertRecord {
-  id: string;
-  title: string;
-  source: string;
-  sourceIp: string;
-  host: string;
-  severity: Severity;
-  status: AlertStatus;
-  time: string;
-  analyst: string | null;
-  incidentId: string;
-  summary: string;
-  tags: string[];
-  iocs: string[];
-}
+type Determination = "unknown" | "malicious" | "suspicious" | "benign";
 
-interface IncidentRecord {
-  id: string;
-  title: string;
-  severity: Severity;
-  status: IncidentStatus;
-  owner: string;
-  alerts: number;
-  summary: string;
-  observables: Array<{ type: string; value: string; status: string }>;
-  timeline: Array<{ time: string; label: string; detail: string; tone: "neutral" | "success" | "warning" }>;
-}
+const alert = {
+  id: "AL-1042",
+  title: "Brute force into production SSH bastion",
+  description:
+    "847 failed SSH attempts against root in 5 minutes from a single external IP. Analyst is validating source reputation and preserving host access logs.",
+  severity: "critical" as Severity,
+  status: "in_progress" as AlertStatus,
+  determination: "suspicious" as Determination,
+  partner: "northwind",
+  assignedUsername: "Mia",
+  duplicateCount: 3,
+  createdAt: "2m ago",
+  source: "CrowdStrike",
+  rule: "ssh_brute_force",
+  sourceIp: "203.0.113.42",
+  destIp: "10.0.1.11",
+  hostname: "prod-bastion-01",
+  sourceId: "cs-evt-88421",
+  tags: ["ssh", "auth", "linux"],
+  iocs: ["203.0.113.42", "prod-bastion-01", "root", "admin@company.com"],
+};
 
-const alerts: AlertRecord[] = [
+const incidents = [
   {
-    id: "AL-1042",
-    title: "Brute force into production SSH bastion",
-    source: "CrowdStrike",
-    sourceIp: "203.0.113.42",
-    host: "prod-bastion-01",
-    severity: "critical",
-    status: "new",
-    time: "2m ago",
-    analyst: null,
-    incidentId: "IN-204",
-    summary: "847 failed SSH attempts against root in 5 minutes from a single external IP.",
-    tags: ["ssh", "auth", "linux"],
-    iocs: ["203.0.113.42", "prod-bastion-01", "root"],
-  },
-  {
-    id: "AL-1041",
-    title: "Impossible travel for privileged account",
-    source: "Azure AD",
-    sourceIp: "185.220.101.6",
-    host: "identity",
-    severity: "high",
-    status: "in_progress",
-    time: "5m ago",
-    analyst: "Mia",
-    incidentId: "IN-204",
-    summary: "Admin account authenticated from New York and Sao Paulo within 7 minutes.",
-    tags: ["identity", "mfa", "travel"],
-    iocs: ["admin@company.com", "185.220.101.6"],
-  },
-  {
-    id: "AL-1039",
-    title: "Suspicious DNS beaconing pattern",
-    source: "Elastic",
-    sourceIp: "10.0.8.15",
-    host: "wkstn-0421",
-    severity: "high",
-    status: "in_progress",
-    time: "9m ago",
-    analyst: "Mia",
-    incidentId: "IN-205",
-    summary: "Encoded subdomain labels suggest exfiltration over DNS to a newly observed domain.",
-    tags: ["dns", "endpoint"],
-    iocs: ["suspicious-ns.example.com", "10.0.8.15"],
-  },
-  {
-    id: "AL-1034",
-    title: "GuardDuty scanner noise",
-    source: "AWS GuardDuty",
-    sourceIp: "198.51.100.23",
-    host: "i-0abc123",
-    severity: "low",
-    status: "resolved",
-    time: "21m ago",
-    analyst: "Noah",
-    incidentId: "IN-203",
-    summary: "Internet-wide scanner hit an unprotected port; triage resolved as benign.",
-    tags: ["cloud", "noise"],
-    iocs: ["198.51.100.23", "i-0abc123"],
+    id: "IN-204",
+    title: "Potential credential access chain",
+    status: "investigating",
+    alertCount: 2,
+    assignedUsername: "Mia",
   },
 ];
 
-const incidents: Record<string, IncidentRecord> = {
-  "IN-204": {
-    id: "IN-204",
-    title: "Potential credential access chain",
-    severity: "critical",
-    status: "investigating",
-    owner: "Mia",
-    alerts: 2,
-    summary:
-      "Multiple auth signals point to credential abuse against privileged infrastructure. Analyst is validating source reputation and access scope.",
-    observables: [
-      { type: "ip", value: "203.0.113.42", status: "malicious" },
-      { type: "user", value: "admin@company.com", status: "watch" },
-      { type: "host", value: "prod-bastion-01", status: "isolated" },
-    ],
-    timeline: [
-      { time: "now", label: "Containment queued", detail: "Blocklist push staged for the source IP and bastion access logs are being preserved.", tone: "warning" },
-      { time: "3m", label: "Incident linked", detail: "Impossible-travel alert merged into the same case based on shared account context.", tone: "neutral" },
-      { time: "7m", label: "Claimed by Mia", detail: "Ownership moved to the on-call analyst with local admin approval pending.", tone: "success" },
-    ],
+const playbooks = [
+  { name: "Contain SSH brute force", description: "Block IP and preserve auth logs" },
+  { name: "Enrich source IP", description: "Threat intel and ASN context" },
+  { name: "Escalate privileged auth", description: "Open case and notify on-call" },
+];
+
+const timeline = [
+  {
+    label: "Mia",
+    time: "now",
+    detail: "Need malware triage before handoff. Preserving auth and process history first.",
+    comment: true,
   },
-  "IN-205": {
-    id: "IN-205",
-    title: "Possible DNS exfiltration",
-    severity: "high",
-    status: "open",
-    owner: "Queue",
-    alerts: 1,
-    summary:
-      "Single workstation beaconing to an unusual domain. Waiting on enrichment before escalation.",
-    observables: [
-      { type: "domain", value: "suspicious-ns.example.com", status: "unknown" },
-      { type: "ip", value: "10.0.8.15", status: "watch" },
-    ],
-    timeline: [
-      { time: "1m", label: "Alert enriched", detail: "Passive DNS lookup queued and endpoint owner resolved from CMDB.", tone: "neutral" },
-      { time: "9m", label: "Alert ingested", detail: "Elastic webhook normalized and routed into the active queue.", tone: "success" },
-    ],
+  {
+    label: "Incident Linked",
+    time: "2m ago",
+    detail: "Created and linked incident Potential credential access chain.",
+    comment: false,
   },
-  "IN-203": {
-    id: "IN-203",
-    title: "Internet scanner noise",
-    severity: "low",
-    status: "contained",
-    owner: "Noah",
-    alerts: 1,
-    summary:
-      "Benign cloud perimeter scan resolved after source reputation and host exposure review.",
-    observables: [
-      { type: "ip", value: "198.51.100.23", status: "benign" },
-    ],
-    timeline: [
-      { time: "4m", label: "Resolved", detail: "Marked benign after confirming known scanner behavior.", tone: "success" },
-    ],
+  {
+    label: "Claimed",
+    time: "4m ago",
+    detail: "Assigned to Mia.",
+    comment: false,
   },
-};
+  {
+    label: "Determination Set",
+    time: "5m ago",
+    detail: "Determination set to suspicious.",
+    comment: false,
+  },
+];
 
-const severityClasses: Record<Severity, string> = {
-  critical: "border-[#f85149]/30 bg-[#f85149]/12 text-[#ffb4b4]",
-  high: "border-[#ff7b72]/25 bg-[#ff7b72]/10 text-[#ff7b72]",
-  medium: "border-[#d29922]/25 bg-[#d29922]/10 text-[#f2cc60]",
-  low: "border-[#6e7681]/25 bg-[#6e7681]/10 text-[#9da7b3]",
-};
-
-const alertStatusClasses: Record<AlertStatus, string> = {
-  new: "bg-[#6e7681]/12 text-[#9da7b3]",
-  in_progress: "bg-[#d29922]/10 text-[#f2cc60]",
-  resolved: "bg-[#3fb950]/10 text-[#73d48d]",
-};
-
-const incidentStatusClasses: Record<IncidentStatus, string> = {
-  open: "bg-[#6e7681]/12 text-[#9da7b3]",
-  investigating: "bg-[#f85149]/10 text-[#ff938d]",
-  contained: "bg-[#3fb950]/10 text-[#73d48d]",
-};
-
-const navItems = [
+const sidebarItems = [
   { id: "dashboard", label: "Dashboard", icon: LayoutGrid },
-  { id: "queue", label: "Alerts", icon: AlertTriangle },
-  { id: "cases", label: "Incidents", icon: Briefcase },
+  { id: "alerts", label: "Alerts", icon: AlertTriangle },
+  { id: "incidents", label: "Incidents", icon: Briefcase },
   { id: "runs", label: "Runs", icon: Play },
-  { id: "actions", label: "Activity", icon: Activity },
+  { id: "activity", label: "Activity", icon: Activity },
   { id: "settings", label: "Settings", icon: Settings2 },
 ];
 
-function Pill({ children, className }: { children: string; className: string }) {
+const severityClasses: Record<Severity, string> = {
+  critical: "bg-[#da3633]/15 text-[#f85149]",
+  high: "bg-[#f85149]/10 text-[#f85149]",
+  medium: "bg-[#d29922]/10 text-[#d29922]",
+  low: "bg-[#848d97]/10 text-[#848d97]",
+};
+
+const statusClasses: Record<AlertStatus, string> = {
+  new: "bg-[#848d97]/10 text-[#848d97]",
+  in_progress: "bg-[#d29922]/10 text-[#d29922]",
+  resolved: "bg-[#3fb950]/10 text-[#3fb950]",
+};
+
+const determinationClasses: Record<Determination, string> = {
+  unknown: "bg-[#6e7681]/10 text-[#6e7681]",
+  malicious: "bg-[#f85149]/10 text-[#f85149]",
+  suspicious: "bg-[#d29922]/10 text-[#d29922]",
+  benign: "bg-[#3fb950]/10 text-[#3fb950]",
+};
+
+function Badge({ children, className }: { children: string; className: string }) {
   return (
-    <span className={`inline-flex items-center rounded text-[10px] font-medium uppercase tracking-[0.12em] ${className}`}>
+    <span className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium uppercase tracking-wide whitespace-nowrap ${className}`}>
       {children}
     </span>
   );
 }
 
+function Card({
+  title,
+  right,
+  children,
+}: {
+  title: string;
+  right?: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="border border-[#30363d] rounded-lg bg-[#161b22]">
+      <div className="px-5 py-4 border-b border-[#30363d] flex items-center justify-between">
+        <h3 className="text-sm font-medium text-[#e6edf3] m-0">{title}</h3>
+        {right}
+      </div>
+      <div className="px-5 py-4">{children}</div>
+    </div>
+  );
+}
+
+function ReadonlyField({
+  label,
+  value,
+  mono = false,
+}: {
+  label: string;
+  value: string;
+  mono?: boolean;
+}) {
+  return (
+    <div>
+      <div className="text-[11px] text-[#6e7681] uppercase tracking-wide mb-0.5">{label}</div>
+      <div className={`text-sm text-[#e6edf3] ${mono ? "font-mono" : ""}`}>{value}</div>
+    </div>
+  );
+}
+
+function SidebarField({
+  label,
+  value,
+  mono = false,
+}: {
+  label: string;
+  value: string;
+  mono?: boolean;
+}) {
+  return (
+    <div className="flex items-center justify-between">
+      <span className="text-[11px] text-[#6e7681] uppercase tracking-wide">{label}</span>
+      <span className={`text-xs text-[#e6edf3] ${mono ? "font-mono" : ""}`}>{value}</span>
+    </div>
+  );
+}
+
 export function AlertDemo() {
-  const [selectedAlertId, setSelectedAlertId] = useState("AL-1042");
-  const [search, setSearch] = useState("");
-  const [nav, setNav] = useState("queue");
-
-  const selectedAlert = alerts.find((alert) => alert.id === selectedAlertId) ?? alerts[0];
-  const selectedIncident = incidents[selectedAlert.incidentId];
-
-  const filteredAlerts = useMemo(() => {
-    return alerts.filter((alert) => {
-      const haystack = `${alert.title} ${alert.source} ${alert.sourceIp} ${alert.host}`.toLowerCase();
-      return haystack.includes(search.toLowerCase());
-    });
-  }, [search]);
+  const [activeNav, setActiveNav] = useState("alerts");
 
   return (
     <div className="overflow-hidden rounded-lg border border-[#30363d] bg-[#0d1117] shadow-[0_20px_80px_rgba(0,0,0,0.35)]">
-      <div className="grid lg:grid-cols-[220px_minmax(0,1fr)]">
-        <aside className="border-b border-[#30363d] bg-[#161b22] lg:border-b-0 lg:border-r">
-          <div className="px-4 py-4">
-            <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#0d1117] text-[#e6edf3] border border-[#30363d]">
-                <Shield className="h-4.5 w-4.5" />
-              </div>
-              <div>
-                <div className="text-[11px] uppercase tracking-[0.14em] text-[#6e7681]">Workspace</div>
-                <div className="text-sm font-semibold text-[#e6edf3]">Northwind SOC</div>
-              </div>
+      <div className="border-b border-[#30363d] bg-[#161b22] px-4 py-3">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
+          </div>
+          <div className="flex min-w-0 flex-1 items-center justify-center">
+            <div className="flex w-full max-w-3xl items-center gap-2 rounded-md border border-[#30363d] bg-[#0d1117] px-3 py-2 text-[11px] text-[#6e7681]">
+              <Shield className="h-3.5 w-3.5 shrink-0 text-[#8b949e]" />
+              <span className="truncate font-mono">https://demo.opensoar.app/alerts/AL-1042</span>
             </div>
+          </div>
+        </div>
+      </div>
 
-            <div className="space-y-1">
-              {navItems.map((item) => {
-                const Icon = item.icon;
-                const active = nav === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => setNav(item.id)}
-                    className={`relative flex w-full items-center gap-2.5 rounded-md px-3 py-2.5 text-left text-sm transition-colors ${
-                      active
-                        ? "bg-[#0d1117] text-[#e6edf3] border border-[#30363d]"
-                        : "text-[#8b949e] hover:bg-[#1c2129] hover:text-[#e6edf3] border border-transparent"
-                    }`}
-                  >
-                    {active && <span className="absolute left-0 top-2.5 h-5 w-[3px] rounded-r-full bg-[#e6edf3]" />}
-                    <Icon className="h-4 w-4 shrink-0" />
-                    <span className="flex-1">{item.label}</span>
-                    {item.id === "queue" && <span className="text-[11px] text-[#ff7b72]">24</span>}
-                  </button>
-                );
-              })}
+      <div className="grid lg:grid-cols-[240px_minmax(0,1fr)]">
+        <aside className="h-full px-3 py-4 hidden md:flex md:flex-col bg-[#161b22] border-r border-[#30363d] flex-shrink-0">
+          <div className="mb-4 flex items-center gap-3 px-2">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#30363d] bg-[#0d1117] text-[#e6edf3]">
+              <Shield className="h-4.5 w-4.5" />
             </div>
+            <div>
+              <div className="text-[10px] uppercase tracking-wider text-[#6e7681]">Workspace</div>
+              <div className="text-sm font-semibold text-[#e6edf3]">Northwind SOC</div>
+            </div>
+          </div>
 
-            <div className="mt-6 rounded-lg border border-[#30363d] bg-[#0d1117] p-3">
-              <div className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#6e7681]">Shift</div>
-              <div className="grid grid-cols-2 gap-2 text-[11px]">
-                <div className="rounded-md bg-[#161b22] p-2">
-                  <div className="text-[#6e7681]">Open</div>
-                  <div className="mt-1 text-lg font-semibold text-[#e6edf3]">24</div>
-                </div>
-                <div className="rounded-md bg-[#161b22] p-2">
-                  <div className="text-[#6e7681]">Active</div>
-                  <div className="mt-1 text-lg font-semibold text-[#e6edf3]">7</div>
-                </div>
-              </div>
-            </div>
+          <div className="space-y-1">
+            {sidebarItems.map((item) => {
+              const Icon = item.icon;
+              const active = activeNav === item.id;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setActiveNav(item.id)}
+                  className={`relative flex items-center gap-3 py-2 px-2 rounded-md w-full text-left no-underline transition-colors ${
+                    active
+                      ? "text-[#e6edf3] bg-[#e6edf3]/10 font-medium"
+                      : "text-[#8b949e] hover:text-[#e6edf3] hover:bg-[#1c2129]"
+                  }`}
+                >
+                  {active && <div className="absolute left-0 w-[3px] h-5 rounded-r-full bg-[#e6edf3]" />}
+                  <span className={`flex-shrink-0 w-5 h-5 flex items-center justify-center ${active ? "text-[#e6edf3]" : ""}`}>
+                    <Icon className="h-4 w-4" />
+                  </span>
+                  <span className="text-sm whitespace-pre flex-1">{item.label}</span>
+                  {item.id === "alerts" && <span className="text-[11px] text-[#f85149]">24</span>}
+                </button>
+              );
+            })}
           </div>
         </aside>
 
-        <div className="bg-[#0d1117]">
-          <div className="border-b border-[#30363d] px-5 py-4">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-2">
-                <span className="text-[#6e7681]">
-                  <AlertTriangle className="h-[18px] w-[18px]" />
-                </span>
-                <h2 className="m-0 text-base font-semibold text-[#e6edf3]">Alerts</h2>
-                <span className="text-xs text-[#6e7681]">(24)</span>
-              </div>
-              <div className="flex flex-wrap items-center gap-2">
-                <div className="flex items-center gap-2 rounded-md border border-[#30363d] bg-[#161b22] px-3 py-2 text-[12px] text-[#8b949e]">
-                  <Search className="h-3.5 w-3.5 shrink-0" />
-                  <input
-                    value={search}
-                    onChange={(event) => setSearch(event.target.value)}
-                    placeholder="Search alerts..."
-                    className="w-40 bg-transparent text-[#e6edf3] outline-none placeholder:text-[#6e7681]"
-                  />
+        <div className="px-5 py-5">
+          <div className="grid grid-cols-12 gap-5">
+            <div className="col-span-12 lg:col-span-8 space-y-4">
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-2">
+                  <span className="text-[#6e7681]">
+                    <AlertTriangle size={18} />
+                  </span>
+                  <h1 className="text-base font-semibold text-[#e6edf3] m-0">Alerts</h1>
+                  <span className="text-xs text-[#6e7681]">(24)</span>
                 </div>
-                <button
-                  type="button"
-                  className="rounded-md border border-[#30363d] bg-[#161b22] px-2.5 py-1.5 text-xs text-[#8b949e]"
-                >
-                  All severities
-                </button>
-                <button
-                  type="button"
-                  className="rounded-md border border-[#30363d] bg-[#161b22] px-2.5 py-1.5 text-xs text-[#8b949e]"
-                >
-                  All statuses
-                </button>
-                <button
-                  type="button"
-                  className="rounded-md border border-[#e6edf3]/30 bg-[#e6edf3]/15 px-2.5 py-1 text-xs font-medium text-[#e6edf3]"
-                >
-                  Create
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid gap-0 xl:grid-cols-[minmax(0,1.06fr)_minmax(360px,0.94fr)]">
-            <section className="border-b border-[#30363d] xl:border-b-0 xl:border-r">
-              <div className="border-b border-[#30363d] px-5 py-4">
-                <div className="grid gap-3 sm:grid-cols-3">
-                  <div className="rounded-lg border border-[#30363d] bg-[#161b22] p-3">
-                    <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Critical</div>
-                    <div className="mt-2 flex items-end justify-between">
-                      <div className="text-2xl font-semibold text-[#ff7b72]">3</div>
-                      <div className="text-[11px] text-[#8b949e]">2 unassigned</div>
-                    </div>
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 rounded-md border border-[#30363d] bg-[#161b22] px-3 py-2 text-[12px] text-[#8b949e]">
+                    <Search className="h-3.5 w-3.5 shrink-0" />
+                    <span>Search alerts...</span>
                   </div>
-                  <div className="rounded-lg border border-[#30363d] bg-[#161b22] p-3">
-                    <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Automation</div>
-                    <div className="mt-2 flex items-end justify-between">
-                      <div className="text-2xl font-semibold text-[#e6edf3]">11</div>
-                      <div className="text-[11px] text-[#73d48d]">8 completed</div>
-                    </div>
-                  </div>
-                  <div className="rounded-lg border border-[#30363d] bg-[#161b22] p-3">
-                    <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Triage</div>
-                    <div className="mt-2 flex items-end justify-between">
-                      <div className="text-2xl font-semibold text-[#e6edf3]">6m</div>
-                      <div className="text-[11px] text-[#8b949e]">today</div>
-                    </div>
-                  </div>
+                  <button type="button" className="px-2.5 py-1.5 text-xs rounded-md border border-[#30363d] bg-[#161b22] text-[#8b949e]">
+                    Critical
+                  </button>
+                  <button type="button" className="px-2.5 py-1.5 text-xs rounded-md border border-[#30363d] bg-[#161b22] text-[#8b949e]">
+                    In Progress
+                  </button>
+                  <button type="button" className="inline-flex items-center justify-center rounded-md border font-medium px-2.5 py-1 text-xs gap-1 bg-[#e6edf3]/15 border-[#e6edf3]/30 text-[#e6edf3]">
+                    Create
+                  </button>
                 </div>
               </div>
 
-              <div className="border border-x-0 border-b-0 border-[#30363d] bg-[#161b22]">
-                <div className="grid grid-cols-[90px_minmax(0,1fr)_110px_96px_92px] border-b border-[#30363d] px-5 py-2.5 text-left text-[11px] font-medium uppercase tracking-wide text-[#6e7681]">
-                  <div>Severity</div>
-                  <div>Title</div>
-                  <div>Status</div>
-                  <div>Source</div>
-                  <div>Time</div>
-                </div>
-                {filteredAlerts.map((alert, index) => {
-                  const active = alert.id === selectedAlertId;
-                  return (
-                    <motion.button
-                      key={alert.id}
-                      type="button"
-                      onClick={() => setSelectedAlertId(alert.id)}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.2, delay: index * 0.03 }}
-                      className={`grid w-full grid-cols-[90px_minmax(0,1fr)_110px_96px_92px] items-center gap-3 border-b border-[#30363d] px-5 py-3 text-left transition-colors ${
-                        active ? "bg-[#111821]" : "hover:bg-[#10161f]"
-                      }`}
-                    >
-                      <div>
-                        <Pill className={severityClasses[alert.severity]}>{alert.severity}</Pill>
-                      </div>
-                      <div className="min-w-0">
-                        <div className="truncate text-[13px] font-medium text-[#e6edf3]">{alert.title}</div>
-                        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-[#8b949e]">
-                          <span className="font-mono">{alert.sourceIp}</span>
-                          <span>{alert.host}</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center">
-                        <span className={`rounded-md px-2 py-0.5 text-[10px] font-medium ${alertStatusClasses[alert.status]}`}>
-                          {alert.status.replace("_", " ")}
-                        </span>
-                      </div>
-                      <div className="text-[11px] text-[#8b949e]">{alert.source}</div>
-                      <div className="inline-flex items-center gap-1 text-[11px] text-[#6e7681]">
-                        <Clock3 className="h-3 w-3" />
-                        {alert.time}
-                      </div>
-                    </motion.button>
-                  );
-                })}
+              <div className="inline-flex items-center gap-1 text-xs text-[#6e7681] no-underline mb-4">
+                <ArrowLeft className="h-3.5 w-3.5" />
+                Alerts
               </div>
-            </section>
 
-            <section className="bg-[#161b22]">
-              <div className="border-b border-[#30363d] px-5 py-4">
-                <div className="mb-3 flex flex-wrap items-start justify-between gap-3">
-                  <div>
-                    <div className="text-[10px] uppercase tracking-[0.16em] text-[#6e7681]">Selected alert</div>
-                    <div className="mt-1 text-base font-semibold text-[#e6edf3]">{selectedAlert.title}</div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                      <span className={`rounded-md px-2 py-0.5 text-[10px] font-medium ${alertStatusClasses[selectedAlert.status]}`}>
-                        {selectedAlert.status.replace("_", " ")}
-                    </span>
-                    <Pill className={severityClasses[selectedAlert.severity]}>{selectedAlert.severity}</Pill>
+              <Card title="">
+                <div className="flex items-start gap-4 mb-3">
+                  <h2 className="text-base font-semibold text-[#e6edf3] m-0 flex-1 min-w-0 leading-snug">
+                    {alert.title}
+                  </h2>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <button type="button" className="inline-flex items-center justify-center rounded-md border font-medium px-2.5 py-1 text-xs gap-1 bg-[#e6edf3]/15 border-[#e6edf3]/30 text-[#e6edf3]">
+                      <UserCheck className="h-3.5 w-3.5" />
+                      Claim
+                    </button>
+                    <button type="button" className="inline-flex items-center justify-center rounded-md border font-medium px-2.5 py-1 text-xs gap-1 bg-transparent border-transparent text-[#8b949e] hover:bg-[#1c2129] hover:text-[#e6edf3]">
+                      Resolve
+                    </button>
                   </div>
                 </div>
 
-                <div className="mb-4 rounded-lg border border-[#30363d] bg-[#0d1117] p-4">
-                  <div className="mb-2 text-[10px] uppercase tracking-[0.16em] text-[#6e7681]">Analyst summary</div>
-                  <p className="text-[13px] leading-relaxed text-[#8b949e]">{selectedAlert.summary}</p>
-                  <div className="mt-3 flex flex-wrap gap-1.5">
-                    {selectedAlert.tags.map((tag) => (
-                      <span key={tag} className="rounded border border-[#30363d] bg-[#161b22] px-2 py-0.5 text-[10px] uppercase tracking-[0.12em] text-[#9da7b3]">
+                <p className="text-sm text-[#8b949e] m-0 mb-3">{alert.description}</p>
+
+                <div className="flex items-center gap-2 flex-wrap">
+                  <Badge className={severityClasses[alert.severity]}>{alert.severity}</Badge>
+                  <Badge className={statusClasses[alert.status]}>{alert.status.replace("_", " ")}</Badge>
+                  <Badge className={determinationClasses[alert.determination]}>{alert.determination}</Badge>
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-[#1c2129] text-[#e6edf3]">
+                    {alert.partner}
+                  </span>
+                  <span className="flex items-center gap-1 text-[11px] text-[#e6edf3]">
+                    <UserCheck className="h-3 w-3" />
+                    {alert.assignedUsername}
+                  </span>
+                  <span className="text-[10px] text-[#d29922] bg-[#d29922]/15 px-1.5 py-0.5 rounded font-medium">
+                    <Copy className="inline mr-0.5 h-2.5 w-2.5" />
+                    {alert.duplicateCount}x
+                  </span>
+                  <span className="text-[#30363d]">|</span>
+                  <span className="text-[11px] text-[#6e7681] flex items-center gap-1">
+                    <Clock className="h-3 w-3" />
+                    {alert.createdAt}
+                  </span>
+                  <span className="text-[11px] text-[#6e7681] flex items-center gap-1">
+                    <Globe className="h-3 w-3" />
+                    {alert.source}
+                  </span>
+                </div>
+              </Card>
+
+              <Card title="Triage">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-4">
+                  <ReadonlyField label="Severity" value="critical" />
+                  <ReadonlyField label="Determination" value="suspicious" />
+                  <ReadonlyField label="Partner" value="northwind" />
+                </div>
+              </Card>
+
+              <Card title="Alert Context">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-3">
+                  <ReadonlyField label="Source" value={alert.source} />
+                  <ReadonlyField label="Rule" value={alert.rule} />
+                  <ReadonlyField label="Source IP" value={alert.sourceIp} mono />
+                  <ReadonlyField label="Dest IP" value={alert.destIp} mono />
+                  <ReadonlyField label="Hostname" value={alert.hostname} mono />
+                  <ReadonlyField label="Source ID" value={alert.sourceId} mono />
+                </div>
+                <div className="mt-3 pt-3 border-t border-[#30363d]">
+                  <div className="flex gap-1 flex-wrap">
+                    {alert.tags.map((tag) => (
+                      <span key={tag} className="px-2 py-0.5 text-[11px] bg-[#0d1117] border border-[#30363d] rounded text-[#e6edf3]">
                         {tag}
                       </span>
                     ))}
                   </div>
                 </div>
+              </Card>
 
-              </div>
+              <Card
+                title="Indicators of Compromise"
+                right={<span className="text-[11px] text-[#e6edf3] bg-[#e6edf3]/10 px-2 py-0.5 rounded-full font-medium">{alert.iocs.length}</span>}
+              >
+                <div className="flex flex-wrap gap-1.5">
+                  {alert.iocs.map((ioc) => (
+                    <div key={ioc} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-[#0d1117] border border-[#30363d] text-[11px] font-mono text-[#8b949e]">
+                      {ioc}
+                    </div>
+                  ))}
+                </div>
+              </Card>
 
-              <div className="space-y-4 px-5 py-5">
-                <motion.div
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="rounded-lg border border-[#30363d] bg-[#0d1117] p-4"
-                >
-                  <div className="mb-3 flex items-start justify-between gap-3">
-                    <div>
-                      <div className="text-[10px] uppercase tracking-[0.16em] text-[#6e7681]">Incident</div>
-                      <div className="mt-1 text-[16px] font-semibold text-[#e6edf3]">{selectedIncident.title}</div>
-                    </div>
-                    <span className={`rounded-md px-2 py-0.5 text-[10px] font-medium ${incidentStatusClasses[selectedIncident.status]}`}>
-                      {selectedIncident.status}
-                    </span>
+              <Card title="Timeline">
+                <div className="flex gap-2 mb-4">
+                  <div className="flex-1 px-3 py-2 text-sm rounded-md border border-[#30363d] bg-[#0d1117] text-[#6e7681]">
+                    Add a comment...
                   </div>
-                  <p className="text-[12px] leading-relaxed text-[#8b949e]">{selectedIncident.summary}</p>
-                </motion.div>
-
-                <div className="grid gap-3 sm:grid-cols-3">
-                  <div className="rounded-lg border border-[#30363d] bg-[#0d1117] p-4">
-                    <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Owner</div>
-                    <div className="mt-2 flex items-center gap-2 text-sm font-semibold text-[#e6edf3]">
-                      <UserRound className="h-4 w-4 text-[#73d48d]" />
-                      {selectedIncident.owner}
-                    </div>
-                  </div>
-                  <div className="rounded-lg border border-[#30363d] bg-[#0d1117] p-4">
-                    <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Linked alerts</div>
-                    <div className="mt-2 text-2xl font-semibold text-[#e6edf3]">{selectedIncident.alerts}</div>
-                  </div>
-                  <div className="rounded-lg border border-[#30363d] bg-[#0d1117] p-4">
-                    <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">Status</div>
-                    <div className="mt-2 inline-flex items-center gap-2 text-[12px] text-[#ffb86c]">
-                      <AlertTriangle className="h-4 w-4" />
-                      Analyst review
-                    </div>
-                  </div>
+                  <button type="button" className="inline-flex items-center justify-center rounded-md border font-medium px-2.5 py-1 text-xs gap-1 bg-[#e6edf3]/15 border-[#e6edf3]/30 text-[#e6edf3]">
+                    Comment
+                  </button>
                 </div>
 
-                <div className="rounded-lg border border-[#30363d] bg-[#0d1117]">
-                  <div className="border-b border-[#30363d] px-4 py-3">
-                    <div className="text-sm font-medium text-[#e6edf3]">Observables</div>
-                  </div>
-                  <div className="space-y-3 px-4 py-4">
-                    {selectedIncident.observables.map((observable) => (
-                      <div key={`${selectedIncident.id}-${observable.type}-${observable.value}`} className="flex items-start justify-between gap-3 rounded-md border border-[#30363d] bg-[#161b22] px-3 py-3">
-                        <div className="min-w-0">
-                          <div className="mb-1 flex items-center gap-2">
-                            <span className="rounded border border-[#30363d] bg-[#0d1117] px-2 py-0.5 text-[10px] uppercase tracking-[0.12em] text-[#9da7b3]">
-                              {observable.type}
-                            </span>
-                            <span className="text-[12px] font-mono text-[#e6edf3] break-all">{observable.value}</span>
-                          </div>
-                          <div className="text-[11px] text-[#6e7681]">Attached to case {selectedIncident.id}</div>
+                <div className="relative">
+                  <div className="absolute left-[7px] top-4 bottom-4 w-px border-l-2 border-dashed border-[#30363d]/40" />
+                  <div className="space-y-0">
+                    {timeline.map((entry) => (
+                      <div key={`${entry.time}-${entry.label}`} className="relative pl-6 pb-4 last:pb-0">
+                        <div className={`absolute left-0 top-1.5 w-[15px] h-[15px] rounded-full border-2 flex items-center justify-center ${
+                          entry.comment ? "border-[#e6edf3]/40 bg-[#e6edf3]/10" : "border-[#30363d] bg-[#161b22]"
+                        }`}>
+                          <div className={`w-[7px] h-[7px] rounded-full ${
+                            entry.comment ? "bg-[#e6edf3]" : entry.label === "Claimed" ? "bg-[#3fb950]" : entry.label === "Determination Set" ? "bg-[#d29922]" : "bg-[#6e7681]"
+                          }`} />
                         </div>
-                        <span
-                          className={`rounded-full px-2 py-1 text-[10px] font-medium ${
-                            observable.status === "malicious"
-                              ? "bg-[#f85149]/10 text-[#ff938d]"
-                              : observable.status === "isolated"
-                                ? "bg-[#3fb950]/10 text-[#73d48d]"
-                                : "bg-[#d29922]/10 text-[#f2cc60]"
-                          }`}
-                        >
-                          {observable.status}
+                        <div className="text-xs">
+                          <div className="flex items-center gap-2 mb-0.5">
+                            <span className="font-medium text-[#e6edf3]">{entry.label}</span>
+                            <span className="text-[#6e7681]">{entry.time}</span>
+                          </div>
+                          {entry.comment ? (
+                            <div className="group/comment bg-[#1c2129]/50 px-3 py-2 rounded-md mt-1 relative text-[#8b949e]">
+                              {entry.detail}
+                            </div>
+                          ) : (
+                            <div className="text-[#8b949e]">{entry.detail}</div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </Card>
+
+              <Card
+                title="Normalized Data"
+                right={
+                  <button type="button" className="inline-flex items-center justify-center rounded-md border font-medium px-2.5 py-1 text-xs gap-1 bg-transparent border-transparent text-[#8b949e] hover:bg-[#1c2129] hover:text-[#e6edf3]">
+                    <FileJson className="h-3.5 w-3.5" />
+                    Raw Payload
+                  </button>
+                }
+              >
+                <div className="rounded-md border border-[#30363d] bg-[#0d1117] p-3 text-[11px] font-mono leading-relaxed text-[#8b949e]">
+                  {"{"}
+                  <br />
+                  &nbsp;&nbsp;"source_ip": "203.0.113.42",
+                  <br />
+                  &nbsp;&nbsp;"hostname": "prod-bastion-01",
+                  <br />
+                  &nbsp;&nbsp;"rule_name": "ssh_brute_force",
+                  <br />
+                  &nbsp;&nbsp;"severity": "critical"
+                  <br />
+                  {"}"}
+                </div>
+              </Card>
+            </div>
+
+            <div className="col-span-12 lg:col-span-4 space-y-4">
+              <Card
+                title="Incidents"
+                right={
+                  <div className="flex items-center gap-1.5">
+                    <button type="button" className="inline-flex items-center justify-center rounded-md border font-medium px-2.5 py-1 text-xs gap-1 bg-transparent border-transparent text-[#8b949e] hover:bg-[#1c2129] hover:text-[#e6edf3]">
+                      <Briefcase className="h-3.5 w-3.5" />
+                      Create
+                    </button>
+                    <button type="button" className="inline-flex items-center justify-center rounded-md border font-medium px-2 py-1 text-xs gap-1 bg-[#e6edf3]/15 border-[#e6edf3]/30 text-[#e6edf3]">
+                      <Link2 className="h-3.5 w-3.5" />
+                      Link
+                    </button>
+                  </div>
+                }
+              >
+                <div className="space-y-2">
+                  {incidents.map((incident) => (
+                    <div key={incident.id} className="block no-underline rounded-md border border-[#30363d] px-3 py-2 hover:border-[#e6edf3]/30">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="min-w-0">
+                          <div className="text-sm text-[#e6edf3] font-medium truncate">{incident.title}</div>
+                          <div className="text-[11px] text-[#6e7681] mt-0.5">
+                            {incident.alertCount} alerts · {incident.assignedUsername}
+                          </div>
+                        </div>
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium uppercase tracking-wide whitespace-nowrap bg-[#f85149]/10 text-[#ff938d]">
+                          {incident.status}
                         </span>
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  ))}
                 </div>
+              </Card>
 
-                <div className="rounded-lg border border-[#30363d] bg-[#0d1117]">
-                  <div className="border-b border-[#30363d] px-4 py-3">
-                    <div className="text-sm font-medium text-[#e6edf3]">Timeline</div>
-                  </div>
-                  <div className="space-y-4 px-4 py-4">
-                    {selectedIncident.timeline.map((entry) => (
-                      <div key={`${selectedIncident.id}-${entry.time}-${entry.label}`} className="flex gap-3">
-                        <div className="mt-1">
-                          <span
-                            className={`block h-2.5 w-2.5 rounded-full ${
-                              entry.tone === "success"
-                                ? "bg-[#3fb950]"
-                                : entry.tone === "warning"
-                                  ? "bg-[#ff7b72]"
-                                  : "bg-[#6e7681]"
-                            }`}
-                          />
-                        </div>
-                        <div className="min-w-0 flex-1 rounded-md border border-[#30363d] bg-[#161b22] px-3 py-3">
-                          <div className="mb-1 flex items-center justify-between gap-3">
-                            <div className="text-[12px] font-semibold text-[#e6edf3]">{entry.label}</div>
-                            <div className="text-[10px] uppercase tracking-[0.14em] text-[#6e7681]">{entry.time}</div>
-                          </div>
-                          <div className="text-[12px] leading-relaxed text-[#8b949e]">{entry.detail}</div>
-                        </div>
+              <Card title="Run Playbook">
+                <div className="space-y-2">
+                  {playbooks.map((playbook) => (
+                    <div key={playbook.name} className="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-left bg-transparent border border-[#30363d] hover:border-[#e6edf3]/30 hover:bg-[#1c2129]">
+                      <Play className="h-[13px] w-[13px] text-[#8b949e] shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs text-[#e6edf3] font-medium truncate">{playbook.name}</div>
+                        <div className="text-[10px] text-[#6e7681] truncate">{playbook.description}</div>
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  ))}
                 </div>
-              </div>
-            </section>
-          </div>
-        </div>
-      </div>
+              </Card>
 
-      <div className="border-t border-[#30363d] bg-[#161b22] px-4 py-3">
-        <div className="flex flex-wrap items-center justify-between gap-3 text-[11px] text-[#6e7681]">
-          <div className="flex items-center gap-4">
-            <span className="inline-flex items-center gap-1.5">
-              <LayoutGrid className="h-3.5 w-3.5" />
-              Alerts, incidents, and context in one workspace
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <Globe className="h-3.5 w-3.5" />
-              Search, assignment, incidents, observables, timeline
-            </span>
-          </div>
-          <div className="inline-flex items-center gap-1.5 text-[#73d48d]">
-            <CheckCircle2 className="h-3.5 w-3.5" />
-            Demo workspace
+              <Card title="Info">
+                <div className="space-y-2.5">
+                  <SidebarField label="Created" value="2025-03-13 14:32" />
+                  <SidebarField label="Updated" value="2025-03-13 14:34" />
+                  <SidebarField label="Source" value={alert.source} />
+                  <SidebarField label="Rule" value={alert.rule} />
+                  <SidebarField label="Source IP" value={alert.sourceIp} mono />
+                  <SidebarField label="Host" value={alert.hostname} mono />
+                  <SidebarField label="ID" value={alert.id} mono />
+                </div>
+              </Card>
+            </div>
           </div>
         </div>
       </div>
