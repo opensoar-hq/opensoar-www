@@ -6,31 +6,47 @@ import { AnimatedTerminal } from '../components/AnimatedTerminal';
 import OpenSource from '../components/OpenSource.astro';
 import Footer from '../components/Footer.astro';
 
-const playbookCode = `from opensoar import playbook
+const playbookCode = `from opensoar import add_current_alert_comment, playbook, update_current_alert
 
-@playbook(trigger="alert.created")
+@playbook(
+    trigger="webhook",
+    conditions={"severity": ["high", "critical"]},
+    description="Enrich high-signal alerts and leave them ready for analyst follow-up",
+)
 async def enrich_and_decide(alert):
-    # Enrich with threat intelligence
-    reputation = await check_ip(alert.source_ip)
+    reputation = await check_ip(alert.get("source_ip"))
 
-    if reputation.malicious:
-        await notify_slack(f"Threat detected: {alert.title}")
-        await isolate_host(alert.hostname)
-    else:
-        await resolve(alert, determination="benign")`;
+    if reputation.get("malicious"):
+        await update_current_alert(
+            status="in_progress",
+            determination="suspicious",
+            reason="Escalated after IP enrichment",
+        )
+        await add_current_alert_comment(
+            "Threat intel came back hot. Analyst follow-up required."
+        )
+
+    return {"reputation": reputation}`;
 
 const testCode = `import pytest
 from my_first_playbook import enrich_and_decide
-from opensoar.testing import MockAlert, mock_action
 
 @pytest.mark.asyncio
-async def test_malicious_ip_triggers_isolation():
-    alert = MockAlert(source_ip="45.33.32.156")
+async def test_malicious_ip_marks_alert_for_follow_up(monkeypatch):
+    async def fake_check_ip(ip):
+        assert ip == "45.33.32.156"
+        return {"malicious": True}
 
-    with mock_action("check_ip", returns={"malicious": True}):
-        await enrich_and_decide(alert)
+    monkeypatch.setattr("my_first_playbook.check_ip", fake_check_ip)
 
-    assert "isolate_host" in alert.actions_taken`;
+    result = await enrich_and_decide({"source_ip": "45.33.32.156"})
+
+    assert result["reputation"]["malicious"] is True`;
+
+const bootstrapCommand = `docker compose exec api opensoar-bootstrap-admin \\
+  --username admin \\
+  --password changeme \\
+  --display-name "OpenSOAR Admin"`;
 
 const nextSteps = [
   {
@@ -39,14 +55,14 @@ const nextSteps = [
     description: "Canonical playbook docs",
   },
   {
+    title: "Incident Workflow",
+    href: "https://docs.opensoar.app/incidents/overview/",
+    description: "How alerts become working incidents",
+  },
+  {
     title: "AI Triage",
     href: "/ai-triage",
     description: "Add LLM-powered alert analysis",
-  },
-  {
-    title: "Integrations",
-    href: "/integrations",
-    description: "Connect your existing tools",
   },
 ];
 ---
@@ -95,14 +111,15 @@ const nextSteps = [
             { text: "Downloading OpenSOAR v0.5.0...", delay: 400 },
             { text: "Installing dependencies...", delay: 800 },
             { text: "Starting services (PostgreSQL, Redis, API, Worker)...", delay: 1200 },
-            { text: "\u2713 OpenSOAR is running at http://localhost:8000", delay: 1600 },
+            { text: "\u2713 OpenSOAR is running at http://localhost:3000", delay: 1600 },
           ]}
           title="terminal — install"
           height="200px"
         />
-        <p class="text-xs text-muted mt-4">
-          Or use Docker: <code class="text-text bg-surface border border-border rounded px-1.5 py-0.5 font-mono text-[11px]">docker compose up -d</code>
+        <p class="text-xs text-muted mt-4 leading-relaxed">
+          Then bootstrap the first local admin. Additional local accounts are created from Settings by that admin; public self-registration is off by default in core.
         </p>
+        <CodeBlock code={bootstrapCommand} filename="bootstrap-admin.sh" />
       </div>
     </section>
 

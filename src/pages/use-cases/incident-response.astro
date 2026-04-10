@@ -3,43 +3,54 @@ import ContentLayout from '../../layouts/ContentLayout.astro';
 import CodeBlock from '../../components/CodeBlock.astro';
 import { AnimatedTerminal } from '../../components/AnimatedTerminal';
 
-const containThreatExample = `@playbook(trigger="alert.severity_changed", condition={"severity": "critical"})
-async def contain_threat(alert):
-    # Immediate containment — parallel execution
+const incidentWorkflowExample = `from opensoar import add_current_alert_comment, playbook, update_current_alert
+
+@playbook(
+    trigger="webhook",
+    conditions={"severity": ["critical"]},
+    order=10,
+)
+async def escalate_critical_alert(alert):
     await asyncio.gather(
-        isolate_host(alert.hostname),
-        block_ip(alert.source_ip, duration="24h"),
-        disable_user(alert.username, reason="Security incident"),
+        lookup_ip_reputation(alert.get("source_ip")),
+        preserve_host_context(alert.get("hostname")),
     )
 
-    # Preserve evidence before remediation
-    await collect_forensics(alert.hostname)
-
-    # Notify IR team
-    await create_incident(
-        alert=alert,
-        severity="critical",
-        channel="#incident-response",
-    )`;
-
-const approvalGateExample = `if alert.asset_criticality == "production":
-    approved = await request_approval(
-        action="isolate_host",
-        target=alert.hostname,
-        approvers=["@security-lead"],
-        timeout_minutes=15,
+    await update_current_alert(
+        status="in_progress",
+        determination="suspicious",
+        reason="Critical alert escalated for incident handling",
     )
-    if not approved:
-        await escalate(alert, reason="Containment requires approval")
-        return`;
+    await add_current_alert_comment(
+        "Enrichment and evidence preservation completed. Create or link an incident from the alert detail page."
+    )
+
+    return {"status": "incident_ready"}`;
+
+const orderedRecoveryExample = `@playbook(
+    trigger="webhook",
+    conditions={"tags": ["docker"]},
+    order=10,
+)
+async def preserve_container_state(alert):
+    await collect_container_logs(alert.get("hostname"))
+
+
+@playbook(
+    trigger="webhook",
+    conditions={"tags": ["docker"]},
+    order=20,
+)
+async def restart_container(alert):
+    await restart_service(alert.get("hostname"))`;
 ---
 
 <ContentLayout
   title="Automated Incident Response Playbooks | OpenSOAR"
-  description="Automate incident response with Python playbooks. Contain threats in seconds, coordinate response across tools, and ensure consistent IR processes."
+  description="Use OpenSOAR incidents to group related alerts, assign ownership, capture observables, and coordinate Python-driven response work."
   badge="Use Case"
   heading="Automated Incident Response"
-  subheading="Contain threats in seconds, not hours. Coordinate response actions across your security stack with Python playbooks."
+  subheading="Turn related alerts into working incidents, keep context in one place, and drive the response flow with Python playbooks."
 >
   <h2>Why automate incident response?</h2>
   <p>
@@ -57,82 +68,96 @@ const approvalGateExample = `if alert.asset_criticality == "production":
     <li>Document everything (case management, compliance records)</li>
   </ul>
   <p>
-    An analyst doing this manually across 4-6 different consoles takes 30-60 minutes minimum. An automated playbook does it in under a minute.
+    OpenSOAR helps by making the alert-to-incident path explicit, keeping the case artifacts together, and letting Python playbooks do the repetitive enrichment and response work around that workflow.
   </p>
 
-  <h2>Incident response with OpenSOAR</h2>
+  <h2>Incident response with OpenSOAR core</h2>
+  <p>
+    In the current public core release, the incident workflow is built around a few concrete operator surfaces:
+  </p>
+  <ul>
+    <li>Create a new incident from the alert detail page when the work becomes case-level.</li>
+    <li>Link additional alerts into that incident without leaving the investigation flow.</li>
+    <li>Assign an incident owner directly from the incident page.</li>
+    <li>Use the shared incident timeline for comments, handoff notes, and system activity.</li>
+    <li>Add incident-scoped observables for IPs, domains, hashes, and other case artifacts.</li>
+    <li>Review lightweight incident suggestions based on unlinked alerts that share a source IP.</li>
+  </ul>
 
-  <h3>Automated containment</h3>
+  <h3>What the workflow looks like</h3>
 
   <div class="my-6 rounded-lg border border-border overflow-hidden">
     <AnimatedTerminal
       client:visible
-      title="opensoar — incident containment"
+      title="opensoar — incident workflow"
       height="300px"
       commands={[
-        "opensoar incident create --alert=alert-7293 --severity=critical",
-        "opensoar contain host workstation-0891 --isolate --collect-forensics",
-        "opensoar contain ip 185.220.101.34 --block --duration=24h",
-        "opensoar contain user jdoe --disable --revoke-sessions",
+        "curl -X POST http://localhost:8000/api/v1/webhooks/alerts -H 'Content-Type: application/json' -d '{\"rule_name\":\"Critical SSH\",\"severity\":\"critical\",\"source_ip\":\"203.0.113.42\"}'",
+        "curl http://localhost:8000/api/v1/incidents/suggestions",
+        "curl -X POST http://localhost:8000/api/v1/incidents -H 'Authorization: Bearer $TOKEN' -d '{\"title\":\"Credential access chain\",\"severity\":\"high\"}'",
+        "curl -X POST http://localhost:8000/api/v1/incidents/$INCIDENT_ID/comments -H 'Authorization: Bearer $TOKEN' -d '{\"text\":\"Preserved auth logs and linked related alerts.\"}'",
+        "curl -X POST http://localhost:8000/api/v1/incidents/$INCIDENT_ID/observables -H 'Authorization: Bearer $TOKEN' -d '{\"type\":\"ip\",\"value\":\"203.0.113.42\"}'",
       ]}
       outputs={[
-        { text: "Incident INC-0042 created, severity: critical", delay: 0 },
-        { text: "Host workstation-0891 isolated via CrowdStrike", delay: 200 },
-        { text: "Forensic snapshot queued (memory + disk)", delay: 200 },
-        { text: "IP 185.220.101.34 blocked on Palo Alto FW + AWS SG", delay: 200 },
-        { text: "User jdoe disabled in Okta, 3 active sessions revoked", delay: 200 },
-        { text: "Slack #incident-response notified, PagerDuty alert sent", delay: 300 },
+        { text: "Alert accepted and queued for playbook matching", delay: 0 },
+        { text: "Suggestion found: 3 unlinked alerts share source_ip 203.0.113.42", delay: 180 },
+        { text: "Incident created: Credential access chain", delay: 220 },
+        { text: "Timeline updated with analyst handoff note", delay: 220 },
+        { text: "Observable added: ip 203.0.113.42", delay: 220 },
       ]}
     />
   </div>
 
-  <CodeBlock code={containThreatExample} filename="contain_threat.py" />
-
-  <h3>Human-in-the-loop for high-impact actions</h3>
+  <h3>Escalate alerts into incidents without losing context</h3>
   <p>
-    Not every response action should be fully automated. Disabling a VIP account or isolating a production server needs human approval. OpenSOAR supports approval gates:
+    A practical OpenSOAR playbook usually does two things well: it enriches or preserves useful context, and it leaves the alert ready for a human to continue the case. The actual incident create/link action then happens in the operator workflow.
   </p>
-  <CodeBlock code={approvalGateExample} filename="approval_gate.py" />
+  <CodeBlock code={incidentWorkflowExample} filename="incident_ready.py" />
+
+  <h3>Sequence playbooks when the order matters</h3>
+  <p>
+    Some incident workflows are easier to operate as multiple focused playbooks instead of one giant file. OpenSOAR now supports explicit playbook ordering, so related playbooks can execute sequentially when the order matters.
+  </p>
+  <CodeBlock code={orderedRecoveryExample} filename="ordered_recovery.py" />
 
   <h3>Coordinated response across tools</h3>
   <p>
-    Real incident response spans multiple tools. OpenSOAR orchestrates them all from a single playbook:
+    Real incident response spans multiple tools. OpenSOAR orchestrates them from Python playbooks while the incident page stays the shared case-management surface:
   </p>
   <ul>
     <li><strong>EDR:</strong> Isolate hosts, collect artifacts, run remote scans</li>
     <li><strong>Firewall:</strong> Block IPs, domains, update threat feeds</li>
-    <li><strong>Identity:</strong> Disable accounts, force password resets, revoke sessions</li>
+    <li><strong>Identity:</strong> Disable accounts, force password resets, or escalate suspicious access</li>
     <li><strong>Email:</strong> Search for and quarantine related phishing emails</li>
-    <li><strong>Ticketing:</strong> Create incidents, update status, assign teams</li>
+    <li><strong>OpenSOAR incident workflow:</strong> Create incidents, link alerts, assign owners, and preserve comments/observables</li>
     <li><strong>Communication:</strong> Notify stakeholders via Slack, Teams, or email</li>
   </ul>
 
-  <h2>IR playbook templates</h2>
+  <h2>Incident workflow templates</h2>
   <p>
-    OpenSOAR includes example playbooks for common incident types:
+    Good OpenSOAR incident playbooks tend to follow a repeatable pattern:
   </p>
   <ul>
-    <li><strong>Malware containment</strong> — Isolate host, quarantine file, block C2, collect forensics</li>
-    <li><strong>Phishing response</strong> — Extract IOCs, search mailboxes, quarantine emails, block sender</li>
-    <li><strong>Compromised account</strong> — Disable account, revoke sessions, check for lateral movement</li>
-    <li><strong>Data exfiltration</strong> — Block destination, preserve evidence, assess data scope</li>
-    <li><strong>Ransomware</strong> — Network isolation, identify spread, preserve backups, notify leadership</li>
+    <li><strong>High-signal triage</strong> — enrich first, then move the alert to <code>in_progress</code> with a clear determination and note</li>
+    <li><strong>Case escalation</strong> — create or link an incident once multiple alerts or artifacts belong together</li>
+    <li><strong>Ownership</strong> — assign the incident to the analyst coordinating the wider case, not just the first alert</li>
+    <li><strong>Shared artifacts</strong> — add observables to the incident when they matter across multiple linked alerts</li>
+    <li><strong>Ordered remediation</strong> — split playbooks and use <code>order=...</code> when the recovery sequence must be deterministic</li>
   </ul>
 
   <h2>Compliance and documentation</h2>
   <p>
-    Every action OpenSOAR takes is logged with timestamps, inputs, outputs, and the analyst who approved it. This creates an automatic audit trail that satisfies compliance requirements for:
+    Incident timelines, alert state transitions, comments, and observable additions create a durable investigation record that is much easier to review during audits or post-incident work:
   </p>
   <ul>
     <li>SOC 2 incident response documentation</li>
-    <li>GDPR breach notification timelines</li>
-    <li>HIPAA security incident procedures</li>
-    <li>PCI DSS incident response requirements</li>
+    <li>internal post-incident reviews and handoffs</li>
+    <li>regulated environments that need an understandable chronology of analyst and system actions</li>
   </ul>
 
   <hr />
 
   <p>
-    Build incident response playbooks in Python. <a href="https://github.com/opensoar-hq/opensoar-core">Get started with OpenSOAR →</a>
+    Build incident response workflows in Python and run the casework from incidents. <a href="https://github.com/opensoar-hq/opensoar-core">Get started with OpenSOAR →</a>
   </p>
 </ContentLayout>
