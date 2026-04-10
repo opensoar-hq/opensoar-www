@@ -188,7 +188,7 @@ export function AlertDemo() {
       initial={{ opacity: 0, y: 20, scale: 0.985 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={shellTransition}
-      className="max-h-[min(76vh,860px)] overflow-hidden rounded-t-lg rounded-b-none border border-[#30363d] border-b-0 bg-[#0d1117] shadow-[0_20px_80px_rgba(0,0,0,0.35)]"
+      className="max-h-[min(76vh,860px)] overflow-hidden rounded-[18px] border border-[#30363d] bg-[#0d1117] shadow-[0_24px_90px_rgba(0,0,0,0.42)]"
     >
       <motion.div
         initial={{ opacity: 0, y: 8 }}
