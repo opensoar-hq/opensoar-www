@@ -32,18 +32,24 @@ So the real question is not “which feature checklist is longer?” It is: **do
 Visual builders are appealing at first because simple workflows look obvious on a canvas. But as soon as you need retries, branching, parallel enrichment, custom transforms, or internal APIs, the visual model starts fighting you. OpenSOAR avoids that by starting from code.
 
 ```python
-@playbook(trigger="alert.created", conditions={"severity": ["high", "critical"]})
+from opensoar import playbook, update_current_alert
+
+@playbook(trigger="webhook", conditions={"severity": ["high", "critical"]})
 async def investigate_alert(alert):
     vt, abuse = await asyncio.gather(
-        lookup_virustotal(alert.iocs),
-        lookup_abuseipdb(alert.source_ip),
+        lookup_virustotal(alert.get("iocs")),
+        lookup_abuseipdb(alert.get("source_ip")),
     )
 
     if abuse.confidence_score > 80:
-        await isolate_host(alert.hostname)
-        await notify_slack(channel="#soc-critical", message=alert.title)
+        await isolate_host(alert.get("hostname"))
+        await notify_slack(channel="#soc-critical", message=alert.get("title"))
     else:
-        await resolve(alert, determination="benign")
+        await update_current_alert(
+            status="resolved",
+            determination="benign",
+            reason="Threat intel came back clean",
+        )
 ```
 
 If your team wants automation to behave like software, OpenSOAR is the cleaner long-term fit.

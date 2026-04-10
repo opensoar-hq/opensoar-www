@@ -219,9 +219,9 @@ const categories = [
                 <div class="w-2 h-2 rounded-full bg-success/40"></div>
                 <span class="text-[10px] text-muted font-mono ml-1">custom_integration.py</span>
               </div>
-              <pre class="px-3 py-2.5 text-[11px] leading-relaxed font-mono overflow-x-auto no-scrollbar"><code><span class="text-[#ff7b72]">from</span> <span class="text-[#ffa657]">opensoar.integrations</span> <span class="text-[#ff7b72]">import</span> Integration
+              <pre class="px-3 py-2.5 text-[11px] leading-relaxed font-mono overflow-x-auto no-scrollbar"><code><span class="text-[#ff7b72]">from</span> <span class="text-[#ffa657]">opensoar.integrations.base</span> <span class="text-[#ff7b72]">import</span> IntegrationBase
 
-<span class="text-[#ff7b72]">class</span> <span class="text-[#d2a8ff]">MyTool</span>(Integration):
+<span class="text-[#ff7b72]">class</span> <span class="text-[#d2a8ff]">MyTool</span>(IntegrationBase):
     <span class="text-[#ff7b72]">async def</span> <span class="text-[#d2a8ff]">lookup</span>(self, indicator):
         resp = <span class="text-[#ff7b72]">await</span> self.http.get(
             <span class="text-[#a5d6ff]">f"https://api.mytool.com/v1/&#123;indicator&#125;"</span>

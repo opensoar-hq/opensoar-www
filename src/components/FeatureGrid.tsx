@@ -14,7 +14,7 @@ const features = [
   {
     icon: Plug,
     title: "Integration Ecosystem",
-    description: "Elastic, CrowdStrike, Jira, PagerDuty, Slack, and more. Community-driven integrations with a simple, consistent API.",
+    description: "Elastic, VirusTotal, AbuseIPDB, Slack, and Email are built in today. Everything else extends cleanly through the Python integration model.",
   },
   {
     icon: Zap,
