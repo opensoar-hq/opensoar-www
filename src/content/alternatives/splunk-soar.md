@@ -7,6 +7,11 @@ badge: "Alternative"
 slug: "splunk-soar"
 vendor: "Splunk SOAR"
 order: 1
+faq:
+  - question: "Why do teams compare OpenSOAR with Splunk SOAR?"
+    answer: "Both products sit in the security automation category, but they represent different operating models: OpenSOAR is open-source and Python-native, while Splunk SOAR is a commercial platform rooted in the Phantom model."
+  - question: "When is Splunk SOAR still the better fit?"
+    answer: "Splunk SOAR can still make sense for organizations already standardized on Splunk and comfortable paying for a broader commercial ecosystem and support structure."
 ---
 
 This page is the comparison overview. For product setup and operational truth, use [docs.opensoar.app](https://docs.opensoar.app).

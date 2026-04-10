@@ -7,6 +7,11 @@ badge: "Alternative"
 slug: "xsoar"
 vendor: "Palo Alto XSOAR"
 order: 2
+faq:
+  - question: "Why do teams look for an XSOAR alternative?"
+    answer: "Common reasons are pricing pressure, vendor ecosystem gravity, and the workflow ceiling teams hit when they want more software-like control than a YAML-and-marketplace model provides."
+  - question: "When should a team stay on XSOAR?"
+    answer: "If the organization is already deeply aligned with Cortex tooling, wants the broadest commercial marketplace immediately, and prefers a large vendor support story, XSOAR may still be the better fit."
 ---
 
 This page is the comparison overview. For product setup and operational truth, use [docs.opensoar.app](https://docs.opensoar.app).

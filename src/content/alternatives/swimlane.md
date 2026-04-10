@@ -7,6 +7,11 @@ badge: "Alternative"
 slug: "swimlane"
 vendor: "Swimlane"
 order: 3
+faq:
+  - question: "How is OpenSOAR different from Swimlane?"
+    answer: "OpenSOAR is positioned around open-source, self-hosted, Python-first automation. Swimlane is a commercial workflow platform with a stronger emphasis on visual orchestration and enterprise packaging."
+  - question: "Who is OpenSOAR a better fit for than Swimlane?"
+    answer: "Engineering-led teams that want source access, lower platform overhead, and automation owned directly in code are usually the best fit for OpenSOAR."
 ---
 
 This page is the comparison overview. For product setup and operational truth, use [docs.opensoar.app](https://docs.opensoar.app).

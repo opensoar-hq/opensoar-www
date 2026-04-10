@@ -6,6 +6,11 @@ subheading: "Security Orchestration, Automation and Response explained for teams
 badge: "Guide"
 slug: "what-is-soar"
 order: 3
+faq:
+  - question: "What does SOAR stand for?"
+    answer: "SOAR stands for Security Orchestration, Automation and Response. It is the workflow layer that connects security tools, enriches alerts, and coordinates investigation or response actions."
+  - question: "What is the difference between SOAR and SIEM?"
+    answer: "A SIEM is primarily for collecting telemetry and triggering detections. A SOAR platform sits downstream and automates the investigation, enrichment, routing, and response workflow around those detections."
 ---
 
 This page is the editorial overview. For OpenSOAR installation, playbook loading, deployment, and operational truth, use [docs.opensoar.app](https://docs.opensoar.app).

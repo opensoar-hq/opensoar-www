@@ -59,6 +59,12 @@ const publishedAt = post.data.publishedAt.toLocaleDateString('en-US', {
   canonical={canonical}
   ogImage={ogImage}
   structuredData={structuredData}
+  breadcrumbs={[
+    { name: 'Home', href: '/' },
+    { name: 'Blog', href: '/blog' },
+    { name: post.data.heading, href: `/blog/${slug}` },
+  ]}
+  faq={post.data.faq ?? []}
 >
   <Content />
 

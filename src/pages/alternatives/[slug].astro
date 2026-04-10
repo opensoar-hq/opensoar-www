@@ -51,6 +51,12 @@ const structuredData = {
   canonical={canonical}
   ogImage={ogImage}
   structuredData={structuredData}
+  breadcrumbs={[
+    { name: 'Home', href: '/' },
+    { name: 'Compare', href: '/compare' },
+    { name: alternative.data.heading, href: `/alternatives/${slug}` },
+  ]}
+  faq={alternative.data.faq ?? []}
 >
   <Content />
 

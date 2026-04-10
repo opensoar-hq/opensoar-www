@@ -21,6 +21,7 @@ const {
 const canonicalURL = canonical || new URL(Astro.url.pathname, Astro.site).toString();
 const ogImageURL = new URL(ogImage, Astro.site).toString();
 const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID?.trim();
+const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION?.trim();
 const defaultStructuredData = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -64,6 +65,9 @@ const structuredDataNodes = [
     <meta name="description" content={description} />
     <meta name="theme-color" content="#0d1117" />
     <meta name="robots" content="index, follow" />
+    {googleSiteVerification && (
+      <meta name="google-site-verification" content={googleSiteVerification} />
+    )}
 
     <!-- Open Graph -->
     <meta property="og:title" content={title} />

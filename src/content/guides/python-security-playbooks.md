@@ -6,6 +6,11 @@ subheading: "Why code-first automation scales better than YAML and visual builde
 badge: "Guide"
 slug: "python-security-playbooks"
 order: 5
+faq:
+  - question: "Why use Python for security playbooks instead of YAML?"
+    answer: "Python handles branching logic, retries, testing, libraries, and code review much more naturally than YAML. Once workflows become operationally complex, code is easier to reason about and maintain."
+  - question: "Can Python playbooks still be tested in CI?"
+    answer: "Yes. That is one of the main advantages of code-first automation. Playbooks can be unit-tested with pytest, versioned in Git, and reviewed through the same CI/CD process as the rest of the codebase."
 ---
 
 This page explains the editorial argument for code-first automation. For the canonical implementation details, loading behavior, and operational guidance, use [docs.opensoar.app](https://docs.opensoar.app/playbooks/overview/).

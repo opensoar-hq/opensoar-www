@@ -8,6 +8,11 @@ slug: "how-ai-alert-triage-changes-the-soc"
 category: "AI"
 publishedAt: 2026-04-03
 featured: false
+faq:
+  - question: "What is AI alert triage best used for?"
+    answer: "AI alert triage is strongest at first-pass work such as summarization, severity suggestion, evidence grouping, and prioritization, where it reduces analyst reading time without replacing human judgment."
+  - question: "Should AI respond autonomously to every alert?"
+    answer: "Usually no. The safer model is confidence-based automation, where low-risk repetitive actions can be automated and ambiguous or high-impact decisions still route through an analyst."
 ---
 
 Most AI content about security operations is either fantasy or fear.

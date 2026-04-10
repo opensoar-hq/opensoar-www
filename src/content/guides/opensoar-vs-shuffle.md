@@ -5,6 +5,11 @@ heading: "OpenSOAR vs Shuffle"
 subheading: "Two different answers to the same question: how should a team automate security workflows without buying a commercial SOAR?"
 badge: "Guide"
 order: 2
+faq:
+  - question: "What is the main difference between OpenSOAR and Shuffle?"
+    answer: "The core difference is workflow model. OpenSOAR is code-first and uses Python playbooks, while Shuffle is visual-first and emphasizes drag-and-drop workflow assembly."
+  - question: "Who should choose OpenSOAR instead of Shuffle?"
+    answer: "Teams that already have Python skills, want automation reviewed like software, and expect workflows to grow beyond simple visual diagrams are usually better served by OpenSOAR."
 ---
 
 This page is the editorial comparison: where each product fits, what tradeoff you are actually making, and which kind of team each model serves best. For canonical product docs, use [docs.opensoar.app](https://docs.opensoar.app).

@@ -6,6 +6,11 @@ subheading: "How modern security teams automate alert enrichment, triage, contai
 badge: "Guide"
 slug: "security-automation"
 order: 4
+faq:
+  - question: "What security workflows are best to automate first?"
+    answer: "Teams usually start with repetitive first-pass workflows such as alert enrichment, phishing triage, IOC lookups, ticket creation, and escalation routing because the steps are frequent and predictable."
+  - question: "Does security automation replace analysts?"
+    answer: "No. Good automation removes repetitive handling work so analysts can focus on higher-judgment investigation and response decisions instead of repeating the same enrichment and routing tasks."
 ---
 
 This page is the editorial overview. For installation, runtime behavior, and the canonical OpenSOAR playbook docs, use [docs.opensoar.app](https://docs.opensoar.app).

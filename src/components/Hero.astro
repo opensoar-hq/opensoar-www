@@ -1,20 +1,15 @@
 ---
-import { DotMatrixBg } from './ui/dot-matrix-bg';
 import InstallCommand from './InstallCommand.astro';
 ---
 
 <section class="relative pt-24 pb-8 md:pt-30 md:pb-10 overflow-hidden">
   <!-- Dot matrix background -->
   <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
-    <DotMatrixBg
-      client:visible
-      className="absolute inset-0 h-full w-full"
-      colors={[[110, 118, 129], [63, 185, 80]]}
-      opacities={[0.3, 0.3, 0.4, 0.5, 0.5, 0.6, 0.7, 0.8, 0.9, 1]}
-      dotSize={4}
-      totalSize={16}
-      animationSpeed={5}
-    />
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(63,185,80,0.10),transparent_40%),linear-gradient(180deg,rgba(255,255,255,0.03),transparent_45%)]"></div>
+    <div
+      class="absolute inset-0 opacity-70"
+      style="background-image: radial-gradient(circle, rgba(110,118,129,0.35) 1px, transparent 1px); background-size: 18px 18px;"
+    ></div>
     <div class="absolute inset-0 bg-gradient-to-t from-bg via-bg/40 to-bg/70"></div>
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,var(--color-bg)_75%)]"></div>
   </div>

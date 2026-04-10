@@ -5,6 +5,11 @@ heading: "Migrate from TheHive to OpenSOAR"
 subheading: "A practical migration path for teams replacing TheHive with a code-first, Python-native SOAR."
 badge: "Guide"
 order: 1
+faq:
+  - question: "Is OpenSOAR a direct drop-in replacement for TheHive?"
+    answer: "Not exactly. The migration is less about replacing identical screens and more about moving from a TheHive-era operating model to a simpler code-first automation model with different workflow assumptions."
+  - question: "What usually changes most during a TheHive migration?"
+    answer: "The biggest shift is how automation is authored and maintained. Teams move away from older ecosystem patterns and toward Python playbooks, Git-based review, and a more software-oriented workflow."
 ---
 
 This page is the editorial overview: why teams move, what changes operationally, and how to think about the transition. For the canonical migration reference and field-level details, use [docs.opensoar.app](https://docs.opensoar.app/migrations/thehive/).
