@@ -137,11 +137,11 @@ function Card({
 }) {
   return (
     <div className="border border-[#30363d] rounded-lg bg-[#161b22]">
-      <div className="px-5 py-4 border-b border-[#30363d] flex items-center justify-between">
+      <div className="px-4 sm:px-5 py-4 border-b border-[#30363d] flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <h3 className="text-sm font-medium text-[#e6edf3] m-0">{title}</h3>
         {right}
       </div>
-      <div className="px-5 py-4">{children}</div>
+      <div className="px-4 sm:px-5 py-4">{children}</div>
     </div>
   );
 }
@@ -188,7 +188,7 @@ export function AlertDemo() {
       initial={{ opacity: 0, y: 20, scale: 0.985 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={shellTransition}
-      className="max-h-[min(72vh,860px)] overflow-hidden rounded-t-lg rounded-b-none border border-[#30363d] border-b-0 bg-[#0d1117] shadow-[0_20px_80px_rgba(0,0,0,0.35)]"
+      className="max-h-[min(76vh,860px)] overflow-hidden rounded-t-lg rounded-b-none border border-[#30363d] border-b-0 bg-[#0d1117] shadow-[0_20px_80px_rgba(0,0,0,0.35)]"
     >
       <motion.div
         initial={{ opacity: 0, y: 8 }}
@@ -262,7 +262,7 @@ export function AlertDemo() {
           initial={{ opacity: 0, x: 14 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="origin-top scale-[0.92] px-5 py-5"
+          className="origin-top scale-[0.86] sm:scale-[0.92] px-3 sm:px-5 py-3 sm:py-5"
         >
           <div className="grid grid-cols-12 gap-5">
             <div className="col-span-12 lg:col-span-8 space-y-4">
@@ -270,7 +270,7 @@ export function AlertDemo() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.26, duration: 0.32 }}
-                className="flex items-center justify-between mb-5"
+                className="mb-5 flex flex-col gap-3 sm:gap-4"
               >
                 <div className="flex items-center gap-2">
                   <span className="text-[#6e7681]">
@@ -279,20 +279,22 @@ export function AlertDemo() {
                   <h1 className="text-base font-semibold text-[#e6edf3] m-0">Alerts</h1>
                   <span className="text-xs text-[#6e7681]">(24)</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-2 rounded-md border border-[#30363d] bg-[#161b22] px-3 py-2 text-[12px] text-[#8b949e]">
+                <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+                  <div className="flex w-full items-center gap-2 rounded-md border border-[#30363d] bg-[#161b22] px-3 py-2 text-[12px] text-[#8b949e] sm:max-w-[240px]">
                     <Search className="h-3.5 w-3.5 shrink-0" />
                     <span>Search alerts...</span>
                   </div>
-                  <button type="button" className="px-2.5 py-1.5 text-xs rounded-md border border-[#30363d] bg-[#161b22] text-[#8b949e]">
-                    Critical
-                  </button>
-                  <button type="button" className="px-2.5 py-1.5 text-xs rounded-md border border-[#30363d] bg-[#161b22] text-[#8b949e]">
-                    In Progress
-                  </button>
-                  <button type="button" className="inline-flex items-center justify-center rounded-md border font-medium px-2.5 py-1 text-xs gap-1 bg-[#e6edf3]/15 border-[#e6edf3]/30 text-[#e6edf3]">
-                    Create
-                  </button>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button type="button" className="px-2.5 py-1.5 text-xs rounded-md border border-[#30363d] bg-[#161b22] text-[#8b949e]">
+                      Critical
+                    </button>
+                    <button type="button" className="px-2.5 py-1.5 text-xs rounded-md border border-[#30363d] bg-[#161b22] text-[#8b949e]">
+                      In Progress
+                    </button>
+                    <button type="button" className="inline-flex items-center justify-center rounded-md border font-medium px-2.5 py-1 text-xs gap-1 bg-[#e6edf3]/15 border-[#e6edf3]/30 text-[#e6edf3]">
+                      Create
+                    </button>
+                  </div>
                 </div>
               </motion.div>
 
@@ -308,11 +310,11 @@ export function AlertDemo() {
 
               {[
                 <Card key="header" title="">
-                  <div className="flex items-start gap-4 mb-3">
+                  <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
                     <h2 className="text-base font-semibold text-[#e6edf3] m-0 flex-1 min-w-0 leading-snug">
                       {alert.title}
                     </h2>
-                    <div className="flex items-center gap-1.5 shrink-0">
+                    <div className="flex flex-wrap items-center gap-1.5 shrink-0">
                       <button type="button" className="inline-flex items-center justify-center rounded-md border font-medium px-2.5 py-1 text-xs gap-1 bg-[#e6edf3]/15 border-[#e6edf3]/30 text-[#e6edf3]">
                         <UserCheck className="h-3.5 w-3.5" />
                         Claim
@@ -391,7 +393,7 @@ export function AlertDemo() {
                   </div>
                 </Card>,
                 <Card key="timeline" title="Timeline">
-                  <div className="flex gap-2 mb-4">
+                  <div className="flex flex-col gap-2 sm:flex-row mb-4">
                     <div className="flex-1 px-3 py-2 text-sm rounded-md border border-[#30363d] bg-[#0d1117] text-[#6e7681]">
                       Add a comment...
                     </div>
@@ -472,7 +474,7 @@ export function AlertDemo() {
                   key="incidents"
                   title="Incidents"
                   right={
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex flex-wrap items-center gap-1.5">
                       <button type="button" className="inline-flex items-center justify-center rounded-md border font-medium px-2.5 py-1 text-xs gap-1 bg-transparent border-transparent text-[#8b949e] hover:bg-[#1c2129] hover:text-[#e6edf3]">
                         <Briefcase className="h-3.5 w-3.5" />
                         Create
