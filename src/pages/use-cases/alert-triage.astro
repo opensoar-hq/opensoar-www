@@ -3,16 +3,38 @@ import ContentLayout from '../../layouts/ContentLayout.astro';
 import CodeBlock from '../../components/CodeBlock.astro';
 import { AnimatedTerminal } from '../../components/AnimatedTerminal';
 
-const autoEnrichCode = `@playbook(trigger="alert.created")
+const autoEnrichCode = `from opensoar import add_current_alert_comment, playbook, update_current_alert
+
+@playbook(
+    trigger="webhook",
+    conditions={"severity": ["medium", "high", "critical"]},
+)
 async def auto_enrich(alert):
     results = await asyncio.gather(
-        check_virustotal(alert.file_hash),
-        check_abuseipdb(alert.source_ip),
-        lookup_asset(alert.hostname),
-        lookup_user(alert.username),
+        check_virustotal(alert.get("file_hash")),
+        check_abuseipdb(alert.get("source_ip")),
+        lookup_asset(alert.get("hostname")),
+        lookup_user(alert.get("username")),
     )
-    alert.enrichment = combine_results(results)
-    await save_alert(alert)`;
+
+    await update_current_alert(
+        status="in_progress",
+        determination="suspicious",
+        reason="Parallel enrichment completed; ready for analyst review",
+    )
+    await add_current_alert_comment(
+        f"Enrichment complete: {combine_results(results)}"
+    )`;
+
+const aiTriageApiCode = `curl -X POST http://localhost:8000/api/v1/ai/triage \\
+  -H "Authorization: Bearer $TOKEN" \\
+  -H "Content-Type: application/json" \\
+  -d '{"alert_id":"'$ALERT_ID'"}'
+
+curl -X POST http://localhost:8000/api/v1/ai/summarize \\
+  -H "Authorization: Bearer $TOKEN" \\
+  -H "Content-Type: application/json" \\
+  -d '{"alert_id":"'$ALERT_ID'"}'`;
 ---
 
 <ContentLayout
@@ -44,16 +66,15 @@ async def auto_enrich(alert):
       title="opensoar — alert triage flow"
       height="280px"
       commands={[
-        "opensoar alerts list --status=new --limit=1",
-        "opensoar enrich alert-4821 --sources=virustotal,abuseipdb,asset-db",
-        "opensoar triage alert-4821 --auto-score",
+        "curl -X POST http://localhost:8000/api/v1/webhooks/alerts -H 'Content-Type: application/json' -d '{\"rule_name\":\"Outbound Connection\",\"severity\":\"high\",\"source_ip\":\"185.220.101.34\",\"hostname\":\"workstation-0142\"}'",
+        "curl -X POST http://localhost:8000/api/v1/ai/triage -H 'Authorization: Bearer $TOKEN' -H 'Content-Type: application/json' -d '{\"alert_id\":\"'$ALERT_ID'\"}'",
+        "curl -X POST http://localhost:8000/api/v1/ai/summarize -H 'Authorization: Bearer $TOKEN' -H 'Content-Type: application/json' -d '{\"alert_id\":\"'$ALERT_ID'\"}'",
       ]}
       outputs={[
-        { text: "Alert #4821: Suspicious outbound connection to 185.220.101.34", delay: 0 },
-        { text: "VirusTotal: IP flagged by 6/89 vendors", delay: 200 },
-        { text: "AbuseIPDB: confidence score 92% (Tor exit node)", delay: 200 },
-        { text: "Asset DB: workstation-0142, low criticality, user: jsmith", delay: 200 },
-        { text: "Risk score: 14/100 — auto-resolved as false_positive (known Tor researcher)", delay: 300 },
+        { text: "Alert accepted: Suspicious outbound connection to 185.220.101.34", delay: 0 },
+        { text: "AI triage: severity high, determination suspicious, confidence 0.92", delay: 200 },
+        { text: "AI summary: likely analyst follow-up required due to hostile IP reputation", delay: 250 },
+        { text: "Playbook enrichment comment added to the alert timeline", delay: 250 },
       ]}
     />
   </div>
@@ -67,24 +88,25 @@ async def auto_enrich(alert):
     By the time an analyst opens the alert, all the context is already there. No manual lookups needed.
   </p>
 
-  <h3>Step 2: Auto-scoring</h3>
+  <h3>Step 2: AI triage and summarization</h3>
   <p>
-    Based on enrichment results, OpenSOAR calculates a risk score combining threat intel confidence, asset criticality, user risk, and alert source reliability.
+    OpenSOAR exposes AI endpoints that can summarize an alert and suggest severity, determination, confidence, and reasoning. That gives analysts a much better first-pass view without forcing a separate workflow layer.
   </p>
+  <CodeBlock code={aiTriageApiCode} filename="ai_triage_api.sh" />
 
-  <h3>Step 3: Auto-routing</h3>
+  <h3>Step 3: Confidence-based routing in your playbooks</h3>
   <ul>
-    <li><strong>Score &gt; 80:</strong> Escalate immediately to senior analyst with full context</li>
-    <li><strong>Score 40-80:</strong> Queue for analyst review with enrichment summary</li>
-    <li><strong>Score &lt; 20:</strong> Auto-resolve as false positive with documented reasoning</li>
+    <li><strong>High confidence benign:</strong> resolve or down-rank with documented reasoning</li>
+    <li><strong>High confidence suspicious or malicious:</strong> move to <code>in_progress</code> and escalate cleanly</li>
+    <li><strong>Mixed or uncertain:</strong> leave the alert for analyst review with enrichment and AI context already attached</li>
   </ul>
   <p>
-    Analysts only see the alerts that need human judgment. The obvious false positives and the confirmed threats are handled automatically.
+    The important point is that OpenSOAR gives you the building blocks. Your actual routing thresholds and escalation logic stay in code you control.
   </p>
 
   <h3>Step 4: AI-assisted analysis</h3>
   <p>
-    For alerts in the middle range (score 40-80), OpenSOAR's AI triage assistant provides an analysis summary and recommended action, giving analysts a head start on investigation.
+    For the alerts that still need humans, AI summaries and reasoning give analysts a head start on investigation instead of forcing them to parse raw payloads first.
   </p>
 
   <h2>Results</h2>
@@ -97,7 +119,7 @@ async def auto_enrich(alert):
 
   <h2>Common alert sources</h2>
   <p>
-    OpenSOAR ingests alerts from any source via webhooks or polling:
+    OpenSOAR ingests alerts from any source via webhooks, and playbooks can enrich them against the systems your team already uses:
   </p>
   <ul>
     <li><strong>SIEMs:</strong> Elastic Security, Splunk, Microsoft Sentinel</li>

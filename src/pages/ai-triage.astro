@@ -3,33 +3,27 @@ import ContentLayout from '../layouts/ContentLayout.astro';
 import CodeBlock from '../components/CodeBlock.astro';
 import { AlertDisplayCards } from '../components/AlertCards';
 
-const triageCode = `from opensoar import playbook
-from opensoar.ai import triage
+const triageCode = `curl -X POST http://localhost:8000/api/v1/ai/triage \\
+  -H "Authorization: Bearer $TOKEN" \\
+  -H "Content-Type: application/json" \\
+  -d '{"alert_id":"'$ALERT_ID'"}'
 
-@playbook(trigger="alert.created")
-async def ai_assisted_triage(alert):
-    assessment = await triage(
-        alert,
-        provider="claude",  # or "gemini", "openai", "ollama"
-    )
+curl -X POST http://localhost:8000/api/v1/ai/summarize \\
+  -H "Authorization: Bearer $TOKEN" \\
+  -H "Content-Type: application/json" \\
+  -d '{"alert_id":"'$ALERT_ID'"}'`;
 
-    if assessment.confidence > 85 and assessment.determination == "benign":
-        await resolve(alert, determination="false_positive", note=assessment.summary)
-    elif assessment.determination == "malicious":
-        await escalate(alert, reason=assessment.reasoning)
-    else:
-        alert.ai_summary = assessment.summary
-        alert.suggested_severity = assessment.severity
-        await save_alert(alert)`;
+const multiModelCode = `# OpenSOAR picks the configured provider from your deployment settings:
+# ANTHROPIC_API_KEY=...
+# OPENAI_API_KEY=...
+# OLLAMA_URL=http://localhost:11434
+# LLM_MODEL=claude-sonnet-4-6
 
-const multiModelCode = `from opensoar.ai import triage, configure_provider
-
-configure_provider("claude", api_key="sk-...")
-configure_provider("gemini", api_key="AIza...")
-configure_provider("ollama", base_url="http://localhost:11434", model="llama3.3")
-
-assessment = await triage(alert, provider="claude")
-assessment = await triage(alert, provider="ollama")`;
+# Then call the built-in AI endpoints:
+curl -X POST http://localhost:8000/api/v1/ai/triage \\
+  -H "Authorization: Bearer $TOKEN" \\
+  -H "Content-Type: application/json" \\
+  -d '{"alert_id":"'$ALERT_ID'"}'`;
 
 const bestFitAreas = [
   {
@@ -105,15 +99,15 @@ const resourceLinks = [
 
   <h2>How it works inside a playbook</h2>
   <p>
-    AI triage is not a separate product tier or disconnected chatbot. It is just another step in the automation flow, which means your playbook controls what happens at each confidence level.
+    AI triage is not a separate product tier or disconnected chatbot. It is part of the normal OpenSOAR workflow surface, so you can call the built-in AI endpoints and then keep the decision logic in your own playbooks and operator process.
   </p>
-  <CodeBlock code={triageCode} filename="ai_triage.py" />
+  <CodeBlock code={triageCode} filename="ai_triage_api.sh" />
 
   <h2>Bring your own model</h2>
   <p>
-    OpenSOAR is model-agnostic. Use cloud providers when convenience matters, or local inference when data residency and network control matter more.
+    OpenSOAR is model-agnostic at the deployment level. Use cloud providers when convenience matters, or local inference when data residency and network control matter more.
   </p>
-  <CodeBlock code={multiModelCode} filename="configure_providers.py" />
+  <CodeBlock code={multiModelCode} filename="ai_provider_config.sh" />
   <table>
     <thead>
       <tr>

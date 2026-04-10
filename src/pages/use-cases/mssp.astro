@@ -3,26 +3,29 @@ import ContentLayout from '../../layouts/ContentLayout.astro';
 import CodeBlock from '../../components/CodeBlock.astro';
 import { AnimatedTerminal } from '../../components/AnimatedTerminal';
 
-const triageCode = `@playbook(trigger="alert.created")
-async def standard_triage(alert):
-    # Core logic — same for every client
-    enrichment = await enrich_alert(alert)
-    score = calculate_risk(enrichment)
+const triageCode = `from opensoar import add_current_alert_comment, playbook, update_current_alert
 
-    # Client-specific thresholds from config
-    config = get_tenant_config()
-    if score > config.escalation_threshold:
-        await escalate(alert, channel=config.slack_channel)
-    elif score < config.auto_resolve_threshold:
-        await resolve(alert, determination="false_positive")`;
+@playbook(trigger="webhook")
+async def standard_triage(alert):
+    enrichment = await enrich_alert(alert)
+    partner = alert.get("partner", "default")
+
+    await update_current_alert(
+        status="in_progress",
+        determination="suspicious",
+        reason=f"Shared triage playbook completed for partner {partner}",
+    )
+    await add_current_alert_comment(
+        f"Partner-aware enrichment complete for {partner}: {enrichment}"
+    )`;
 ---
 
 <ContentLayout
   title="SOAR for MSSPs: Multi-Tenant Security Automation | OpenSOAR"
-  description="Deploy OpenSOAR as your MSSP's SOAR platform. Per-tenant isolation, white-label ready, Python playbooks, and no per-client licensing fees."
+  description="Use OpenSOAR for MSSP workflows with partner-aware alerts, shared playbooks, and no per-client licensing fees. Core fits one deployment per client; optional enterprise layers can extend tenant controls."
   badge="Use Case"
   heading="SOAR for MSSPs"
-  subheading="A SOAR platform built for managed security service providers — per-tenant isolation, shared playbooks, and no per-client licensing."
+  subheading="A SOAR platform for managed security providers — shared playbooks, partner-aware workflows, and no per-client licensing."
 >
   <h2>The MSSP SOAR challenge</h2>
   <p>
@@ -32,20 +35,20 @@ async def standard_triage(alert):
     Commercial SOAR platforms charge per-user, per-action, or per-tenant. When you're managing 50 clients, those costs multiply quickly. A $75,000/year SOAR license becomes a $500,000+ line item that eats into margins and gets passed to clients.
   </p>
   <p>
-    OpenSOAR is free. Deploy one instance per tenant, or run a shared platform with tenant isolation. No per-client fees, no per-action caps, no licensing math.
+    OpenSOAR is free. The simplest public-core posture is one deployment per client. If you need deeper shared-platform tenant controls, that belongs to the optional enterprise/private extension path rather than the default core bootstrap model. No per-client fees, no per-action caps, no licensing math.
   </p>
 
   <h2>How MSSPs use OpenSOAR</h2>
 
   <h3>Per-tenant deployment</h3>
   <p>
-    Deploy a dedicated OpenSOAR instance for each client using Docker or Kubernetes. Each tenant gets their own database, their own playbooks, and their own API keys. Complete data isolation with shared infrastructure.
+    Deploy a dedicated OpenSOAR instance for each client using Docker or Kubernetes. Each client gets their own database, their own playbooks, and their own API keys. That is the cleanest isolation model in the public core today.
   </p>
 
   <div class="my-6 rounded-lg border border-border overflow-hidden">
     <AnimatedTerminal
       client:visible
-      title="opensoar — multi-tenant deployment"
+      title="opensoar — per-client deployment"
       height="300px"
       commands={[
         "docker compose -p client-acme --env-file clients/acme/.env up -d",
@@ -59,7 +62,7 @@ async def standard_triage(alert):
         { text: "client-globex: Dashboard ready at globex.soc.yourdomain.com", delay: 200 },
         { text: "client-initech: PostgreSQL + Redis + API + Worker running", delay: 200 },
         { text: "client-initech: Dashboard ready at initech.soc.yourdomain.com", delay: 200 },
-        { text: "3 tenants deployed, 0 licensing fees", delay: 300 },
+        { text: "3 client stacks deployed, 0 licensing fees", delay: 300 },
       ]}
     />
   </div>
@@ -73,7 +76,7 @@ docker compose -f docker-compose.yml \\
 
   <h3>Shared playbook library</h3>
   <p>
-    Build playbooks once, deploy across clients. Your core triage, enrichment, and response playbooks work for every client. Client-specific customizations are just Python configuration:
+    Build playbooks once, deploy across clients. Your core triage, enrichment, and response playbooks can stay shared while branching on the alert's `partner` field or deployment-specific configuration:
   </p>
   <CodeBlock code={triageCode} filename="standard_triage.py" />
 
@@ -84,7 +87,7 @@ docker compose -f docker-compose.yml \\
 
   <h3>Client-specific integrations</h3>
   <p>
-    Every client has different tools. Client A uses CrowdStrike + Splunk. Client B uses SentinelOne + Elastic. OpenSOAR's integration layer handles this cleanly — configure integrations per-tenant, use the same playbook logic.
+    Every client has different tools. Client A uses CrowdStrike + Splunk. Client B uses SentinelOne + Elastic. OpenSOAR's integration layer handles this cleanly — configure integrations per deployment, keep the playbook logic largely shared.
   </p>
 
   <h2>MSSP metrics and reporting</h2>
