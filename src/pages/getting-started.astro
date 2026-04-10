@@ -1,10 +1,7 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Nav from '../components/Nav.astro';
+import ContentLayout from '../layouts/ContentLayout.astro';
 import CodeBlock from '../components/CodeBlock.astro';
 import { AnimatedTerminal } from '../components/AnimatedTerminal';
-import OpenSource from '../components/OpenSource.astro';
-import Footer from '../components/Footer.astro';
 
 const playbookCode = `from opensoar import add_current_alert_comment, playbook, update_current_alert
 
@@ -67,149 +64,81 @@ const nextSteps = [
 ];
 ---
 
-<Layout
+<ContentLayout
   title="Getting Started with OpenSOAR — Install, Write, Deploy in 60 Seconds"
   description="Install OpenSOAR, write your first security automation playbook in Python, test it, and deploy — all in one terminal session. Free and open source."
+  badge="Getting Started"
+  heading="Getting Started"
+  subheading="A fast editorial walkthrough of what the first OpenSOAR experience feels like. For canonical setup and operational docs, use docs.opensoar.app."
+  breadcrumbs={[
+    { name: 'Home', href: '/' },
+    { name: 'Getting Started', href: '/getting-started' },
+  ]}
 >
-  <Nav />
-  <main>
+  <p>
+    Need the exact install and deployment path? <a href="https://docs.opensoar.app/getting-started/" target="_blank" rel="noopener">Go to the docs</a>.
+  </p>
 
-    <!-- Hero -->
-    <section class="pt-32 pb-16 md:pt-40 md:pb-20">
-      <div class="mx-auto max-w-3xl px-6 text-center">
-        <span class="inline-block text-[11px] font-medium text-muted border border-border rounded-full px-3 py-1 mb-6">
-          Getting Started
-        </span>
-        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-heading leading-tight mb-4">
-          From zero to automated in 60&nbsp;seconds
-        </h1>
-        <p class="text-base md:text-lg text-text leading-relaxed max-w-2xl mx-auto">
-          A fast editorial walkthrough of what the first OpenSOAR experience feels like. For canonical setup and operational docs, use docs.opensoar.app.
-        </p>
-        <p class="text-sm text-muted leading-relaxed max-w-2xl mx-auto mt-4">
-          Need the exact install and deployment path? <a href="https://docs.opensoar.app/getting-started/" target="_blank" rel="noopener" class="text-heading hover:underline">Go to the docs</a>.
-        </p>
-      </div>
-    </section>
+  <h2>1. Install</h2>
+  <p>
+    This is the shortest path to seeing the product live locally. The docs cover the full setup, verification, and operational details.
+  </p>
+  <AnimatedTerminal
+    client:visible
+    commands={["curl -fsSL https://opensoar.app/install.sh | sh"]}
+    outputs={[
+      { text: "Downloading OpenSOAR v0.5.0...", delay: 400 },
+      { text: "Installing dependencies...", delay: 800 },
+      { text: "Starting services (PostgreSQL, Redis, API, Worker)...", delay: 1200 },
+      { text: "\u2713 OpenSOAR is running at http://localhost:3000", delay: 1600 },
+    ]}
+    title="terminal — install"
+    height="200px"
+  />
+  <p>
+    Then bootstrap the first local admin. Additional local accounts are created from Settings by that admin; public self-registration is off by default in core.
+  </p>
+  <CodeBlock code={bootstrapCommand} filename="bootstrap-admin.sh" />
 
-    <!-- Step 1: Install -->
-    <section class="py-16">
-      <div class="mx-auto max-w-4xl px-6">
-        <div class="flex items-baseline gap-4 mb-6">
-          <span class="text-4xl md:text-5xl font-bold text-heading/15 leading-none">1</span>
-          <h2 class="text-xl md:text-2xl font-bold text-heading">Install</h2>
-        </div>
-        <div class="max-w-3xl mb-4">
-          <p class="text-sm text-text leading-relaxed">
-            This is the shortest path to seeing the product live locally. The docs cover the full setup, verification, and operational details.
-          </p>
-        </div>
-        <AnimatedTerminal
-          client:visible
-          commands={["curl -fsSL https://opensoar.app/install.sh | sh"]}
-          outputs={[
-            { text: "Downloading OpenSOAR v0.5.0...", delay: 400 },
-            { text: "Installing dependencies...", delay: 800 },
-            { text: "Starting services (PostgreSQL, Redis, API, Worker)...", delay: 1200 },
-            { text: "\u2713 OpenSOAR is running at http://localhost:3000", delay: 1600 },
-          ]}
-          title="terminal — install"
-          height="200px"
-        />
-        <p class="text-xs text-muted mt-4 leading-relaxed">
-          Then bootstrap the first local admin. Additional local accounts are created from Settings by that admin; public self-registration is off by default in core.
-        </p>
-        <CodeBlock code={bootstrapCommand} filename="bootstrap-admin.sh" />
-      </div>
-    </section>
+  <h2>2. Write your first playbook</h2>
+  <p>
+    This is the core product idea in one screen: playbooks are plain Python, not visual blocks or YAML definitions.
+  </p>
+  <CodeBlock code={playbookCode} filename="my_first_playbook.py" />
 
-    <!-- Step 2: Write your first playbook -->
-    <section class="py-16">
-      <div class="mx-auto max-w-4xl px-6">
-        <div class="flex items-baseline gap-4 mb-6">
-          <span class="text-4xl md:text-5xl font-bold text-heading/15 leading-none">2</span>
-          <h2 class="text-xl md:text-2xl font-bold text-heading">Write your first playbook</h2>
-        </div>
-        <div class="max-w-3xl mb-6">
-          <p class="text-sm text-text leading-relaxed">
-            This is the core product idea in one screen: playbooks are plain Python, not visual blocks or YAML definitions.
-          </p>
-        </div>
-        <CodeBlock code={playbookCode} filename="my_first_playbook.py" />
-      </div>
-    </section>
+  <h2>3. Test it</h2>
+  <p>
+    Because playbooks are real code, you can test them with pytest. This page is showing the shape of the workflow, not replacing the full docs.
+  </p>
+  <CodeBlock code={testCode} filename="test_playbook.py" />
 
-    <!-- Step 3: Test it -->
-    <section class="py-16">
-      <div class="mx-auto max-w-4xl px-6">
-        <div class="flex items-baseline gap-4 mb-6">
-          <span class="text-4xl md:text-5xl font-bold text-heading/15 leading-none">3</span>
-          <h2 class="text-xl md:text-2xl font-bold text-heading">Test it</h2>
-        </div>
-        <div class="max-w-3xl mb-6">
-          <p class="text-sm text-text leading-relaxed">
-            Because playbooks are real code, you can test them with pytest. This page is showing the shape of the workflow, not replacing the full docs.
-          </p>
-        </div>
-        <CodeBlock code={testCode} filename="test_playbook.py" />
-      </div>
-    </section>
+  <h2>4. Deploy</h2>
+  <p>
+    In practice, deployment means shipping code and reloading the services that discover and run it. The detailed loading model is documented separately.
+  </p>
+  <AnimatedTerminal
+    client:visible
+    commands={["git add playbooks/", "git commit -m 'Add enrichment playbook'", "git push origin main", "docker compose restart api worker"]}
+    outputs={[
+      { text: "\u2713 Playbook code deployed. API and worker restarted.", delay: 400 },
+    ]}
+    title="terminal — deploy"
+    height="180px"
+  />
+  <p>
+    For the exact loading and sync behavior, see <a href="https://docs.opensoar.app/playbooks/loading-and-sync/" target="_blank" rel="noopener">the docs</a>.
+  </p>
 
-    <!-- Step 4: Deploy -->
-    <section class="py-16">
-      <div class="mx-auto max-w-4xl px-6">
-        <div class="flex items-baseline gap-4 mb-6">
-          <span class="text-4xl md:text-5xl font-bold text-heading/15 leading-none">4</span>
-          <h2 class="text-xl md:text-2xl font-bold text-heading">Deploy</h2>
-        </div>
-        <div class="max-w-3xl mb-4">
-          <p class="text-sm text-text leading-relaxed">
-            In practice, deployment means shipping code and reloading the services that discover and run it. The detailed loading model is documented separately.
-          </p>
-        </div>
-        <AnimatedTerminal
-          client:visible
-          commands={["git add playbooks/", "git commit -m 'Add enrichment playbook'", "git push origin main", "docker compose restart api worker"]}
-          outputs={[
-            { text: "\u2713 Playbook code deployed. API and worker restarted.", delay: 400 },
-          ]}
-          title="terminal — deploy"
-          height="180px"
-        />
-        <p class="text-xs text-muted mt-4">
-          For the exact loading and sync behavior, see <a href="https://docs.opensoar.app/playbooks/loading-and-sync/" target="_blank" rel="noopener" class="text-heading hover:underline">the docs</a>.
-        </p>
-      </div>
-    </section>
-
-    <!-- Next Steps -->
-    <section class="py-16">
-      <div class="mx-auto max-w-4xl px-6">
-        <h2 class="text-xl md:text-2xl font-bold text-heading mb-8 text-center">Next steps</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {nextSteps.map((item) => (
-            <a
-              href={item.href}
-              class="group flex flex-col justify-between rounded-lg border border-border bg-surface p-5 transition-colors hover:border-heading/30"
-            >
-              <div>
-                <h3 class="text-sm font-semibold text-heading mb-1.5">{item.title}</h3>
-                <p class="text-xs text-muted leading-relaxed">{item.description}</p>
-              </div>
-              <div class="mt-4 flex items-center text-xs text-muted group-hover:text-heading transition-colors">
-                <span>Learn more</span>
-                <svg class="w-3.5 h-3.5 ml-1 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                  <polyline points="12 5 19 12 12 19" />
-                </svg>
-              </div>
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <OpenSource />
-  </main>
-  <Footer />
-</Layout>
+  <h2>Next steps</h2>
+  <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 my-6">
+    {nextSteps.map((item) => (
+      <a
+        href={item.href}
+        class="rounded-lg border border-border bg-surface p-5 transition-colors hover:border-heading/30"
+      >
+        <h3 class="text-base font-semibold text-heading mb-2">{item.title}</h3>
+        <p class="text-sm text-text leading-relaxed">{item.description}</p>
+      </a>
+    ))}
+  </div>
+</ContentLayout>
